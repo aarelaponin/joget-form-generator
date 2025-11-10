@@ -1,0 +1,79 @@
+form:
+  id: md25equipment
+  name: MD.25 - Equipment
+  description: ""
+
+fields:
+  - id: code
+    label: Code
+    type: textField
+    required: true
+
+  - id: name
+    label: Name
+    type: textField
+    required: true
+
+  # Nested LOV: References parent form md25equipCategory
+  - id: equipment_category
+    label: Equipment Category
+    type: selectBox
+    required: true
+    optionsSource:
+      type: formData
+      formId: md25equipCategory
+      valueColumn: code
+      labelColumn: name
+      addEmptyOption: "true"
+      useAjax: "false"
+
+  # Polymorphic fields (sparse columns)
+  - id: estimated_cost_lsl
+    label: Estimated Cost Lsl
+    type: textField
+    required: false
+
+  - id: tool_category
+    label: Tool Category
+    type: textField
+    required: false
+
+  - id: typical_quantity
+    label: Typical Quantity
+    type: textField
+    required: false
+
+  - id: irrigation_type
+    label: Irrigation Type
+    type: textField
+    required: false
+
+  - id: area_coverage_ha
+    label: Area Coverage Ha
+    type: textField
+    required: false
+
+  - id: equipment_type
+    label: Equipment Type
+    type: textField
+    required: false
+
+  - id: purpose
+    label: Purpose
+    type: textField
+    required: false
+
+  - id: sprayer_type
+    label: Sprayer Type
+    type: textField
+    required: false
+
+  - id: capacity_litres
+    label: Capacity Litres
+    type: textField
+    required: false
+
+  - id: planting_type
+    label: Planting Type
+    type: textField
+    required: false

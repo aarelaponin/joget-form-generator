@@ -1,0 +1,15 @@
+form:
+  id: md01maritalStatus
+  name: MD.01 - Marital Status
+  description: ""
+
+fields:
+  - id: code
+    label: Code
+    type: textField
+    required: false
+
+  - id: name
+    label: Name
+    type: textField
+    required: false

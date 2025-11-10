@@ -26,57 +26,71 @@ class ValidationMixin:
         """
         Build Joget validator configuration from validation spec.
 
+        For MDM forms:
+        - If field is required, always add DefaultValidator with mandatory="true"
+        - Additional validations (regex, length) are added as separate validators
+
         Args:
-            field: Field specification with optional 'validation' key
+            field: Field specification with optional 'validation' key and 'required' flag
 
         Returns:
             Joget validator dict or None if no validation
         """
-        validation = field.get("validation")
-        if not validation:
-            return None
-
         validators = []
 
-        # Regex pattern validator
-        if pattern := validation.get("pattern"):
+        # Add DefaultValidator for required fields (MDM pattern)
+        if field.get("required", False):
             validators.append(
                 {
-                    "className": "org.joget.apps.form.lib.RegexValidator",
+                    "className": "org.joget.apps.form.lib.DefaultValidator",
                     "properties": {
-                        "regex": pattern,
-                        "message": validation.get("message", "Invalid format"),
+                        "mandatory": "true"
                     },
                 }
             )
 
-        # Minimum length validator
-        if (min_len := validation.get("minLength")) is not None:
-            validators.append(
-                {
-                    "className": "org.joget.apps.form.lib.TextFieldLengthValidator",
-                    "properties": {
-                        "minLength": str(min_len),
-                        "message": validation.get(
-                            "message", f"Minimum {min_len} characters required"
-                        ),
-                    },
-                }
-            )
+        # Check for additional validation rules
+        validation = field.get("validation")
+        if validation:
+            # Regex pattern validator
+            if pattern := validation.get("pattern"):
+                validators.append(
+                    {
+                        "className": "org.joget.apps.form.lib.RegexValidator",
+                        "properties": {
+                            "regex": pattern,
+                            "message": validation.get("message", "Invalid format"),
+                        },
+                    }
+                )
 
-        # Maximum length validator
-        if (max_len := validation.get("maxLength")) is not None:
-            validators.append(
-                {
-                    "className": "org.joget.apps.form.lib.TextFieldLengthValidator",
-                    "properties": {
-                        "maxLength": str(max_len),
-                        "message": validation.get(
-                            "message", f"Maximum {max_len} characters allowed"
-                        ),
-                    },
-                }
-            )
+            # Minimum length validator
+            if (min_len := validation.get("minLength")) is not None:
+                validators.append(
+                    {
+                        "className": "org.joget.apps.form.lib.TextFieldLengthValidator",
+                        "properties": {
+                            "minLength": str(min_len),
+                            "message": validation.get(
+                                "message", f"Minimum {min_len} characters required"
+                            ),
+                        },
+                    }
+                )
+
+            # Maximum length validator
+            if (max_len := validation.get("maxLength")) is not None:
+                validators.append(
+                    {
+                        "className": "org.joget.apps.form.lib.TextFieldLengthValidator",
+                        "properties": {
+                            "maxLength": str(max_len),
+                            "message": validation.get(
+                                "message", f"Maximum {max_len} characters allowed"
+                            ),
+                        },
+                    }
+                )
 
         # Return single validator or multi-validator
         if len(validators) == 0:
@@ -133,17 +147,16 @@ class OptionsMixin:
         source_type = options_source["type"]
 
         if source_type == "formData":
-            # Cascading dropdown (get options from another form)
+            # Nested LOV: get options from another form (parent form reference)
+            # Uses FormOptionsBinder for simple parent-child relationships
             return {
-                "className": "org.joget.apps.form.model.FormLoadBinder",
+                "className": "org.joget.apps.form.lib.FormOptionsBinder",
                 "properties": {
                     "formDefId": options_source["formId"],
-                    "keyColumn": options_source.get("valueColumn", "id"),
+                    "idColumn": options_source.get("valueColumn", "code"),
                     "labelColumn": options_source.get("labelColumn", "name"),
-                    # Cascading configuration
-                    "parentFieldId": options_source.get("parentField", ""),
-                    "filterField": options_source.get("filterField", ""),
-                    "extraCondition": options_source.get("extraCondition", ""),
+                    "addEmptyOption": options_source.get("addEmptyOption", "true"),
+                    "useAjax": options_source.get("useAjax", "false"),
                 },
             }
 

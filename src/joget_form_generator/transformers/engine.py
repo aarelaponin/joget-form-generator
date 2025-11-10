@@ -64,25 +64,14 @@ class TransformEngine:
             normalized_spec: Normalized specification
 
         Returns:
-            Joget form JSON structure
+            Joget form JSON structure with Section → Column → Fields layout
         """
         form_meta = normalized_spec["form"]
         fields = normalized_spec["fields"]
 
-        # Build form structure
-        form_json = {
-            "className": "org.joget.apps.form.model.Form",
-            "properties": {
-                "id": form_meta["id"],
-                "name": form_meta["name"],
-                "tableName": form_meta["tableName"],
-                "description": form_meta.get("description", ""),
-            },
-            "elements": [],
-        }
-
         # Transform each field using pattern library
         context = {"form": form_meta}
+        field_elements = []
 
         for field in fields:
             field_type = field["type"]
@@ -94,8 +83,56 @@ class TransformEngine:
             pattern = pattern_class()
             field_json = pattern.render(field, context)
 
-            # Add to form elements
-            form_json["elements"].append(field_json)
+            # Add to field list
+            field_elements.append(field_json)
+
+        # Wrap fields in Section → Column layout (MDM pattern)
+        section = {
+            "className": "org.joget.apps.form.model.Section",
+            "properties": {
+                "id": "section1",
+                "label": "Section"
+            },
+            "elements": [
+                {
+                    "className": "org.joget.apps.form.model.Column",
+                    "properties": {
+                        "width": "100%"
+                    },
+                    "elements": field_elements
+                }
+            ]
+        }
+
+        # Build form structure with WorkflowFormBinder (MDM pattern)
+        form_json = {
+            "className": "org.joget.apps.form.model.Form",
+            "properties": {
+                "id": form_meta["id"],
+                "name": form_meta["name"],
+                "tableName": form_meta["tableName"],
+                "description": form_meta.get("description", ""),
+                "loadBinder": {
+                    "className": "org.joget.apps.form.lib.WorkflowFormBinder",
+                    "properties": {}
+                },
+                "storeBinder": {
+                    "className": "org.joget.apps.form.lib.WorkflowFormBinder",
+                    "properties": {}
+                },
+                "noPermissionMessage": "",
+                "postProcessorRunOn": "create",
+                "permission": {
+                    "className": "",
+                    "properties": {}
+                },
+                "postProcessor": {
+                    "className": "",
+                    "properties": {}
+                }
+            },
+            "elements": [section]
+        }
 
         return form_json
 
