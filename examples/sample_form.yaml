@@ -1,0 +1,42 @@
+form:
+  id: sampleForm
+  name: Sample Contact Form
+  description: A simple contact form demonstrating joget-form-generator
+
+fields:
+  - id: fullName
+    label: Full Name
+    type: textField
+    required: true
+    placeholder: Enter your full name
+
+  - id: email
+    label: Email Address
+    type: textField
+    required: true
+    validator:
+      type: email
+      message: Please enter a valid email address
+
+  - id: status
+    label: Status
+    type: selectBox
+    required: true
+    options:
+      - value: active
+        label: Active
+      - value: inactive
+        label: Inactive
+      - value: pending
+        label: Pending
+
+  - id: birthDate
+    label: Date of Birth
+    type: datePicker
+    dateFormat: yyyy-MM-dd
+
+  - id: comments
+    label: Comments
+    type: textArea
+    rows: 5
+    cols: 60
