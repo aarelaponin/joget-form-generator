@@ -77,3 +77,43 @@ fields:
     label: Planting Type
     type: textField
     required: false
+
+  - id: processing_type
+    label: Processing Type
+    type: textField
+    required: false
+
+  - id: storage_type
+    label: Storage Type
+    type: textField
+    required: false
+
+  - id: transport_type
+    label: Transport Type
+    type: textField
+    required: false
+
+  - id: capacity
+    label: Capacity
+    type: textField
+    required: false
+
+  - id: power_source
+    label: Power Source
+    type: textField
+    required: false
+
+  - id: material
+    label: Material
+    type: textField
+    required: false
+
+  - id: typical_lifespan_years
+    label: Typical Lifespan Years
+    type: textField
+    required: false
+
+  - id: maintenance_level
+    label: Maintenance Level
+    type: textField
+    required: false
