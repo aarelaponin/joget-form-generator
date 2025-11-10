@@ -1,0 +1,19 @@
+{
+  "className": "org.joget.apps.form.lib.TextArea",
+  "properties": {
+    "id": "{{ id }}",
+    "label": "{{ label }}",
+    "required": "{{ required }}",
+    "readonly": "{{ readonly }}",
+    "value": "{{ value }}",
+    "rows": "{{ rows }}",
+    "cols": "{{ cols }}",
+    {% if placeholder %}
+    "placeholder": "{{ placeholder }}",
+    {% endif %}
+    {% if validator %}
+    "validator": {{ validator | tojson_pretty }},
+    {% endif %}
+    "encryption": ""
+  }
+}

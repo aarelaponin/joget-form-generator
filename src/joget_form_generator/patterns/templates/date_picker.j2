@@ -1,0 +1,16 @@
+{
+  "className": "org.joget.apps.form.lib.DatePicker",
+  "properties": {
+    "id": "{{ id }}",
+    "label": "{{ label }}",
+    "required": "{{ required }}",
+    "readonly": "{{ readonly }}",
+    "value": "{{ value }}",
+    "format": "{{ format }}",
+    "yearRange": "c-100:c+10",
+    {% if validator %}
+    "validator": {{ validator | tojson_pretty }},
+    {% endif %}
+    "currentDateAs": ""
+  }
+}

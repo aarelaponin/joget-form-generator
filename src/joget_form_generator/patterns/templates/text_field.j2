@@ -1,0 +1,21 @@
+{
+  "className": "org.joget.apps.form.lib.TextField",
+  "properties": {
+    "id": "{{ id }}",
+    "label": "{{ label }}",
+    "required": "{{ required }}",
+    "readonly": "{{ readonly }}",
+    "value": "{{ value }}",
+    "size": "{{ size }}",
+    {% if maxlength %}
+    "maxlength": "{{ maxlength }}",
+    {% endif %}
+    {% if placeholder %}
+    "placeholder": "{{ placeholder }}",
+    {% endif %}
+    {% if validator %}
+    "validator": {{ validator | tojson_pretty }},
+    {% endif %}
+    "encryption": ""
+  }
+}
