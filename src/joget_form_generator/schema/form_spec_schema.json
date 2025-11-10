@@ -1,0 +1,285 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://joget.org/schemas/form-spec/v1.0.json",
+  "title": "Joget Form Specification",
+  "description": "Schema for Joget DX form definitions in canonical YAML format",
+  "type": "object",
+  "required": ["form", "fields"],
+  "properties": {
+    "form": {
+      "$ref": "#/$defs/FormMetadata"
+    },
+    "fields": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Field"
+      },
+      "minItems": 1
+    }
+  },
+  "$defs": {
+    "FormMetadata": {
+      "type": "object",
+      "required": ["id", "name", "tableName"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z][a-zA-Z0-9_]{0,19}$",
+          "maxLength": 20,
+          "description": "Form ID (must match tableName, max 20 chars)"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255,
+          "description": "Human-readable form name displayed in Joget"
+        },
+        "tableName": {
+          "type": "string",
+          "pattern": "^[a-zA-Z][a-zA-Z0-9_]{0,19}$",
+          "maxLength": 20,
+          "description": "Database table name (must match id)"
+        },
+        "description": {
+          "type": "string",
+          "description": "Optional form description"
+        }
+      }
+    },
+    "Field": {
+      "type": "object",
+      "required": ["id", "label", "type"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$",
+          "maxLength": 50,
+          "description": "Field ID (database column name)"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Field label shown in UI"
+        },
+        "type": {
+          "enum": [
+            "hiddenField",
+            "textField",
+            "passwordField",
+            "textArea",
+            "selectBox",
+            "checkBox",
+            "radio",
+            "datePicker",
+            "fileUpload"
+          ],
+          "description": "Field type (Phase 1: 9 standard fields)"
+        },
+        "required": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether field is mandatory"
+        },
+        "readonly": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether field is read-only"
+        },
+        "defaultValue": {
+          "type": "string",
+          "description": "Default value for field"
+        },
+        "placeholder": {
+          "type": "string",
+          "description": "Placeholder text (textField, textArea, passwordField)"
+        },
+        "size": {
+          "enum": ["small", "medium", "large"],
+          "default": "medium",
+          "description": "Field size"
+        },
+        "rows": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 50,
+          "description": "Number of rows (textArea)"
+        },
+        "cols": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 200,
+          "description": "Number of columns (textArea)"
+        },
+        "maxlength": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Maximum character length"
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Option"
+          },
+          "minItems": 1,
+          "description": "Static options (selectBox, checkBox, radio)"
+        },
+        "optionsSource": {
+          "$ref": "#/$defs/OptionsSource",
+          "description": "Dynamic options configuration"
+        },
+        "multiple": {
+          "type": "boolean",
+          "default": false,
+          "description": "Allow multiple selections (selectBox, checkBox)"
+        },
+        "dateFormat": {
+          "type": "string",
+          "default": "yyyy-MM-dd",
+          "description": "Date format pattern (datePicker)"
+        },
+        "maxSize": {
+          "type": "integer",
+          "description": "Maximum file size in MB (fileUpload)"
+        },
+        "fileTypes": {
+          "type": "string",
+          "description": "Allowed file extensions, comma-separated (fileUpload)"
+        },
+        "validation": {
+          "$ref": "#/$defs/Validation",
+          "description": "Validation rules"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {"type": {"const": "selectBox"}}
+          },
+          "then": {
+            "oneOf": [
+              {"required": ["options"]},
+              {"required": ["optionsSource"]}
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {"type": {"enum": ["checkBox", "radio"]}}
+          },
+          "then": {
+            "required": ["options"]
+          }
+        }
+      ]
+    },
+    "Option": {
+      "type": "object",
+      "required": ["value", "label"],
+      "properties": {
+        "value": {
+          "type": "string",
+          "description": "Option value (stored in database)"
+        },
+        "label": {
+          "type": "string",
+          "description": "Option label (displayed to user)"
+        }
+      }
+    },
+    "OptionsSource": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "enum": ["formData", "api", "database"],
+          "description": "Options source type"
+        },
+        "formId": {
+          "type": "string",
+          "description": "Source form ID (formData type)"
+        },
+        "valueColumn": {
+          "type": "string",
+          "default": "id",
+          "description": "Column for option value"
+        },
+        "labelColumn": {
+          "type": "string",
+          "default": "name",
+          "description": "Column for option label"
+        },
+        "parentField": {
+          "type": "string",
+          "description": "Parent field ID for cascading dropdown"
+        },
+        "filterField": {
+          "type": "string",
+          "description": "Field to filter by in cascading dropdown"
+        },
+        "extraCondition": {
+          "type": "string",
+          "description": "Additional SQL WHERE condition"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "API endpoint URL (api type)"
+        },
+        "method": {
+          "enum": ["GET", "POST"],
+          "default": "GET",
+          "description": "HTTP method (api type)"
+        },
+        "valueJsonPath": {
+          "type": "string",
+          "description": "JSONPath for value extraction (api type)"
+        },
+        "labelJsonPath": {
+          "type": "string",
+          "description": "JSONPath for label extraction (api type)"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {"type": {"const": "formData"}}
+          },
+          "then": {
+            "required": ["formId"]
+          }
+        },
+        {
+          "if": {
+            "properties": {"type": {"const": "api"}}
+          },
+          "then": {
+            "required": ["url"]
+          }
+        }
+      ]
+    },
+    "Validation": {
+      "type": "object",
+      "properties": {
+        "pattern": {
+          "type": "string",
+          "description": "Regex pattern for validation"
+        },
+        "minLength": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Minimum character length"
+        },
+        "maxLength": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Maximum character length"
+        },
+        "message": {
+          "type": "string",
+          "description": "Custom validation error message"
+        }
+      }
+    }
+  }
+}
