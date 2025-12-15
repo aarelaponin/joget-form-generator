@@ -1,0 +1,157 @@
+form:
+  id: phase2Showcase
+  name: Phase 2 Features Showcase
+  description: Demonstrates all Phase 2 field types - Custom HTML, ID Generator, Subform, and Grid
+
+fields:
+  # Custom HTML - Section Header
+  - id: headerBanner
+    label: Header
+    type: customHTML
+    html: |
+      <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 8px; color: white; margin-bottom: 20px;">
+        <h2 style="margin: 0 0 10px 0;">Phase 2 Features Showcase</h2>
+        <p style="margin: 0; opacity: 0.9;">This form demonstrates Custom HTML, ID Generator, Subform, and Grid patterns</p>
+      </div>
+
+  # ID Generator - Application Number
+  - id: applicationNumber
+    label: Application Number
+    type: idGenerator
+    prefix: "APP-"
+    postfix: "-2025"
+    format: "{prefix}{count:08d}{postfix}"
+
+  # Custom HTML - Info Notice
+  - id: infoNotice
+    label: Instructions
+    type: customHTML
+    html: |
+      <div style="background-color: #e3f2fd; border-left: 4px solid #2196f3; padding: 15px; margin: 20px 0;">
+        <strong>📋 Instructions:</strong> Please complete all sections below. Use the "Add" buttons to add multiple entries.
+      </div>
+
+  # Text Field - Applicant Name
+  - id: applicantName
+    label: Applicant Name
+    type: textField
+    required: true
+    placeholder: Enter full name
+
+  # Select Box - Application Type
+  - id: applicationType
+    label: Application Type
+    type: selectBox
+    required: true
+    options:
+      - value: new_project
+        label: New Project
+      - value: renewal
+        label: Renewal
+      - value: amendment
+        label: Amendment
+
+  # Custom HTML - Grid Section Header
+  - id: budgetSectionHeader
+    label: Budget Section
+    type: customHTML
+    html: |
+      <h3 style="margin-top: 30px; margin-bottom: 15px; color: #333; border-bottom: 2px solid #667eea; padding-bottom: 10px;">
+        💰 Budget Breakdown
+      </h3>
+
+  # Grid - Budget Items
+  - id: budgetItems
+    label: Budget Line Items
+    type: grid
+    columns:
+      - id: category
+        label: Category
+        type: textField
+      - id: description
+        label: Description
+        type: textField
+      - id: unitCost
+        label: Unit Cost
+        type: textField
+      - id: quantity
+        label: Quantity
+        type: textField
+      - id: totalCost
+        label: Total Cost
+        type: textField
+    validateMinRow: 1
+    validateMaxRow: 50
+    errorMessage: "Please enter at least one budget item (maximum 50)"
+
+  # Custom HTML - Team Section Header
+  - id: teamSectionHeader
+    label: Team Section
+    type: customHTML
+    html: |
+      <h3 style="margin-top: 30px; margin-bottom: 15px; color: #333; border-bottom: 2px solid #764ba2; padding-bottom: 10px;">
+        👥 Team Members
+      </h3>
+
+  # Subform - Team Members (would reference teamMemberForm)
+  - id: teamMembers
+    label: Project Team
+    type: subform
+    formId: teamMemberForm
+    required: true
+    addButtonLabel: "Add Team Member"
+    deleteButtonLabel: "Remove"
+
+  # Custom HTML - Equipment Section Header
+  - id: equipmentSectionHeader
+    label: Equipment Section
+    type: customHTML
+    html: |
+      <h3 style="margin-top: 30px; margin-bottom: 15px; color: #333; border-bottom: 2px solid #667eea; padding-bottom: 10px;">
+        🛠️ Equipment & Resources
+      </h3>
+
+  # Subform - Equipment Requests
+  - id: equipmentRequests
+    label: Required Equipment
+    type: subform
+    formId: equipmentRequestForm
+    addButtonLabel: "Add Equipment Request"
+    deleteButtonLabel: "Remove Request"
+    noDeleteButton: false
+
+  # Text Area - Additional Notes
+  - id: additionalNotes
+    label: Additional Notes
+    type: textArea
+    rows: 5
+    cols: 60
+    placeholder: Any additional information or comments
+
+  # Custom HTML - Submission Notice
+  - id: submissionNotice
+    label: Submission Checklist
+    type: customHTML
+    html: |
+      <div style="background-color: #fff3cd; border: 1px solid #ffc107; padding: 15px; margin: 20px 0; border-radius: 5px;">
+        <strong>⚠️ Before Submitting:</strong>
+        <ul style="margin: 10px 0 0 20px;">
+          <li>Verify all budget items are accurate</li>
+          <li>Ensure all team members are listed</li>
+          <li>Double-check equipment requests</li>
+          <li>Review application number for your records</li>
+        </ul>
+      </div>
+
+  # Date Picker - Submission Date
+  - id: submissionDate
+    label: Submission Date
+    type: datePicker
+    dateFormat: yyyy-MM-dd
+    required: true
+
+  # Hidden Field - Status
+  - id: applicationStatus
+    label: Application Status
+    type: hiddenField
+    defaultValue: "DRAFT"

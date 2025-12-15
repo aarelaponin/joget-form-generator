@@ -24,8 +24,8 @@ fields:
       formId: md25equipCategory
       valueColumn: code
       labelColumn: name
-      addEmptyOption: "true"
-      useAjax: "false"
+      addEmptyOption: true
+      useAjax: false
 
   # Polymorphic fields (sparse columns)
   - id: estimated_cost_lsl

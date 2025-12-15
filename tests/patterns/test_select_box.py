@@ -32,17 +32,17 @@ def test_select_box_with_static_options(pattern):
     assert binder["properties"]["options"][0]["value"] == "active"
 
 
-def test_select_box_with_cascading_dropdown(pattern):
-    """Test select box with cascading dropdown (formData source)."""
+def test_select_box_with_nested_lov(pattern):
+    """Test select box with nested LOV (formData source)."""
     field = {
-        "id": "equipment",
-        "label": "Equipment",
+        "id": "equipment_category",
+        "label": "Equipment Category",
         "type": "selectBox",
         "optionsSource": {
             "type": "formData",
-            "formId": "md25equipment",
-            "parentField": "equipmentCategory",
-            "filterField": "equipment_category",
+            "formId": "md25equipCategory",
+            "valueColumn": "code",
+            "labelColumn": "name",
         },
     }
     context = {}
@@ -50,10 +50,10 @@ def test_select_box_with_cascading_dropdown(pattern):
     result = pattern.render(field, context)
 
     binder = result["properties"]["optionsBinder"]
-    assert binder["className"] == "org.joget.apps.form.model.FormLoadBinder"
-    assert binder["properties"]["formDefId"] == "md25equipment"
-    assert binder["properties"]["parentFieldId"] == "equipmentCategory"
-    assert binder["properties"]["filterField"] == "equipment_category"
+    assert binder["className"] == "org.joget.apps.form.lib.FormOptionsBinder"
+    assert binder["properties"]["formDefId"] == "md25equipCategory"
+    assert binder["properties"]["idColumn"] == "code"
+    assert binder["properties"]["labelColumn"] == "name"
 
 
 def test_select_box_multiple(pattern):

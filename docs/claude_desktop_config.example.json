@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "joget-form-generator": {
+      "command": "joget-form-mcp",
+      "args": ["serve"],
+      "env": {
+        "JOGET_DEFAULT_URL": "http://localhost:8080/jw",
+        "JOGET_DEFAULT_APP_ID": "farmersPortal"
+      }
+    }
+  }
+}

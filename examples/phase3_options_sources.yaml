@@ -1,0 +1,132 @@
+form:
+  id: phase3OptionsDemo
+  name: Phase 3 - API and Database Options Demo
+  description: Demonstrates API and Database options sources for dynamic dropdowns
+
+fields:
+  # Static options (Phase 1) - for comparison
+  - id: priority
+    label: Priority
+    type: selectBox
+    required: true
+    options:
+      - value: low
+        label: Low
+      - value: medium
+        label: Medium
+      - value: high
+        label: High
+
+  # FormData options (Phase 1) - from another Joget form
+  - id: department
+    label: Department
+    type: selectBox
+    required: true
+    optionsSource:
+      type: formData
+      formId: departmentsList
+      valueColumn: code
+      labelColumn: name
+
+  # API options (Phase 3) - from REST API
+  - id: country
+    label: Country
+    type: selectBox
+    required: true
+    optionsSource:
+      type: api
+      jsonUrl: https://restcountries.com/v3.1/all
+      requestType: GET
+      idColumn: cca2
+      labelColumn: name.common
+      addEmptyOption: true
+      emptyLabel: "-- Select Country --"
+      useAjax: false
+
+  # API options with POST and headers (Phase 3)
+  - id: product
+    label: Product
+    type: selectBox
+    optionsSource:
+      type: api
+      jsonUrl: https://api.company.com/products/search
+      requestType: POST
+      postMethod: parameters
+      params:
+        - name: category
+          value: electronics
+        - name: in_stock
+          value: "true"
+      headers:
+        - name: Authorization
+          value: Bearer ${env.API_TOKEN}
+        - name: Content-Type
+          value: application/json
+      idColumn: product_id
+      labelColumn: product_name
+      groupingColumn: category
+      multirowBaseObject: data.products
+
+  # Database options (Phase 3 - Enterprise) - from SQL table
+  - id: vendor
+    label: Vendor
+    type: selectBox
+    required: true
+    optionsSource:
+      type: database
+      jdbcDatasource: default
+      tableName: app_fd_vendors
+      valueColumn: c_vendor_code
+      labelColumn: c_vendor_name
+      extraCondition: c_status = 'ACTIVE'
+      addEmpty: true
+      emptyLabel: "-- Select Vendor --"
+      useAjax: false
+
+  # Database options with grouping (Phase 3)
+  - id: employeeCategory
+    label: Employee Category
+    type: selectBox
+    optionsSource:
+      type: database
+      jdbcDatasource: hrDatabase
+      tableName: employee_categories
+      valueColumn: category_code
+      labelColumn: category_name
+      groupingColumn: division
+      extraCondition: is_active = 1 AND hire_date > '2020-01-01'
+      addEmpty: true
+      useAjax: true
+
+  # CheckBox with API options (Phase 3)
+  - id: features
+    label: Desired Features
+    type: checkBox
+    optionsSource:
+      type: api
+      jsonUrl: https://api.company.com/features
+      requestType: GET
+      idColumn: feature_code
+      labelColumn: feature_name
+      addEmptyOption: false
+
+  # Radio with database options (Phase 3)
+  - id: paymentMethod
+    label: Payment Method
+    type: radio
+    required: true
+    optionsSource:
+      type: database
+      jdbcDatasource: default
+      tableName: app_fd_paymentMethods
+      valueColumn: c_code
+      labelColumn: c_description
+      extraCondition: c_enabled = 1
+      addEmpty: false
+
+  # Text Area for notes
+  - id: notes
+    label: Additional Notes
+    type: textArea
+    rows: 5
+    placeholder: Enter any additional information

@@ -1,5 +1,6 @@
 """Normalization phase: apply defaults and resolve references."""
 
+import re
 from typing import Any
 
 
@@ -9,6 +10,27 @@ class Normalizer:
     DEFAULT_FIELD_VALUES = {"required": False, "readonly": False, "size": "medium"}
 
     DEFAULT_FORM_VALUES = {"description": ""}
+
+    # Patterns for intelligent field detection
+    EMAIL_PATTERNS = re.compile(r'\b(email|e[-_]?mail|mail)\b', re.IGNORECASE)
+    PHONE_PATTERNS = re.compile(r'\b(phone|mobile|tel|telephone|contact[-_]?number)\b', re.IGNORECASE)
+    NUMERIC_PATTERNS = re.compile(r'\b(age|quantity|count|number|amount|price|cost)\b', re.IGNORECASE)
+
+    # Validation patterns
+    EMAIL_VALIDATION = {
+        "pattern": r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
+        "message": "Please enter a valid email address"
+    }
+
+    PHONE_VALIDATION = {
+        "pattern": r"^[+]?[0-9\s\-()]+$",
+        "message": "Please enter a valid phone number"
+    }
+
+    NUMERIC_VALIDATION = {
+        "pattern": r"^[0-9]+$",
+        "message": "Please enter numbers only"
+    }
 
     def normalize(self, spec: dict[str, Any]) -> dict[str, Any]:
         """
@@ -69,7 +91,43 @@ class Normalizer:
             if "fileTypes" not in normalized_field:
                 normalized_field["fileTypes"] = "*"
 
+        # Apply intelligent validation for textField types
+        if field_type == "textField":
+            normalized_field = self._apply_intelligent_validation(normalized_field)
+
         return normalized_field
+
+    def _apply_intelligent_validation(self, field: dict[str, Any]) -> dict[str, Any]:
+        """
+        Apply intelligent validation based on field ID and label patterns.
+
+        Automatically detects common field types (email, phone, numeric) and adds
+        appropriate validation if not already present.
+        """
+        # Skip if validation already exists
+        if "validation" in field:
+            return field
+
+        field_id = field.get("id", "")
+        field_label = field.get("label", "")
+        combined = f"{field_id} {field_label}"
+
+        # Check for email pattern
+        if self.EMAIL_PATTERNS.search(combined):
+            field["validation"] = self.EMAIL_VALIDATION.copy()
+            return field
+
+        # Check for phone pattern
+        if self.PHONE_PATTERNS.search(combined):
+            field["validation"] = self.PHONE_VALIDATION.copy()
+            return field
+
+        # Check for numeric pattern
+        if self.NUMERIC_PATTERNS.search(combined):
+            field["validation"] = self.NUMERIC_VALIDATION.copy()
+            return field
+
+        return field
 
     def _apply_defaults(self, obj: dict, defaults: dict) -> dict:
         """Apply default values for missing keys."""

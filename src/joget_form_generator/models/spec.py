@@ -38,7 +38,7 @@ class FormMetadata(BaseModel):
 
 class Type(Enum):
     """
-    Field type (Phase 1: 9 standard fields)
+    Field type (Phase 1: 9 standard, Phase 2: 4 custom/advanced, Enterprise: 4 advanced fields)
     """
 
     hiddenField = 'hiddenField'
@@ -50,6 +50,14 @@ class Type(Enum):
     radio = 'radio'
     datePicker = 'datePicker'
     fileUpload = 'fileUpload'
+    customHTML = 'customHTML'
+    idGenerator = 'idGenerator'
+    subform = 'subform'
+    grid = 'grid'
+    calculationField = 'calculationField'
+    richTextEditor = 'richTextEditor'
+    formGrid = 'formGrid'
+    multiPagedForm = 'multiPagedForm'
 
 
 class Size(Enum):

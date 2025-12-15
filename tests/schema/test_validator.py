@@ -26,16 +26,15 @@ def test_missing_required_field(validator):
     """Test validation fails when required field missing."""
     spec = {
         "form": {
-            "id": "testForm",
-            "name": "Test Form"
-            # Missing: tableName (required)
+            "id": "testForm"
+            # Missing: name (required, cannot be auto-filled)
         },
-        "fields": [],
+        "fields": [{"id": "name", "label": "Name", "type": "textField"}],
     }
 
     result = validator.validate(spec)
     assert not result.valid
-    assert any("tableName" in error for error in result.errors)
+    assert any("'name' is a required property" in error for error in result.errors)
 
 
 def test_invalid_field_type(validator):

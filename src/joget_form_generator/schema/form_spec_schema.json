@@ -71,9 +71,17 @@
             "checkBox",
             "radio",
             "datePicker",
-            "fileUpload"
+            "fileUpload",
+            "customHTML",
+            "idGenerator",
+            "subform",
+            "grid",
+            "calculationField",
+            "richTextEditor",
+            "formGrid",
+            "multiPagedForm"
           ],
-          "description": "Field type (Phase 1: 9 standard fields)"
+          "description": "Field type (Phase 1: 9 standard, Phase 2: 4 custom/advanced, Enterprise: 4 advanced fields)"
         },
         "required": {
           "type": "boolean",
@@ -145,6 +153,85 @@
           "type": "string",
           "description": "Allowed file extensions, comma-separated (fileUpload)"
         },
+        "html": {
+          "type": "string",
+          "description": "HTML content (customHTML)"
+        },
+        "prefix": {
+          "type": "string",
+          "description": "ID prefix (idGenerator)"
+        },
+        "postfix": {
+          "type": "string",
+          "description": "ID postfix (idGenerator)"
+        },
+        "format": {
+          "type": "string",
+          "description": "ID format pattern, e.g., '{prefix}{count:05d}{postfix}' (idGenerator)"
+        },
+        "formId": {
+          "type": "string",
+          "description": "Referenced form ID (subform)"
+        },
+        "columns": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/GridColumn"
+          },
+          "description": "Grid column definitions (grid, formGrid)"
+        },
+        "equation": {
+          "type": "string",
+          "description": "Calculation equation/formula (calculationField)"
+        },
+        "storeNumeric": {
+          "type": "boolean",
+          "default": true,
+          "description": "Store result as numeric value (calculationField)"
+        },
+        "editor": {
+          "enum": ["tinymce", "quill"],
+          "default": "tinymce",
+          "description": "Rich text editor type (richTextEditor)"
+        },
+        "allowAddRow": {
+          "type": "boolean",
+          "default": true,
+          "description": "Allow adding new rows (formGrid)"
+        },
+        "allowDeleteRow": {
+          "type": "boolean",
+          "default": true,
+          "description": "Allow deleting rows (formGrid)"
+        },
+        "validateMinRow": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Minimum number of rows (grid, formGrid)"
+        },
+        "validateMaxRow": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Maximum number of rows (grid, formGrid)"
+        },
+        "pages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Page"
+          },
+          "minItems": 1,
+          "description": "Page definitions (multiPagedForm)"
+        },
+        "showNavigation": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show page navigation (multiPagedForm)"
+        },
+        "showProgressBar": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show progress bar (multiPagedForm)"
+        },
         "validation": {
           "$ref": "#/$defs/Validation",
           "description": "Validation rules"
@@ -167,7 +254,10 @@
             "properties": {"type": {"enum": ["checkBox", "radio"]}}
           },
           "then": {
-            "required": ["options"]
+            "oneOf": [
+              {"required": ["options"]},
+              {"required": ["optionsSource"]}
+            ]
           }
         }
       ]
@@ -201,12 +291,16 @@
         "valueColumn": {
           "type": "string",
           "default": "id",
-          "description": "Column for option value"
+          "description": "Column for option value (formData, database)"
         },
         "labelColumn": {
           "type": "string",
           "default": "name",
-          "description": "Column for option label"
+          "description": "Column for option label (formData, database)"
+        },
+        "groupingColumn": {
+          "type": "string",
+          "description": "Column for option grouping"
         },
         "parentField": {
           "type": "string",
@@ -216,27 +310,87 @@
           "type": "string",
           "description": "Field to filter by in cascading dropdown"
         },
-        "extraCondition": {
-          "type": "string",
-          "description": "Additional SQL WHERE condition"
+        "addEmptyOption": {
+          "type": "boolean",
+          "default": true,
+          "description": "Add empty first option (formData, api)"
         },
-        "url": {
+        "emptyLabel": {
+          "type": "string",
+          "default": "",
+          "description": "Label for empty option"
+        },
+        "useAjax": {
+          "type": "boolean",
+          "default": false,
+          "description": "Use AJAX for loading options"
+        },
+        "jsonUrl": {
           "type": "string",
           "format": "uri",
           "description": "API endpoint URL (api type)"
         },
-        "method": {
-          "enum": ["GET", "POST"],
+        "requestType": {
+          "enum": ["GET", "POST", "PUT", "DELETE"],
           "default": "GET",
-          "description": "HTTP method (api type)"
+          "description": "HTTP request method (api type)"
         },
-        "valueJsonPath": {
-          "type": "string",
-          "description": "JSONPath for value extraction (api type)"
+        "postMethod": {
+          "enum": ["parameters", "jsonPayload", "custom"],
+          "default": "parameters",
+          "description": "POST/PUT body format (api type)"
         },
-        "labelJsonPath": {
+        "params": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {"type": "string"},
+              "value": {"type": "string"}
+            }
+          },
+          "description": "Request parameters (api type)"
+        },
+        "customPayload": {
           "type": "string",
-          "description": "JSONPath for label extraction (api type)"
+          "description": "Custom JSON payload (api type, postMethod=custom)"
+        },
+        "headers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {"type": "string"},
+              "value": {"type": "string"}
+            }
+          },
+          "description": "HTTP headers (api type)"
+        },
+        "idColumn": {
+          "type": "string",
+          "description": "JSON field for value (api type)"
+        },
+        "multirowBaseObject": {
+          "type": "string",
+          "description": "Base JSON object path for array extraction (api type)"
+        },
+        "jdbcDatasource": {
+          "type": "string",
+          "default": "default",
+          "description": "JDBC datasource name (database type)"
+        },
+        "tableName": {
+          "type": "string",
+          "description": "Database table name (database type)"
+        },
+        "extraCondition": {
+          "type": "string",
+          "description": "SQL WHERE condition (database type)"
+        },
+        "addEmpty": {
+          "type": "boolean",
+          "default": true,
+          "description": "Add empty first option (database type)"
         }
       },
       "allOf": [
@@ -253,7 +407,15 @@
             "properties": {"type": {"const": "api"}}
           },
           "then": {
-            "required": ["url"]
+            "required": ["jsonUrl", "idColumn", "labelColumn"]
+          }
+        },
+        {
+          "if": {
+            "properties": {"type": {"const": "database"}}
+          },
+          "then": {
+            "required": ["tableName", "valueColumn", "labelColumn"]
           }
         }
       ]
@@ -278,6 +440,55 @@
         "message": {
           "type": "string",
           "description": "Custom validation error message"
+        }
+      }
+    },
+    "GridColumn": {
+      "type": "object",
+      "required": ["id", "label", "type"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$",
+          "description": "Column ID"
+        },
+        "label": {
+          "type": "string",
+          "description": "Column label"
+        },
+        "type": {
+          "enum": ["textField", "selectBox", "datePicker", "checkBox"],
+          "description": "Column field type (subset of main field types)"
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Option"
+          },
+          "description": "Options for selectBox columns"
+        },
+        "editable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether column is editable"
+        }
+      }
+    },
+    "Page": {
+      "type": "object",
+      "required": ["formId"],
+      "properties": {
+        "formId": {
+          "type": "string",
+          "description": "Referenced form ID for this page"
+        },
+        "label": {
+          "type": "string",
+          "description": "Page label/title"
+        },
+        "description": {
+          "type": "string",
+          "description": "Page description"
         }
       }
     }

@@ -149,38 +149,87 @@ class OptionsMixin:
         if source_type == "formData":
             # Nested LOV: get options from another form (parent form reference)
             # Uses FormOptionsBinder for simple parent-child relationships
+            add_empty = options_source.get("addEmptyOption", True)
+            use_ajax = options_source.get("useAjax", False)
+
             return {
                 "className": "org.joget.apps.form.lib.FormOptionsBinder",
                 "properties": {
                     "formDefId": options_source["formId"],
                     "idColumn": options_source.get("valueColumn", "code"),
                     "labelColumn": options_source.get("labelColumn", "name"),
-                    "addEmptyOption": options_source.get("addEmptyOption", "true"),
-                    "useAjax": options_source.get("useAjax", "false"),
+                    "addEmptyOption": "true" if add_empty else "false",
+                    "useAjax": "true" if use_ajax else "false",
                 },
             }
 
         elif source_type == "api":
-            # API-based options
+            # JSON API-based options (JsonApiFormOptionsBinder)
+            props = {
+                "jsonUrl": options_source["jsonUrl"],
+                "requestType": options_source.get("requestType", "GET").lower(),
+                "idColumn": options_source["idColumn"],
+                "labelColumn": options_source["labelColumn"],
+                "addEmptyOption": "true" if options_source.get("addEmptyOption", True) else "false",
+                "emptyLabel": options_source.get("emptyLabel", ""),
+                "useAjax": "true" if options_source.get("useAjax", False) else "false",
+            }
+
+            # Optional grouping column
+            if grouping := options_source.get("groupingColumn"):
+                props["groupingColumn"] = grouping
+
+            # Optional base object for array extraction
+            if base_obj := options_source.get("multirowBaseObject"):
+                props["multirowBaseObject"] = base_obj
+
+            # POST/PUT specific options
+            if props["requestType"] in ["post", "put"]:
+                props["postMethod"] = options_source.get("postMethod", "parameters")
+
+                if props["postMethod"] == "custom" and "customPayload" in options_source:
+                    props["customPayload"] = options_source["customPayload"]
+                elif "params" in options_source:
+                    props["params"] = options_source["params"]
+
+            # HTTP headers
+            if "headers" in options_source:
+                props["headers"] = options_source["headers"]
+
             return {
-                "className": "org.joget.apps.form.lib.RestApiFormBinder",
-                "properties": {
-                    "url": options_source["url"],
-                    "method": options_source.get("method", "GET"),
-                    "valueJsonPath": options_source.get("valueJsonPath", "$.value"),
-                    "labelJsonPath": options_source.get("labelJsonPath", "$.label"),
-                },
+                "className": "org.joget.apps.form.lib.JsonApiFormOptionsBinder",
+                "properties": props,
             }
 
         elif source_type == "database":
-            # Direct database query
+            # Database wizard options binder (Enterprise Edition)
+            props = {
+                "jdbcDatasource": options_source.get("jdbcDatasource", "default"),
+                "tableName": options_source["tableName"],
+                "valueColumn": options_source["valueColumn"],
+                "labelColumn": options_source["labelColumn"],
+                "addEmpty": "true" if options_source.get("addEmpty", True) else "false",
+                "emptyLabel": options_source.get("emptyLabel", ""),
+                "useAjax": "true" if options_source.get("useAjax", False) else "false",
+                "joins": [],
+                "filters": [],
+            }
+
+            # Optional grouping column
+            if grouping := options_source.get("groupingColumn"):
+                props["groupingColumn"] = grouping
+            else:
+                props["groupingColumn"] = ""
+
+            # Optional extra SQL condition
+            if extra := options_source.get("extraCondition"):
+                props["extraCondition"] = extra
+            else:
+                props["extraCondition"] = ""
+
             return {
-                "className": "org.joget.apps.form.lib.JdbcOptionsBinder",
-                "properties": {
-                    "datasource": options_source.get("datasource", "default"),
-                    "sql": options_source.get("sql", ""),
-                    "useAjax": "true",
-                },
+                "className": "org.joget.plugin.enterprise.DatabaseWizardOptionsBinder",
+                "properties": props,
             }
 
         else:

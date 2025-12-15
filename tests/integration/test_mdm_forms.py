@@ -176,8 +176,8 @@ class TestMDMFormGeneration:
                         "formId": "parentForm",
                         "valueColumn": "code",
                         "labelColumn": "name",
-                        "addEmptyOption": "true",
-                        "useAjax": "false"
+                        "addEmptyOption": True,
+                        "useAjax": False
                     }
                 }
             ]

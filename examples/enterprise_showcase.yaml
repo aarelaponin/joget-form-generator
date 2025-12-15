@@ -1,0 +1,161 @@
+# Enterprise Edition Features Showcase
+# Demonstrates advanced field types available in Joget Professional/Enterprise editions
+
+form:
+  id: enterpriseShowcase
+  name: Enterprise Features Showcase
+  description: Demonstration of Enterprise Edition field types
+
+fields:
+  # Basic information section
+  - id: title
+    label: Form Title
+    type: textField
+    required: true
+    defaultValue: Enterprise Features Demo
+
+  # 1. Multi Select Box (Enterprise)
+  # Allows multiple selections with auto-complete behavior
+  - id: technologies
+    label: Technologies (Multi-Select)
+    type: selectBox
+    multiple: true
+    size: large
+    required: true
+    options:
+      - value: java
+        label: Java
+      - value: python
+        label: Python
+      - value: javascript
+        label: JavaScript
+      - value: typescript
+        label: TypeScript
+      - value: go
+        label: Go
+      - value: rust
+        label: Rust
+
+  # 2. Calculation Field (Enterprise)
+  # Performs arithmetic computations on field values
+  - id: quantity
+    label: Quantity
+    type: textField
+    required: true
+    defaultValue: "1"
+
+  - id: unitPrice
+    label: Unit Price
+    type: textField
+    required: true
+    defaultValue: "100.00"
+
+  - id: taxRate
+    label: Tax Rate (%)
+    type: textField
+    defaultValue: "21"
+
+  - id: subtotal
+    label: Subtotal
+    type: calculationField
+    equation: quantity * unitPrice
+    storeNumeric: true
+    readonly: true
+
+  - id: taxAmount
+    label: Tax Amount
+    type: calculationField
+    equation: (quantity * unitPrice) * (taxRate / 100)
+    storeNumeric: true
+    readonly: true
+
+  - id: total
+    label: Total Amount
+    type: calculationField
+    equation: subtotal + taxAmount
+    storeNumeric: true
+    readonly: true
+
+  # 3. Rich Text Editor (Enterprise)
+  # WYSIWYG HTML editor for formatted content
+  - id: productDescription
+    label: Product Description
+    type: richTextEditor
+    editor: tinymce
+    rows: 15
+    placeholder: Enter detailed product description with formatting...
+    required: true
+
+  - id: emailTemplate
+    label: Email Template (Quill Editor)
+    type: richTextEditor
+    editor: quill
+    rows: 12
+    defaultValue: <p>Dear <strong>Customer</strong>,</p><p>Thank you for your purchase!</p>
+
+  # 4. Form Grid (Enterprise)
+  # Advanced grid with complex field types
+  - id: orderLines
+    label: Order Line Items
+    type: formGrid
+    required: true
+    validateMinRow: 1
+    validateMaxRow: 20
+    allowAddRow: true
+    allowDeleteRow: true
+    columns:
+      - id: product
+        label: Product
+        type: textField
+        editable: true
+      - id: sku
+        label: SKU
+        type: textField
+        editable: true
+      - id: qty
+        label: Quantity
+        type: textField
+        editable: true
+      - id: price
+        label: Unit Price
+        type: textField
+        editable: true
+      - id: status
+        label: Status
+        type: selectBox
+        editable: true
+        options:
+          - value: pending
+            label: Pending
+          - value: shipped
+            label: Shipped
+          - value: delivered
+            label: Delivered
+
+  # Read-only grid for displaying calculated results
+  - id: summaryGrid
+    label: Summary Grid (Read-Only)
+    type: formGrid
+    readonly: true
+    allowAddRow: false
+    allowDeleteRow: false
+    columns:
+      - id: category
+        label: Category
+        type: textField
+        editable: false
+      - id: count
+        label: Count
+        type: textField
+        editable: false
+      - id: amount
+        label: Total Amount
+        type: textField
+        editable: false
+
+  # Additional notes
+  - id: additionalNotes
+    label: Additional Notes
+    type: textArea
+    rows: 4
+    placeholder: Add any additional comments here...
