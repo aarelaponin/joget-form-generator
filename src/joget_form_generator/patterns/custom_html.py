@@ -9,9 +9,7 @@ class CustomHTMLPattern(BasePattern):
 
     template_name: ClassVar[str] = "custom_html.j2"
 
-    def _prepare_context(
-        self, field: dict[str, Any], context: dict[str, Any]
-    ) -> dict[str, Any]:
+    def _prepare_context(self, field: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
         """
         Prepare context for CustomHTML template.
 

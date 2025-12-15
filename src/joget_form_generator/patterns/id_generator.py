@@ -9,9 +9,7 @@ class IDGeneratorPattern(BasePattern):
 
     template_name: ClassVar[str] = "id_generator.j2"
 
-    def _prepare_context(
-        self, field: dict[str, Any], context: dict[str, Any]
-    ) -> dict[str, Any]:
+    def _prepare_context(self, field: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
         """
         Prepare context for IDGenerator template.
 

@@ -121,13 +121,8 @@ class TestOptionsMixin:
             "idColumn": "id",
             "labelColumn": "title",
             "postMethod": "parameters",
-            "params": [
-                {"name": "category", "value": "books"},
-                {"name": "limit", "value": "100"}
-            ],
-            "headers": [
-                {"name": "Authorization", "value": "Bearer TOKEN"}
-            ],
+            "params": [{"name": "category", "value": "books"}, {"name": "limit", "value": "100"}],
+            "headers": [{"name": "Authorization", "value": "Bearer TOKEN"}],
         }
         context = {}
 
@@ -171,7 +166,9 @@ class TestOptionsMixin:
 
         options_binder = mixin._build_dynamic_options(options_source, context)
 
-        assert options_binder["className"] == "org.joget.plugin.enterprise.DatabaseWizardOptionsBinder"
+        assert (
+            options_binder["className"] == "org.joget.plugin.enterprise.DatabaseWizardOptionsBinder"
+        )
         assert options_binder["properties"]["jdbcDatasource"] == "default"
         assert options_binder["properties"]["tableName"] == "app_fd_categories"
         assert options_binder["properties"]["valueColumn"] == "c_code"

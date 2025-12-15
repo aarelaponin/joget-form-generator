@@ -47,9 +47,7 @@ def generate(
         joget-form-gen generate myform.yaml -o output/
     """
 
-    console.print(
-        Panel.fit("[bold blue]Joget Form Generator[/bold blue]", subtitle="v0.1.0")
-    )
+    console.print(Panel.fit("[bold blue]Joget Form Generator[/bold blue]", subtitle="v0.1.0"))
     console.print(f"📄 Specification: [cyan]{spec_file}[/cyan]")
 
     # Import here to avoid slow startup
@@ -100,9 +98,7 @@ def generate(
     console.print("[green]✓ Validation passed[/green]")
 
     if validate_only:
-        console.print(
-            "\n[bold green]✓ Validation complete (no forms generated)[/bold green]"
-        )
+        console.print("\n[bold green]✓ Validation complete (no forms generated)[/bold green]")
         return
 
     # Phase 3: Generate forms
@@ -151,9 +147,7 @@ def generate(
 
     table.add_row("Forms Generated", str(len(forms)))
     table.add_row("Output Directory", str(output_dir))
-    table.add_row(
-        "Total Fields", str(sum(len(f.get("elements", [])) for f in forms.values()))
-    )
+    table.add_row("Total Fields", str(sum(len(f.get("elements", [])) for f in forms.values())))
 
     console.print()
     console.print(table)
@@ -439,7 +433,9 @@ def generate_from_db(
             subtitle="v0.1.0",
         )
     )
-    console.print(f"🗄️  Database: [cyan]{connection_string.split('@')[-1] if '@' in connection_string else connection_string}[/cyan]")
+    console.print(
+        f"🗄️  Database: [cyan]{connection_string.split('@')[-1] if '@' in connection_string else connection_string}[/cyan]"
+    )
     console.print(f"📊 Table: [cyan]{table_name}[/cyan]")
 
     # Phase 1: Connect and analyze database
@@ -456,7 +452,7 @@ def generate_from_db(
             # Parse skip_columns if provided
             skip_list = None
             if skip_columns:
-                skip_list = [col.strip() for col in skip_columns.split(',')]
+                skip_list = [col.strip() for col in skip_columns.split(",")]
 
             spec = analyzer.analyze_table(
                 table_name,
@@ -607,9 +603,7 @@ def deploy(
         "--overwrite",
         help="Overwrite existing forms",
     ),
-    verbose: bool = typer.Option(
-        False, "--verbose", "-v", help="Show detailed progress"
-    ),
+    verbose: bool = typer.Option(False, "--verbose", "-v", help="Show detailed progress"),
 ):
     """
     Deploy form(s) to a Joget DX instance.
@@ -637,10 +631,7 @@ def deploy(
             from ..deployment.api_client import JogetAPIClient
 
             client = JogetAPIClient(
-                base_url=base_url,
-                app_id=app_id,
-                username=username,
-                password=password
+                base_url=base_url, app_id=app_id, username=username, password=password
             )
 
             # Get version info
@@ -674,7 +665,9 @@ def deploy(
                     if verbose:
                         console.print(f"  File: [cyan]{form_path}[/cyan]")
                 else:
-                    console.print(f"[red]❌ Deployment failed: {result.get('message', 'Unknown error')}[/red]")
+                    console.print(
+                        f"[red]❌ Deployment failed: {result.get('message', 'Unknown error')}[/red]"
+                    )
                     raise typer.Exit(code=1)
 
             except Exception as e:
@@ -682,6 +675,7 @@ def deploy(
                 console.print(f"  {e}")
                 if verbose:
                     import traceback
+
                     console.print("\n[yellow]Stack trace:[/yellow]")
                     console.print(traceback.format_exc())
                 raise typer.Exit(code=1)
@@ -697,8 +691,7 @@ def deploy(
 
             try:
                 results = client.deploy_forms_from_directory(
-                    form_path,
-                    overwrite_existing=overwrite
+                    form_path, overwrite_existing=overwrite
                 )
                 progress.update(task, completed=True)
 

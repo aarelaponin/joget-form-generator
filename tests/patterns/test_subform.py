@@ -95,9 +95,13 @@ def test_required_subform(pattern):
 
     result = pattern.render(field, context)
 
-    assert result["properties"]["validator"]["className"] == "org.joget.apps.form.lib.DefaultValidator"
+    assert (
+        result["properties"]["validator"]["className"] == "org.joget.apps.form.lib.DefaultValidator"
+    )
     assert result["properties"]["validator"]["properties"]["mandatory"] == "true"
-    assert "Input Requests is required" in result["properties"]["validator"]["properties"]["message"]
+    assert (
+        "Input Requests is required" in result["properties"]["validator"]["properties"]["message"]
+    )
 
 
 def test_subform_with_workflow_variable(pattern):

@@ -70,11 +70,11 @@ def create_server() -> Server:
                     "properties": {
                         "yaml_spec": {
                             "type": "string",
-                            "description": "YAML specification for the form"
+                            "description": "YAML specification for the form",
                         }
                     },
-                    "required": ["yaml_spec"]
-                }
+                    "required": ["yaml_spec"],
+                },
             ),
             Tool(
                 name="generate_multiple_forms",
@@ -87,13 +87,12 @@ def create_server() -> Server:
                     "properties": {
                         "yaml_spec": {
                             "type": "string",
-                            "description": "YAML specification with multiple form definitions"
+                            "description": "YAML specification with multiple form definitions",
                         }
                     },
-                    "required": ["yaml_spec"]
-                }
+                    "required": ["yaml_spec"],
+                },
             ),
-
             # Validation tools
             Tool(
                 name="validate_spec",
@@ -106,11 +105,11 @@ def create_server() -> Server:
                     "properties": {
                         "yaml_spec": {
                             "type": "string",
-                            "description": "YAML specification to validate"
+                            "description": "YAML specification to validate",
                         }
                     },
-                    "required": ["yaml_spec"]
-                }
+                    "required": ["yaml_spec"],
+                },
             ),
             Tool(
                 name="validate_joget_json",
@@ -123,13 +122,12 @@ def create_server() -> Server:
                     "properties": {
                         "joget_json": {
                             "type": "string",
-                            "description": "Joget form JSON to validate"
+                            "description": "Joget form JSON to validate",
                         }
                     },
-                    "required": ["joget_json"]
-                }
+                    "required": ["joget_json"],
+                },
             ),
-
             # Discovery tools
             Tool(
                 name="list_field_types",
@@ -137,11 +135,7 @@ def create_server() -> Server:
                     "List all supported Joget field types with descriptions. "
                     "Returns field types grouped by category (standard, advanced, enterprise)."
                 ),
-                inputSchema={
-                    "type": "object",
-                    "properties": {},
-                    "required": []
-                }
+                inputSchema={"type": "object", "properties": {}, "required": []},
             ),
             Tool(
                 name="get_field_type_info",
@@ -154,11 +148,11 @@ def create_server() -> Server:
                     "properties": {
                         "field_type": {
                             "type": "string",
-                            "description": "Field type name (e.g., 'textField', 'selectBox', 'calculationField')"
+                            "description": "Field type name (e.g., 'textField', 'selectBox', 'calculationField')",
                         }
                     },
-                    "required": ["field_type"]
-                }
+                    "required": ["field_type"],
+                },
             ),
             Tool(
                 name="get_example_spec",
@@ -172,13 +166,12 @@ def create_server() -> Server:
                     "properties": {
                         "example_name": {
                             "type": "string",
-                            "description": "Name of the example to retrieve"
+                            "description": "Name of the example to retrieve",
                         }
                     },
-                    "required": ["example_name"]
-                }
+                    "required": ["example_name"],
+                },
             ),
-
             # Specification tools
             Tool(
                 name="create_form_spec",
@@ -192,19 +185,19 @@ def create_server() -> Server:
                     "properties": {
                         "description": {
                             "type": "string",
-                            "description": "Natural language description of the form to create"
+                            "description": "Natural language description of the form to create",
                         },
                         "form_id": {
                             "type": "string",
-                            "description": "ID for the form (optional, will be generated if not provided)"
+                            "description": "ID for the form (optional, will be generated if not provided)",
                         },
                         "form_name": {
                             "type": "string",
-                            "description": "Display name for the form (optional)"
-                        }
+                            "description": "Display name for the form (optional)",
+                        },
                     },
-                    "required": ["description"]
-                }
+                    "required": ["description"],
+                },
             ),
             Tool(
                 name="create_cascading_dropdown_spec",
@@ -217,27 +210,27 @@ def create_server() -> Server:
                     "properties": {
                         "parent_form_id": {
                             "type": "string",
-                            "description": "ID of the parent form (e.g., 'md25equipCategory')"
+                            "description": "ID of the parent form (e.g., 'md25equipCategory')",
                         },
                         "child_form_id": {
                             "type": "string",
-                            "description": "ID of the child form (e.g., 'md25equipment')"
+                            "description": "ID of the child form (e.g., 'md25equipment')",
                         },
                         "parent_label_field": {
                             "type": "string",
-                            "description": "Field in parent form to display as label"
+                            "description": "Field in parent form to display as label",
                         },
                         "parent_value_field": {
                             "type": "string",
-                            "description": "Field in parent form to use as value"
+                            "description": "Field in parent form to use as value",
                         },
                         "child_fk_field": {
                             "type": "string",
-                            "description": "Foreign key field in child form"
-                        }
+                            "description": "Foreign key field in child form",
+                        },
                     },
-                    "required": ["parent_form_id", "child_form_id"]
-                }
+                    "required": ["parent_form_id", "child_form_id"],
+                },
             ),
             Tool(
                 name="add_field_to_spec",
@@ -250,21 +243,20 @@ def create_server() -> Server:
                     "properties": {
                         "yaml_spec": {
                             "type": "string",
-                            "description": "Existing YAML specification"
+                            "description": "Existing YAML specification",
                         },
                         "field_description": {
                             "type": "string",
-                            "description": "Description of the field to add"
+                            "description": "Description of the field to add",
                         },
                         "position": {
                             "type": "integer",
-                            "description": "Position to insert field (0-based, default: end)"
-                        }
+                            "description": "Position to insert field (0-based, default: end)",
+                        },
                     },
-                    "required": ["yaml_spec", "field_description"]
-                }
+                    "required": ["yaml_spec", "field_description"],
+                },
             ),
-
         ]
 
     @server.call_tool()
@@ -294,9 +286,7 @@ def create_server() -> Server:
             # Specification tools
             elif name == "create_form_spec":
                 result = specification_tools.create_form_spec(
-                    arguments["description"],
-                    arguments.get("form_id"),
-                    arguments.get("form_name")
+                    arguments["description"], arguments.get("form_id"), arguments.get("form_name")
                 )
             elif name == "create_cascading_dropdown_spec":
                 result = specification_tools.create_cascading_dropdown_spec(
@@ -304,13 +294,13 @@ def create_server() -> Server:
                     arguments["child_form_id"],
                     arguments.get("parent_label_field", "name"),
                     arguments.get("parent_value_field", "code"),
-                    arguments.get("child_fk_field", "categoryCode")
+                    arguments.get("child_fk_field", "categoryCode"),
                 )
             elif name == "add_field_to_spec":
                 result = specification_tools.add_field_to_spec(
                     arguments["yaml_spec"],
                     arguments["field_description"],
-                    arguments.get("position")
+                    arguments.get("position"),
                 )
 
             else:
@@ -320,11 +310,7 @@ def create_server() -> Server:
 
         except Exception as e:
             logger.exception(f"Error in tool {name}")
-            error_result = {
-                "error": str(e),
-                "tool": name,
-                "arguments": arguments
-            }
+            error_result = {"error": str(e), "tool": name, "arguments": arguments}
             return [TextContent(type="text", text=json.dumps(error_result, indent=2))]
 
     @server.list_resources()
@@ -335,31 +321,31 @@ def create_server() -> Server:
                 uri=AnyUrl("joget://docs/field-types"),
                 name="Field Types Documentation",
                 description="Complete documentation for all supported Joget field types",
-                mimeType="text/markdown"
+                mimeType="text/markdown",
             ),
             Resource(
                 uri=AnyUrl("joget://docs/cascading-dropdowns"),
                 name="Cascading Dropdowns Guide",
                 description="How to create cascading dropdown patterns (nested LOV)",
-                mimeType="text/markdown"
+                mimeType="text/markdown",
             ),
             Resource(
                 uri=AnyUrl("joget://examples/simple-form"),
                 name="Simple Form Example",
                 description="Basic form with text fields and select box",
-                mimeType="text/yaml"
+                mimeType="text/yaml",
             ),
             Resource(
                 uri=AnyUrl("joget://examples/mdm-form"),
                 name="MDM Form Example",
                 description="Master Data Management form with cascading dropdowns",
-                mimeType="text/yaml"
+                mimeType="text/yaml",
             ),
             Resource(
                 uri=AnyUrl("joget://examples/enterprise-showcase"),
                 name="Enterprise Features Showcase",
                 description="Form demonstrating calculation fields, rich text, form grid",
-                mimeType="text/yaml"
+                mimeType="text/yaml",
             ),
         ]
 
@@ -396,13 +382,13 @@ async def main():
                 server_name="joget-form-generator",
                 server_version="0.1.0",
                 capabilities=server.get_capabilities(
-                    notification_options=None,
-                    experimental_capabilities={}
-                )
-            )
+                    notification_options=None, experimental_capabilities={}
+                ),
+            ),
         )
 
 
 if __name__ == "__main__":
     import asyncio
+
     asyncio.run(main())

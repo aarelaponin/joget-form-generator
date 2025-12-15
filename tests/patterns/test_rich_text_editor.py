@@ -13,7 +13,6 @@ def test_basic_rich_text_editor():
     }
 
     result = pattern.render(field, {})
-    
 
     assert result["className"] == "org.joget.plugin.enterprise.RichTextEditor"
     assert result["properties"]["id"] == "description"
@@ -34,7 +33,6 @@ def test_rich_text_editor_with_quill():
     }
 
     result = pattern.render(field, {})
-    
 
     assert result["properties"]["editor"] == "quill"
 
@@ -50,7 +48,6 @@ def test_rich_text_editor_with_default_value():
     }
 
     result = pattern.render(field, {})
-    
 
     assert result["properties"]["value"] == "<p>Hello <strong>World</strong>!</p>"
 
@@ -66,7 +63,6 @@ def test_rich_text_editor_with_custom_height():
     }
 
     result = pattern.render(field, {})
-    
 
     assert result["properties"]["rows"] == "20"
 
@@ -83,7 +79,6 @@ def test_rich_text_editor_with_placeholder():
     }
 
     result = pattern.render(field, {})
-    
 
     assert result["properties"]["placeholder"] == "Enter your notes here..."
     assert result["properties"]["required"] == "true"
@@ -100,6 +95,5 @@ def test_rich_text_editor_readonly():
     }
 
     result = pattern.render(field, {})
-    
 
     assert result["properties"]["readonly"] == "true"

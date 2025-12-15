@@ -89,19 +89,14 @@ class TransformEngine:
         # Wrap fields in Section → Column layout (MDM pattern)
         section = {
             "className": "org.joget.apps.form.model.Section",
-            "properties": {
-                "id": "section1",
-                "label": "Section"
-            },
+            "properties": {"id": "section1", "label": "Section"},
             "elements": [
                 {
                     "className": "org.joget.apps.form.model.Column",
-                    "properties": {
-                        "width": "100%"
-                    },
-                    "elements": field_elements
+                    "properties": {"width": "100%"},
+                    "elements": field_elements,
                 }
-            ]
+            ],
         }
 
         # Build form structure with WorkflowFormBinder (MDM pattern)
@@ -114,24 +109,18 @@ class TransformEngine:
                 "description": form_meta.get("description", ""),
                 "loadBinder": {
                     "className": "org.joget.apps.form.lib.WorkflowFormBinder",
-                    "properties": {}
+                    "properties": {},
                 },
                 "storeBinder": {
                     "className": "org.joget.apps.form.lib.WorkflowFormBinder",
-                    "properties": {}
+                    "properties": {},
                 },
                 "noPermissionMessage": "",
                 "postProcessorRunOn": "create",
-                "permission": {
-                    "className": "",
-                    "properties": {}
-                },
-                "postProcessor": {
-                    "className": "",
-                    "properties": {}
-                }
+                "permission": {"className": "", "properties": {}},
+                "postProcessor": {"className": "", "properties": {}},
             },
-            "elements": [section]
+            "elements": [section],
         }
 
         return form_json

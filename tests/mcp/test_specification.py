@@ -35,9 +35,7 @@ class TestSpecificationTools:
     def test_create_form_spec_with_id_and_name(self, tools):
         """Test creating form spec with custom ID and name."""
         result = tools.create_form_spec(
-            "A form with name and email",
-            form_id="customForm",
-            form_name="My Custom Form"
+            "A form with name and email", form_id="customForm", form_name="My Custom Form"
         )
 
         assert result["success"] is True
@@ -47,9 +45,7 @@ class TestSpecificationTools:
 
     def test_create_form_spec_infers_field_types(self, tools):
         """Test that field types are correctly inferred."""
-        result = tools.create_form_spec(
-            "Form with email address, phone number, and birth date"
-        )
+        result = tools.create_form_spec("Form with email address, phone number, and birth date")
 
         assert result["success"] is True
         spec = yaml.safe_load(result["yaml_spec"])
@@ -79,8 +75,7 @@ class TestSpecificationTools:
     def test_create_cascading_dropdown_spec(self, tools):
         """Test creating cascading dropdown pattern."""
         result = tools.create_cascading_dropdown_spec(
-            parent_form_id="md25equipCategory",
-            child_form_id="md25equipment"
+            parent_form_id="md25equipCategory", child_form_id="md25equipment"
         )
 
         assert result["success"] is True
@@ -98,10 +93,7 @@ class TestSpecificationTools:
         assert child["form"]["id"] == "md25equipment"
 
         # Check cascading dropdown field
-        category_field = next(
-            (f for f in child["fields"] if f.get("optionsSource")),
-            None
-        )
+        category_field = next((f for f in child["fields"] if f.get("optionsSource")), None)
         assert category_field is not None
         assert category_field["type"] == "selectBox"
         assert category_field["optionsSource"]["type"] == "formData"
@@ -114,7 +106,7 @@ class TestSpecificationTools:
             child_form_id="items",
             parent_label_field="title",
             parent_value_field="id",
-            child_fk_field="parentCategoryId"
+            child_fk_field="parentCategoryId",
         )
 
         assert result["success"] is True
@@ -140,10 +132,7 @@ fields:
     label: Name
     type: textField
 """
-        result = tools.add_field_to_spec(
-            original_yaml,
-            "email"  # Simple field name
-        )
+        result = tools.add_field_to_spec(original_yaml, "email")  # Simple field name
 
         assert result["success"] is True
         assert "yaml_spec" in result
@@ -171,9 +160,7 @@ fields:
     type: textField
 """
         result = tools.add_field_to_spec(
-            original_yaml,
-            "description notes",
-            position=1  # Insert between field1 and field3
+            original_yaml, "description notes", position=1  # Insert between field1 and field3
         )
 
         assert result["success"] is True
@@ -184,10 +171,7 @@ fields:
 
     def test_add_field_to_spec_invalid_yaml(self, tools):
         """Test adding field to invalid YAML."""
-        result = tools.add_field_to_spec(
-            "not: valid: yaml: [",
-            "some field"
-        )
+        result = tools.add_field_to_spec("not: valid: yaml: [", "some field")
 
         assert result["success"] is False
         assert "error" in result

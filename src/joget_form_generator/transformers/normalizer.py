@@ -12,25 +12,26 @@ class Normalizer:
     DEFAULT_FORM_VALUES = {"description": ""}
 
     # Patterns for intelligent field detection
-    EMAIL_PATTERNS = re.compile(r'\b(email|e[-_]?mail|mail)\b', re.IGNORECASE)
-    PHONE_PATTERNS = re.compile(r'\b(phone|mobile|tel|telephone|contact[-_]?number)\b', re.IGNORECASE)
-    NUMERIC_PATTERNS = re.compile(r'\b(age|quantity|count|number|amount|price|cost)\b', re.IGNORECASE)
+    EMAIL_PATTERNS = re.compile(r"\b(email|e[-_]?mail|mail)\b", re.IGNORECASE)
+    PHONE_PATTERNS = re.compile(
+        r"\b(phone|mobile|tel|telephone|contact[-_]?number)\b", re.IGNORECASE
+    )
+    NUMERIC_PATTERNS = re.compile(
+        r"\b(age|quantity|count|number|amount|price|cost)\b", re.IGNORECASE
+    )
 
     # Validation patterns
     EMAIL_VALIDATION = {
         "pattern": r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
-        "message": "Please enter a valid email address"
+        "message": "Please enter a valid email address",
     }
 
     PHONE_VALIDATION = {
         "pattern": r"^[+]?[0-9\s\-()]+$",
-        "message": "Please enter a valid phone number"
+        "message": "Please enter a valid phone number",
     }
 
-    NUMERIC_VALIDATION = {
-        "pattern": r"^[0-9]+$",
-        "message": "Please enter numbers only"
-    }
+    NUMERIC_VALIDATION = {"pattern": r"^[0-9]+$", "message": "Please enter numbers only"}
 
     def normalize(self, spec: dict[str, Any]) -> dict[str, Any]:
         """
@@ -45,9 +46,7 @@ class Normalizer:
         normalized = spec.copy()
 
         # Apply form-level defaults
-        normalized["form"] = self._apply_defaults(
-            normalized["form"], self.DEFAULT_FORM_VALUES
-        )
+        normalized["form"] = self._apply_defaults(normalized["form"], self.DEFAULT_FORM_VALUES)
 
         # Ensure id matches tableName (critical for Joget)
         form_meta = normalized["form"]
@@ -58,9 +57,7 @@ class Normalizer:
             form_meta["tableName"] = form_meta["id"]
 
         # Apply field-level defaults
-        normalized["fields"] = [
-            self._apply_field_defaults(field) for field in normalized["fields"]
-        ]
+        normalized["fields"] = [self._apply_field_defaults(field) for field in normalized["fields"]]
 
         return normalized
 

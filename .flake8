@@ -1,0 +1,20 @@
+[flake8]
+max-line-length = 100
+extend-ignore =
+    E203,
+    W503,
+    F541,
+    E501
+exclude =
+    .git,
+    __pycache__,
+    venv,
+    .venv,
+    build,
+    dist,
+    *.egg-info
+per-file-ignores =
+    src/joget_form_generator/cli/main.py:F401
+    src/joget_form_mcp/cli.py:F401
+    src/joget_form_mcp/server.py:F401
+    tests/*:F401

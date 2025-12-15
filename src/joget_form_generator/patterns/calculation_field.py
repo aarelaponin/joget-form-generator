@@ -14,9 +14,7 @@ class CalculationFieldPattern(BasePattern, ReadOnlyMixin):
 
     template_name: ClassVar[str] = "calculation_field.j2"
 
-    def _prepare_context(
-        self, field: dict[str, Any], context: dict[str, Any]
-    ) -> dict[str, Any]:
+    def _prepare_context(self, field: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
         """
         Prepare context for Calculation Field template.
 

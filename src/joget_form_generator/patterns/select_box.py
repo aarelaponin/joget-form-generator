@@ -10,9 +10,7 @@ class SelectBoxPattern(BasePattern, ReadOnlyMixin, OptionsMixin):
 
     template_name: ClassVar[str] = "select_box.j2"
 
-    def _prepare_context(
-        self, field: dict[str, Any], context: dict[str, Any]
-    ) -> dict[str, Any]:
+    def _prepare_context(self, field: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
         """Prepare context for SelectBox template."""
         return {
             "id": field["id"],

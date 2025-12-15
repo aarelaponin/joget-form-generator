@@ -13,9 +13,7 @@ class DualValidator:
     def __init__(self, schema_path: Path | None = None):
         self.schema_validator = SchemaValidator(schema_path)
 
-    def validate(
-        self, spec_dict: dict[str, Any]
-    ) -> tuple[ValidationResult, Any | None]:
+    def validate(self, spec_dict: dict[str, Any]) -> tuple[ValidationResult, Any | None]:
         """
         Run dual validation.
 
@@ -50,7 +48,7 @@ class DualValidator:
             # Convert Pydantic errors to our format
             errors = []
             for error in e.errors():
-                loc = " → ".join(str(l) for l in error["loc"])
+                loc = " → ".join(str(part) for part in error["loc"])
                 msg = error["msg"]
                 errors.append(f"[{loc}] {msg}")
 

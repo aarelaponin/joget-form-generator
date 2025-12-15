@@ -13,9 +13,7 @@ class MultiPagedFormPattern(BasePattern):
 
     template_name: ClassVar[str] = "multi_paged_form.j2"
 
-    def _prepare_context(
-        self, field: dict[str, Any], context: dict[str, Any]
-    ) -> dict[str, Any]:
+    def _prepare_context(self, field: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
         """
         Prepare context for Multi Paged Form template.
 

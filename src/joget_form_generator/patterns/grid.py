@@ -9,9 +9,7 @@ class GridPattern(BasePattern):
 
     template_name: ClassVar[str] = "grid.j2"
 
-    def _prepare_context(
-        self, field: dict[str, Any], context: dict[str, Any]
-    ) -> dict[str, Any]:
+    def _prepare_context(self, field: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
         """
         Prepare context for Grid template.
 
@@ -33,13 +31,10 @@ class GridPattern(BasePattern):
         """
         # Convert columns to options format (Joget uses "options" for grid columns)
         columns = field.get("columns", [])
-        options = [
-            {"value": col["id"], "label": col["label"]}
-            for col in columns
-        ]
+        options = [{"value": col["id"], "label": col["label"]} for col in columns]
 
         # Build validator if min/max row validation needed
-        validator = {}
+        validator: dict[str, str] = {}
         validate_min_row = field.get("validateMinRow", "")
         validate_max_row = field.get("validateMaxRow", "")
         error_message = field.get("errorMessage", "")

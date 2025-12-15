@@ -17,7 +17,6 @@ def test_basic_form_grid():
     }
 
     result = pattern.render(field, {})
-    
 
     assert result["className"] == "org.joget.plugin.enterprise.FormGrid"
     assert result["properties"]["id"] == "lineItems"
@@ -43,7 +42,6 @@ def test_form_grid_with_form_reference():
     }
 
     result = pattern.render(field, {})
-    
 
     assert result["properties"]["formDefId"] == "orderLineItems"
 
@@ -69,7 +67,6 @@ def test_form_grid_with_select_column():
     }
 
     result = pattern.render(field, {})
-    
 
     assert result["properties"]["columns"][0]["type"] == "selectBox"
     assert len(result["properties"]["columns"][0]["options"]) == 2
@@ -89,7 +86,6 @@ def test_form_grid_with_row_validation():
     }
 
     result = pattern.render(field, {})
-    
 
     assert result["properties"]["validateMinRow"] == "1"
     assert result["properties"]["validateMaxRow"] == "10"
@@ -107,7 +103,6 @@ def test_form_grid_readonly():
     }
 
     result = pattern.render(field, {})
-    
 
     assert result["properties"]["readonly"] == "true"
 
@@ -125,7 +120,6 @@ def test_form_grid_with_disabled_buttons():
     }
 
     result = pattern.render(field, {})
-    
 
     assert result["properties"]["allowAddRow"] == "false"
     assert result["properties"]["allowDeleteRow"] == "false"
@@ -145,7 +139,6 @@ def test_form_grid_with_non_editable_column():
     }
 
     result = pattern.render(field, {})
-    
 
     assert result["properties"]["columns"][0]["editable"] == "false"
     assert result["properties"]["columns"][1]["editable"] == "true"

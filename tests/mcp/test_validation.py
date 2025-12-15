@@ -63,29 +63,37 @@ fields: []
 
     def test_validate_joget_json_success(self, tools):
         """Test successful Joget JSON validation."""
-        joget_json = json.dumps({
-            "className": "org.joget.apps.form.model.Form",
-            "properties": {
-                "id": "testForm",
-                "name": "Test Form",
-                "tableName": "app_fd_testForm",
-                "loadBinder": {"className": "org.joget.apps.form.lib.WorkflowFormBinder", "properties": {}},
-                "storeBinder": {"className": "org.joget.apps.form.lib.WorkflowFormBinder", "properties": {}}
-            },
-            "elements": [
-                {
-                    "className": "org.joget.apps.form.model.Section",
-                    "properties": {"id": "section1", "label": "Section"},
-                    "elements": [
-                        {
-                            "className": "org.joget.apps.form.model.Column",
-                            "properties": {"width": "100%"},
-                            "elements": []
-                        }
-                    ]
-                }
-            ]
-        })
+        joget_json = json.dumps(
+            {
+                "className": "org.joget.apps.form.model.Form",
+                "properties": {
+                    "id": "testForm",
+                    "name": "Test Form",
+                    "tableName": "app_fd_testForm",
+                    "loadBinder": {
+                        "className": "org.joget.apps.form.lib.WorkflowFormBinder",
+                        "properties": {},
+                    },
+                    "storeBinder": {
+                        "className": "org.joget.apps.form.lib.WorkflowFormBinder",
+                        "properties": {},
+                    },
+                },
+                "elements": [
+                    {
+                        "className": "org.joget.apps.form.model.Section",
+                        "properties": {"id": "section1", "label": "Section"},
+                        "elements": [
+                            {
+                                "className": "org.joget.apps.form.model.Column",
+                                "properties": {"width": "100%"},
+                                "elements": [],
+                            }
+                        ],
+                    }
+                ],
+            }
+        )
 
         result = tools.validate_joget_json(joget_json)
 
@@ -102,13 +110,9 @@ fields: []
 
     def test_validate_joget_json_missing_classname(self, tools):
         """Test validation with missing className."""
-        joget_json = json.dumps({
-            "properties": {
-                "id": "testForm",
-                "name": "Test Form",
-                "tableName": "app_fd_testForm"
-            }
-        })
+        joget_json = json.dumps(
+            {"properties": {"id": "testForm", "name": "Test Form", "tableName": "app_fd_testForm"}}
+        )
 
         result = tools.validate_joget_json(joget_json)
 
@@ -117,14 +121,16 @@ fields: []
 
     def test_validate_joget_json_missing_properties(self, tools):
         """Test validation with missing required properties."""
-        joget_json = json.dumps({
-            "className": "org.joget.apps.form.model.Form",
-            "properties": {
-                "id": "testForm"
-                # Missing name and tableName
-            },
-            "elements": []
-        })
+        joget_json = json.dumps(
+            {
+                "className": "org.joget.apps.form.model.Form",
+                "properties": {
+                    "id": "testForm"
+                    # Missing name and tableName
+                },
+                "elements": [],
+            }
+        )
 
         result = tools.validate_joget_json(joget_json)
 

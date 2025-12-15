@@ -43,9 +43,7 @@ class ValidationMixin:
             validators.append(
                 {
                     "className": "org.joget.apps.form.lib.DefaultValidator",
-                    "properties": {
-                        "mandatory": "true"
-                    },
+                    "properties": {"mandatory": "true"},
                 }
             )
 
@@ -130,9 +128,7 @@ class OptionsMixin:
 
     def _build_static_options(self, options: list[dict]) -> dict[str, Any]:
         """Build FormOptionsBinder for static options."""
-        option_list = [
-            {"value": opt["value"], "label": opt["label"]} for opt in options
-        ]
+        option_list = [{"value": opt["value"], "label": opt["label"]} for opt in options]
 
         return {
             "className": "org.joget.apps.form.lib.FormOptionsBinder",

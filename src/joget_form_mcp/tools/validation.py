@@ -47,10 +47,7 @@ class ValidationTools:
             spec = yaml.safe_load(yaml_spec)
 
             if not spec:
-                return {
-                    "valid": False,
-                    "errors": ["Empty or invalid YAML specification"]
-                }
+                return {"valid": False, "errors": ["Empty or invalid YAML specification"]}
 
             # Run dual validation
             result, form_spec = self.dual_validator.validate(spec)
@@ -69,23 +66,17 @@ class ValidationTools:
                     "form_id": form_meta.get("id"),
                     "form_name": form_meta.get("name"),
                     "field_count": len(fields),
-                    "field_types": list(set(f.get("type") for f in fields if "type" in f))
+                    "field_types": list(set(f.get("type") for f in fields if "type" in f)),
                 }
 
             return response
 
         except yaml.YAMLError as e:
             logger.error(f"YAML parsing error: {e}")
-            return {
-                "valid": False,
-                "errors": [f"Invalid YAML syntax: {e}"]
-            }
+            return {"valid": False, "errors": [f"Invalid YAML syntax: {e}"]}
         except Exception as e:
             logger.exception("Unexpected error during validation")
-            return {
-                "valid": False,
-                "errors": [f"Validation failed: {e}"]
-            }
+            return {"valid": False, "errors": [f"Validation failed: {e}"]}
 
     def validate_joget_json(self, joget_json_str: str) -> dict[str, Any]:
         """
@@ -108,19 +99,13 @@ class ValidationTools:
         try:
             joget_json = json.loads(joget_json_str)
         except json.JSONDecodeError as e:
-            return {
-                "valid": False,
-                "errors": [f"Invalid JSON syntax: {e}"]
-            }
+            return {"valid": False, "errors": [f"Invalid JSON syntax: {e}"]}
 
         errors = []
 
         # Check root structure
         if not isinstance(joget_json, dict):
-            return {
-                "valid": False,
-                "errors": ["Root element must be an object"]
-            }
+            return {"valid": False, "errors": ["Root element must be an object"]}
 
         # Check className
         class_name = joget_json.get("className")
@@ -153,19 +138,12 @@ class ValidationTools:
                 errors.extend(section_errors)
 
         if errors:
-            return {
-                "valid": False,
-                "errors": errors
-            }
+            return {"valid": False, "errors": errors}
 
         # Build structure summary
         structure = self._analyze_structure(joget_json)
 
-        return {
-            "valid": True,
-            "structure": structure,
-            "message": "Joget JSON is valid"
-        }
+        return {"valid": True, "structure": structure, "message": "Joget JSON is valid"}
 
     def _validate_section(self, section: dict, index: int) -> list[str]:
         """Validate a section element."""
@@ -210,7 +188,7 @@ class ValidationTools:
         field_types = set()
 
         def count_fields(elems: list):
-            nonlocal field_count, field_types
+            nonlocal field_count
             for elem in elems:
                 class_name = elem.get("className", "")
                 if "Section" not in class_name and "Column" not in class_name:
@@ -230,5 +208,5 @@ class ValidationTools:
             "table_name": props.get("tableName"),
             "section_count": len(elements),
             "field_count": field_count,
-            "field_types": list(field_types)
+            "field_types": list(field_types),
         }

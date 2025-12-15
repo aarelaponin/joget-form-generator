@@ -10,9 +10,7 @@ class DatePickerPattern(BasePattern, ReadOnlyMixin, ValidationMixin):
 
     template_name: ClassVar[str] = "date_picker.j2"
 
-    def _prepare_context(
-        self, field: dict[str, Any], context: dict[str, Any]
-    ) -> dict[str, Any]:
+    def _prepare_context(self, field: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
         """Prepare context for DatePicker template."""
         return {
             "id": field["id"],

@@ -10,9 +10,7 @@ class FileUploadPattern(BasePattern, ReadOnlyMixin):
 
     template_name: ClassVar[str] = "file_upload.j2"
 
-    def _prepare_context(
-        self, field: dict[str, Any], context: dict[str, Any]
-    ) -> dict[str, Any]:
+    def _prepare_context(self, field: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
         """Prepare context for FileUpload template."""
         # Convert maxSize from MB to bytes (Joget expects bytes)
         max_size_mb = field.get("maxSize", 10)

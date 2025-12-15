@@ -44,10 +44,7 @@ class SpecificationTools:
     """Tools for creating and modifying form specifications."""
 
     def create_form_spec(
-        self,
-        description: str,
-        form_id: Optional[str] = None,
-        form_name: Optional[str] = None
+        self, description: str, form_id: Optional[str] = None, form_name: Optional[str] = None
     ) -> dict[str, Any]:
         """
         Generate a YAML form specification from natural language description.
@@ -67,7 +64,7 @@ class SpecificationTools:
             return {
                 "success": False,
                 "error": "Could not identify any fields from the description. "
-                         "Please include field names like 'name', 'email', 'status', etc."
+                "Please include field names like 'name', 'email', 'status', etc.",
             }
 
         # Generate form ID and name if not provided
@@ -81,9 +78,9 @@ class SpecificationTools:
             "form": {
                 "id": form_id,
                 "name": form_name,
-                "description": description[:200] if len(description) > 200 else description
+                "description": description[:200] if len(description) > 200 else description,
             },
-            "fields": fields
+            "fields": fields,
         }
 
         yaml_spec = yaml.dump(spec, default_flow_style=False, sort_keys=False, allow_unicode=True)
@@ -95,7 +92,7 @@ class SpecificationTools:
             "form_name": form_name,
             "field_count": len(fields),
             "fields_detected": [f["id"] for f in fields],
-            "message": f"Generated specification with {len(fields)} fields"
+            "message": f"Generated specification with {len(fields)} fields",
         }
 
     def create_cascading_dropdown_spec(
@@ -104,7 +101,7 @@ class SpecificationTools:
         child_form_id: str,
         parent_label_field: str = "name",
         parent_value_field: str = "code",
-        child_fk_field: str = "categoryCode"
+        child_fk_field: str = "categoryCode",
     ) -> dict[str, Any]:
         """
         Generate YAML specification for cascading dropdown pattern.
@@ -124,22 +121,22 @@ class SpecificationTools:
             "form": {
                 "id": parent_form_id,
                 "name": self._id_to_name(parent_form_id),
-                "description": f"Parent lookup table for {child_form_id}"
+                "description": f"Parent lookup table for {child_form_id}",
             },
             "fields": [
                 {
                     "id": parent_value_field,
                     "label": parent_value_field.title(),
                     "type": "textField",
-                    "required": True
+                    "required": True,
                 },
                 {
                     "id": parent_label_field,
                     "label": parent_label_field.title(),
                     "type": "textField",
-                    "required": True
-                }
-            ]
+                    "required": True,
+                },
+            ],
         }
 
         # Generate child form spec
@@ -147,21 +144,11 @@ class SpecificationTools:
             "form": {
                 "id": child_form_id,
                 "name": self._id_to_name(child_form_id),
-                "description": f"Child form with cascading dropdown from {parent_form_id}"
+                "description": f"Child form with cascading dropdown from {parent_form_id}",
             },
             "fields": [
-                {
-                    "id": "code",
-                    "label": "Code",
-                    "type": "textField",
-                    "required": True
-                },
-                {
-                    "id": "name",
-                    "label": "Name",
-                    "type": "textField",
-                    "required": True
-                },
+                {"id": "code", "label": "Code", "type": "textField", "required": True},
+                {"id": "name", "label": "Name", "type": "textField", "required": True},
                 {
                     "id": child_fk_field,
                     "label": self._id_to_name(parent_form_id),
@@ -171,10 +158,10 @@ class SpecificationTools:
                         "type": "formData",
                         "formId": parent_form_id,
                         "valueColumn": parent_value_field,
-                        "labelColumn": parent_label_field
-                    }
-                }
-            ]
+                        "labelColumn": parent_label_field,
+                    },
+                },
+            ],
         }
 
         parent_yaml = yaml.dump(parent_spec, default_flow_style=False, sort_keys=False)
@@ -187,14 +174,11 @@ class SpecificationTools:
             "parent_form_id": parent_form_id,
             "child_form_id": child_form_id,
             "relationship": f"{parent_form_id}.{parent_value_field} → {child_form_id}.{child_fk_field}",
-            "message": "Generated cascading dropdown pattern with parent and child forms"
+            "message": "Generated cascading dropdown pattern with parent and child forms",
         }
 
     def add_field_to_spec(
-        self,
-        yaml_spec: str,
-        field_description: str,
-        position: Optional[int] = None
+        self, yaml_spec: str, field_description: str, position: Optional[int] = None
     ) -> dict[str, Any]:
         """
         Add a new field to an existing YAML specification.
@@ -210,10 +194,7 @@ class SpecificationTools:
         try:
             spec = yaml.safe_load(yaml_spec)
         except yaml.YAMLError as e:
-            return {
-                "success": False,
-                "error": f"Invalid YAML: {e}"
-            }
+            return {"success": False, "error": f"Invalid YAML: {e}"}
 
         if "fields" not in spec:
             spec["fields"] = []
@@ -224,7 +205,7 @@ class SpecificationTools:
         if not field:
             return {
                 "success": False,
-                "error": f"Could not infer field from description: '{field_description}'"
+                "error": f"Could not infer field from description: '{field_description}'",
             }
 
         # Insert at position
@@ -233,14 +214,16 @@ class SpecificationTools:
         else:
             spec["fields"].append(field)
 
-        updated_yaml = yaml.dump(spec, default_flow_style=False, sort_keys=False, allow_unicode=True)
+        updated_yaml = yaml.dump(
+            spec, default_flow_style=False, sort_keys=False, allow_unicode=True
+        )
 
         return {
             "success": True,
             "yaml_spec": updated_yaml,
             "added_field": field,
             "field_count": len(spec["fields"]),
-            "message": f"Added field '{field['id']}' ({field['type']})"
+            "message": f"Added field '{field['id']}' ({field['type']})",
         }
 
     def _extract_fields_from_description(self, description: str) -> list[dict]:
@@ -289,10 +272,12 @@ class SpecificationTools:
 
         # Sort by a reasonable order
         priority_fields = ["id", "code", "name", "firstName", "lastName", "email", "phone"]
-        fields.sort(key=lambda f: (
-            priority_fields.index(f["id"]) if f["id"] in priority_fields else 100,
-            f["id"]
-        ))
+        fields.sort(
+            key=lambda f: (
+                priority_fields.index(f["id"]) if f["id"] in priority_fields else 100,
+                f["id"],
+            )
+        )
 
         return fields
 

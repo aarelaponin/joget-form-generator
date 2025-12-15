@@ -9,9 +9,7 @@ class SubformPattern(BasePattern):
 
     template_name: ClassVar[str] = "subform.j2"
 
-    def _prepare_context(
-        self, field: dict[str, Any], context: dict[str, Any]
-    ) -> dict[str, Any]:
+    def _prepare_context(self, field: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
         """
         Prepare context for Subform template.
 

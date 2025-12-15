@@ -10,9 +10,7 @@ class TextAreaPattern(BasePattern, ReadOnlyMixin, ValidationMixin):
 
     template_name: ClassVar[str] = "text_area.j2"
 
-    def _prepare_context(
-        self, field: dict[str, Any], context: dict[str, Any]
-    ) -> dict[str, Any]:
+    def _prepare_context(self, field: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
         """Prepare context for TextArea template."""
         return {
             "id": field["id"],

@@ -14,9 +14,7 @@ class FormGridPattern(BasePattern):
 
     template_name: ClassVar[str] = "form_grid.j2"
 
-    def _prepare_context(
-        self, field: dict[str, Any], context: dict[str, Any]
-    ) -> dict[str, Any]:
+    def _prepare_context(self, field: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
         """
         Prepare context for Form Grid template.
 
@@ -58,8 +56,12 @@ class FormGridPattern(BasePattern):
             "formId": field.get("formId", ""),
             "columns": column_defs,
             "readonly": "true" if field.get("readonly", False) else "",
-            "validateMinRow": str(field.get("validateMinRow", "")) if field.get("validateMinRow") else "",
-            "validateMaxRow": str(field.get("validateMaxRow", "")) if field.get("validateMaxRow") else "",
+            "validateMinRow": (
+                str(field.get("validateMinRow", "")) if field.get("validateMinRow") else ""
+            ),
+            "validateMaxRow": (
+                str(field.get("validateMaxRow", "")) if field.get("validateMaxRow") else ""
+            ),
             "allowAddRow": "true" if field.get("allowAddRow", True) else "false",
             "allowDeleteRow": "true" if field.get("allowDeleteRow", True) else "false",
         }

@@ -15,9 +15,7 @@ class RichTextEditorPattern(BasePattern, ReadOnlyMixin):
 
     template_name: ClassVar[str] = "rich_text_editor.j2"
 
-    def _prepare_context(
-        self, field: dict[str, Any], context: dict[str, Any]
-    ) -> dict[str, Any]:
+    def _prepare_context(self, field: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
         """
         Prepare context for Rich Text Editor template.
 

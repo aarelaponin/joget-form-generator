@@ -500,8 +500,8 @@ class TestIntelligentValidation:
                     "type": "textField",
                     "validation": {
                         "pattern": "^custom@pattern\\.com$",
-                        "message": "Custom validation message"
-                    }
+                        "message": "Custom validation message",
+                    },
                 }
             ],
         }

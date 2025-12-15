@@ -10,9 +10,7 @@ class RadioPattern(BasePattern, ReadOnlyMixin, OptionsMixin):
 
     template_name: ClassVar[str] = "radio.j2"
 
-    def _prepare_context(
-        self, field: dict[str, Any], context: dict[str, Any]
-    ) -> dict[str, Any]:
+    def _prepare_context(self, field: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
         """Prepare context for Radio template."""
         return {
             "id": field["id"],

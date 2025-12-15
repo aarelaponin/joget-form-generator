@@ -18,7 +18,7 @@ from pydantic import AnyUrl, BaseModel, Field
 
 
 class FormMetadata(BaseModel):
-    id: str = Field(..., max_length=20, pattern='^[a-zA-Z][a-zA-Z0-9_]{0,19}$')
+    id: str = Field(..., max_length=20, pattern="^[a-zA-Z][a-zA-Z0-9_]{0,19}$")
     """
     Form ID (must match tableName, max 20 chars)
     """
@@ -26,7 +26,7 @@ class FormMetadata(BaseModel):
     """
     Human-readable form name displayed in Joget
     """
-    tableName: str | None = Field(None, max_length=20, pattern='^[a-zA-Z][a-zA-Z0-9_]{0,19}$')
+    tableName: str | None = Field(None, max_length=20, pattern="^[a-zA-Z][a-zA-Z0-9_]{0,19}$")
     """
     Database table name (must match id)
     """
@@ -41,23 +41,23 @@ class Type(Enum):
     Field type (Phase 1: 9 standard, Phase 2: 4 custom/advanced, Enterprise: 4 advanced fields)
     """
 
-    hiddenField = 'hiddenField'
-    textField = 'textField'
-    passwordField = 'passwordField'
-    textArea = 'textArea'
-    selectBox = 'selectBox'
-    checkBox = 'checkBox'
-    radio = 'radio'
-    datePicker = 'datePicker'
-    fileUpload = 'fileUpload'
-    customHTML = 'customHTML'
-    idGenerator = 'idGenerator'
-    subform = 'subform'
-    grid = 'grid'
-    calculationField = 'calculationField'
-    richTextEditor = 'richTextEditor'
-    formGrid = 'formGrid'
-    multiPagedForm = 'multiPagedForm'
+    hiddenField = "hiddenField"
+    textField = "textField"
+    passwordField = "passwordField"
+    textArea = "textArea"
+    selectBox = "selectBox"
+    checkBox = "checkBox"
+    radio = "radio"
+    datePicker = "datePicker"
+    fileUpload = "fileUpload"
+    customHTML = "customHTML"
+    idGenerator = "idGenerator"
+    subform = "subform"
+    grid = "grid"
+    calculationField = "calculationField"
+    richTextEditor = "richTextEditor"
+    formGrid = "formGrid"
+    multiPagedForm = "multiPagedForm"
 
 
 class Size(Enum):
@@ -65,9 +65,9 @@ class Size(Enum):
     Field size
     """
 
-    small = 'small'
-    medium = 'medium'
-    large = 'large'
+    small = "small"
+    medium = "medium"
+    large = "large"
 
 
 class Option(BaseModel):
@@ -86,9 +86,9 @@ class Type1(Enum):
     Options source type
     """
 
-    formData = 'formData'
-    api = 'api'
-    database = 'database'
+    formData = "formData"
+    api = "api"
+    database = "database"
 
 
 class Method(Enum):
@@ -96,8 +96,8 @@ class Method(Enum):
     HTTP method (api type)
     """
 
-    GET = 'GET'
-    POST = 'POST'
+    GET = "GET"
+    POST = "POST"
 
 
 class OptionsSource(BaseModel):
@@ -109,11 +109,11 @@ class OptionsSource(BaseModel):
     """
     Source form ID (formData type)
     """
-    valueColumn: str | None = 'id'
+    valueColumn: str | None = "id"
     """
     Column for option value
     """
-    labelColumn: str | None = 'name'
+    labelColumn: str | None = "name"
     """
     Column for option label
     """
@@ -133,7 +133,7 @@ class OptionsSource(BaseModel):
     """
     API endpoint URL (api type)
     """
-    method: Method | None = 'GET'
+    method: Method | None = "GET"
     """
     HTTP method (api type)
     """
@@ -167,7 +167,7 @@ class Validation(BaseModel):
 
 
 class FieldModel(BaseModel):
-    id: str = Field(..., max_length=50, pattern='^[a-zA-Z][a-zA-Z0-9_]*$')
+    id: str = Field(..., max_length=50, pattern="^[a-zA-Z][a-zA-Z0-9_]*$")
     """
     Field ID (database column name)
     """
@@ -195,7 +195,7 @@ class FieldModel(BaseModel):
     """
     Placeholder text (textField, textArea, passwordField)
     """
-    size: Size | None = 'medium'
+    size: Size | None = "medium"
     """
     Field size
     """
@@ -223,7 +223,7 @@ class FieldModel(BaseModel):
     """
     Allow multiple selections (selectBox, checkBox)
     """
-    dateFormat: str | None = 'yyyy-MM-dd'
+    dateFormat: str | None = "yyyy-MM-dd"
     """
     Date format pattern (datePicker)
     """

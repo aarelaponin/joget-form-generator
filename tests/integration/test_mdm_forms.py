@@ -19,7 +19,13 @@ class TestMDMFormGeneration:
     def production_forms_dir(self):
         """Path to production MDM forms."""
         # Navigate from joget-form-generator/tests/integration to dev/gam_utilities
-        return Path(__file__).parent.parent.parent.parent / "gam_utilities" / "joget_utility" / "data" / "metadata_forms"
+        return (
+            Path(__file__).parent.parent.parent.parent
+            / "gam_utilities"
+            / "joget_utility"
+            / "data"
+            / "metadata_forms"
+        )
 
     def normalize_json(self, obj):
         """
@@ -61,8 +67,10 @@ class TestMDMFormGeneration:
 
         def deep_compare(gen_obj, prod_obj, current_path):
             """Recursively compare objects."""
-            if type(gen_obj) != type(prod_obj):
-                differences.append(f"{current_path}: Type mismatch - {type(gen_obj).__name__} vs {type(prod_obj).__name__}")
+            if type(gen_obj) is not type(prod_obj):
+                differences.append(
+                    f"{current_path}: Type mismatch - {type(gen_obj).__name__} vs {type(prod_obj).__name__}"
+                )
                 return
 
             if isinstance(gen_obj, dict):
@@ -74,10 +82,14 @@ class TestMDMFormGeneration:
                 extra_in_gen = gen_keys - prod_keys
 
                 for key in missing_in_gen:
-                    differences.append(f"{current_path}.{key}: Missing in generated (production has it)")
+                    differences.append(
+                        f"{current_path}.{key}: Missing in generated (production has it)"
+                    )
 
                 for key in extra_in_gen:
-                    differences.append(f"{current_path}.{key}: Extra in generated (production doesn't have it)")
+                    differences.append(
+                        f"{current_path}.{key}: Extra in generated (production doesn't have it)"
+                    )
 
                 # Compare common keys
                 for key in gen_keys & prod_keys:
@@ -85,7 +97,9 @@ class TestMDMFormGeneration:
 
             elif isinstance(gen_obj, list):
                 if len(gen_obj) != len(prod_obj):
-                    differences.append(f"{current_path}: List length mismatch - {len(gen_obj)} vs {len(prod_obj)}")
+                    differences.append(
+                        f"{current_path}: List length mismatch - {len(gen_obj)} vs {len(prod_obj)}"
+                    )
                     return
 
                 for i, (gen_item, prod_item) in enumerate(zip(gen_obj, prod_obj)):
@@ -94,7 +108,9 @@ class TestMDMFormGeneration:
             else:
                 # Scalar comparison
                 if gen_obj != prod_obj:
-                    differences.append(f"{current_path}: Value mismatch - '{gen_obj}' vs '{prod_obj}'")
+                    differences.append(
+                        f"{current_path}: Value mismatch - '{gen_obj}' vs '{prod_obj}'"
+                    )
 
         deep_compare(gen_norm, prod_norm, "root")
 
@@ -103,7 +119,9 @@ class TestMDMFormGeneration:
     def test_md01_marital_status_structure(self, engine, production_forms_dir):
         """Test md01maritalStatus generation matches production."""
         # Load YAML spec
-        yaml_path = Path(__file__).parent.parent.parent / "examples" / "mdm" / "md01maritalStatus.yaml"
+        yaml_path = (
+            Path(__file__).parent.parent.parent / "examples" / "mdm" / "md01maritalStatus.yaml"
+        )
         with open(yaml_path) as f:
             spec = yaml.safe_load(f)
 
@@ -161,10 +179,7 @@ class TestMDMFormGeneration:
     def test_nested_lov_structure(self, engine):
         """Test that nested LOV generates correct FormOptionsBinder."""
         spec = {
-            "form": {
-                "id": "testForm",
-                "name": "Test Form"
-            },
+            "form": {"id": "testForm", "name": "Test Form"},
             "fields": [
                 {
                     "id": "category",
@@ -177,10 +192,10 @@ class TestMDMFormGeneration:
                         "valueColumn": "code",
                         "labelColumn": "name",
                         "addEmptyOption": True,
-                        "useAjax": False
-                    }
+                        "useAjax": False,
+                    },
                 }
-            ]
+            ],
         }
 
         generated_forms = engine.generate(spec)
@@ -205,18 +220,15 @@ class TestMDMFormGeneration:
     def test_required_field_validator(self, engine):
         """Test that required fields get DefaultValidator."""
         spec = {
-            "form": {
-                "id": "testForm",
-                "name": "Test Form"
-            },
+            "form": {"id": "testForm", "name": "Test Form"},
             "fields": [
                 {
                     "id": "requiredField",
                     "label": "Required Field",
                     "type": "textField",
-                    "required": True
+                    "required": True,
                 }
-            ]
+            ],
         }
 
         generated_forms = engine.generate(spec)
@@ -251,10 +263,10 @@ class TestMDMFormGeneration:
             "readonlyLabel",
             "storeNumeric",
             "validator: Missing",  # Empty validators in old forms
-            "size: Extra",          # We normalize size, old forms have empty/missing
-            "size: Missing",        # Some old forms have size, we omit if not needed
-            "required: Extra",      # We always add required, some old forms omit it
-            "description: Missing", # We default to empty, old forms may have descriptions
+            "size: Extra",  # We normalize size, old forms have empty/missing
+            "size: Missing",  # Some old forms have size, we omit if not needed
+            "required: Extra",  # We always add required, some old forms omit it
+            "description: Missing",  # We default to empty, old forms may have descriptions
         ]
 
         for diff in differences:
@@ -280,17 +292,8 @@ class TestFormValidation:
         engine = TransformEngine()
 
         spec = {
-            "form": {
-                "id": "testForm",
-                "name": "Test Form"
-            },
-            "fields": [
-                {
-                    "id": "badField",
-                    "label": "Bad Field",
-                    "type": "invalidType"  # Invalid!
-                }
-            ]
+            "form": {"id": "testForm", "name": "Test Form"},
+            "fields": [{"id": "badField", "label": "Bad Field", "type": "invalidType"}],  # Invalid!
         }
 
         with pytest.raises(ValueError, match="Validation failed"):
@@ -301,16 +304,13 @@ class TestFormValidation:
         engine = TransformEngine()
 
         spec = {
-            "form": {
-                "id": "testForm",
-                "name": "Test Form"
-            },
+            "form": {"id": "testForm", "name": "Test Form"},
             "fields": [
                 {
                     "id": "incompleteField",
                     # Missing: label, type
                 }
-            ]
+            ],
         }
 
         with pytest.raises(ValueError, match="Validation failed"):

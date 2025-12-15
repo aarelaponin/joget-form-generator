@@ -17,7 +17,6 @@ def test_basic_multi_paged_form():
     }
 
     result = pattern.render(field, {})
-    
 
     assert result["className"] == "org.joget.plugin.enterprise.PageFormElement"
     assert result["properties"]["id"] == "wizard"
@@ -50,7 +49,6 @@ def test_multi_paged_form_with_descriptions():
     }
 
     result = pattern.render(field, {})
-    
 
     assert result["properties"]["pages"][0]["description"] == "Enter your basic information"
     assert result["properties"]["pages"][1]["description"] == "Review and confirm"
@@ -70,7 +68,6 @@ def test_multi_paged_form_without_navigation():
     }
 
     result = pattern.render(field, {})
-    
 
     assert result["properties"]["showNavigation"] == "false"
 
@@ -88,7 +85,6 @@ def test_multi_paged_form_without_progress_bar():
     }
 
     result = pattern.render(field, {})
-    
 
     assert result["properties"]["showProgressBar"] == "false"
 
@@ -107,7 +103,6 @@ def test_multi_paged_form_readonly():
     }
 
     result = pattern.render(field, {})
-    
 
     assert result["properties"]["readonly"] == "true"
 
@@ -120,13 +115,16 @@ def test_multi_paged_form_three_pages():
         "type": "multiPagedForm",
         "pages": [
             {"formId": "applicantInfo", "label": "Applicant", "description": "Your information"},
-            {"formId": "documents", "label": "Documents", "description": "Upload required documents"},
+            {
+                "formId": "documents",
+                "label": "Documents",
+                "description": "Upload required documents",
+            },
             {"formId": "confirmation", "label": "Confirmation", "description": "Review and submit"},
         ],
     }
 
     result = pattern.render(field, {})
-    
 
     assert len(result["properties"]["pages"]) == 3
     assert result["properties"]["pages"][2]["formDefId"] == "confirmation"

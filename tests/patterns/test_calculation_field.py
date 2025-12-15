@@ -36,7 +36,6 @@ def test_calculation_field_with_custom_formula():
     }
 
     result = pattern.render(field, {})
-    
 
     assert result["properties"]["equation"] == "(price * quantity) * 0.15"
     assert result["properties"]["storeNumeric"] == "true"
@@ -55,7 +54,6 @@ def test_calculation_field_with_default_value():
     }
 
     result = pattern.render(field, {})
-    
 
     assert result["properties"]["value"] == "0"
     assert result["properties"]["required"] == "true"
@@ -73,6 +71,5 @@ def test_calculation_field_store_as_string():
     }
 
     result = pattern.render(field, {})
-    
 
     assert result["properties"]["storeNumeric"] == "false"

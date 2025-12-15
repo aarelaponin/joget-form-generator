@@ -10,9 +10,7 @@ class PasswordFieldPattern(BasePattern, ReadOnlyMixin, ValidationMixin):
 
     template_name: ClassVar[str] = "password_field.j2"
 
-    def _prepare_context(
-        self, field: dict[str, Any], context: dict[str, Any]
-    ) -> dict[str, Any]:
+    def _prepare_context(self, field: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
         """Prepare context for PasswordField template."""
         return {
             "id": field["id"],

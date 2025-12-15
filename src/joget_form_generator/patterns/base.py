@@ -1,7 +1,6 @@
 """Base pattern class for field generation."""
 
 from abc import ABC, abstractmethod
-from pathlib import Path
 from typing import Any, ClassVar
 import json
 
@@ -66,9 +65,7 @@ class BasePattern(ABC):
         return self._post_process(field_json, field, context)
 
     @abstractmethod
-    def _prepare_context(
-        self, field: dict[str, Any], context: dict[str, Any]
-    ) -> dict[str, Any]:
+    def _prepare_context(self, field: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
         """
         Prepare context for template rendering.
 

@@ -57,7 +57,7 @@ def test_selectbox_needs_options_or_source(validator):
             {
                 "id": "category",
                 "label": "Category",
-                "type": "selectBox"
+                "type": "selectBox",
                 # Missing: options AND optionsSource
             }
         ],
@@ -130,7 +130,7 @@ def test_warning_for_cascading_without_parent(validator):
                 "type": "selectBox",
                 "optionsSource": {
                     "type": "formData",
-                    "formId": "categories"
+                    "formId": "categories",
                     # Missing: parentField (may or may not be intentional)
                 },
             }
@@ -165,7 +165,7 @@ def test_checkbox_requires_options(validator):
             {
                 "id": "agree",
                 "label": "I Agree",
-                "type": "checkBox"
+                "type": "checkBox",
                 # Missing: options (required for checkBox)
             }
         ],
@@ -183,7 +183,7 @@ def test_radio_requires_options(validator):
             {
                 "id": "gender",
                 "label": "Gender",
-                "type": "radio"
+                "type": "radio",
                 # Missing: options (required for radio)
             }
         ],
@@ -260,4 +260,6 @@ def test_all_9_field_types_valid(validator):
             spec["fields"][0]["options"] = [{"value": "opt1", "label": "Option 1"}]
 
         result = validator.validate(spec)
-        assert result.valid, f"Field type '{field_type}' should be valid but got errors: {result.errors}"
+        assert (
+            result.valid
+        ), f"Field type '{field_type}' should be valid but got errors: {result.errors}"

@@ -5,7 +5,6 @@ Provides tools to discover field types, get documentation, and retrieve examples
 """
 
 import logging
-from pathlib import Path
 from typing import Any
 
 from joget_form_generator.patterns import PatternRegistry
@@ -21,25 +20,29 @@ FIELD_TYPE_INFO = {
         "description": "Hidden field for storing values not visible to users",
         "use_cases": ["Store IDs", "Pass workflow variables", "Hidden defaults"],
         "properties": ["id", "value", "workflowVariable"],
-        "example": {
-            "id": "recordId",
-            "type": "hiddenField",
-            "value": "#currentUser.id#"
-        }
+        "example": {"id": "recordId", "type": "hiddenField", "value": "#currentUser.id#"},
     },
     "textField": {
         "category": "standard",
         "description": "Single-line text input field",
         "use_cases": ["Names", "Email", "Phone", "Short text"],
-        "properties": ["id", "label", "required", "placeholder", "maxLength", "validator", "readonly"],
+        "properties": [
+            "id",
+            "label",
+            "required",
+            "placeholder",
+            "maxLength",
+            "validator",
+            "readonly",
+        ],
         "validators": ["email", "numeric", "alphanumeric", "regex"],
         "example": {
             "id": "email",
             "label": "Email Address",
             "type": "textField",
             "required": True,
-            "validator": {"type": "email", "message": "Please enter valid email"}
-        }
+            "validator": {"type": "email", "message": "Please enter valid email"},
+        },
     },
     "passwordField": {
         "category": "standard",
@@ -50,8 +53,8 @@ FIELD_TYPE_INFO = {
             "id": "password",
             "label": "Password",
             "type": "passwordField",
-            "required": True
-        }
+            "required": True,
+        },
     },
     "textArea": {
         "category": "standard",
@@ -63,8 +66,8 @@ FIELD_TYPE_INFO = {
             "label": "Description",
             "type": "textArea",
             "rows": 5,
-            "cols": 60
-        }
+            "cols": 60,
+        },
     },
     "selectBox": {
         "category": "standard",
@@ -79,9 +82,9 @@ FIELD_TYPE_INFO = {
             "required": True,
             "options": [
                 {"value": "active", "label": "Active"},
-                {"value": "inactive", "label": "Inactive"}
-            ]
-        }
+                {"value": "inactive", "label": "Inactive"},
+            ],
+        },
     },
     "checkBox": {
         "category": "standard",
@@ -94,9 +97,9 @@ FIELD_TYPE_INFO = {
             "type": "checkBox",
             "options": [
                 {"value": "wifi", "label": "WiFi"},
-                {"value": "parking", "label": "Parking"}
-            ]
-        }
+                {"value": "parking", "label": "Parking"},
+            ],
+        },
     },
     "radio": {
         "category": "standard",
@@ -107,24 +110,28 @@ FIELD_TYPE_INFO = {
             "id": "gender",
             "label": "Gender",
             "type": "radio",
-            "options": [
-                {"value": "M", "label": "Male"},
-                {"value": "F", "label": "Female"}
-            ]
-        }
+            "options": [{"value": "M", "label": "Male"}, {"value": "F", "label": "Female"}],
+        },
     },
     "datePicker": {
         "category": "standard",
         "description": "Date selection with calendar popup",
         "use_cases": ["Birth dates", "Due dates", "Event dates"],
-        "properties": ["id", "label", "required", "dateFormat", "startDateFieldId", "endDateFieldId"],
+        "properties": [
+            "id",
+            "label",
+            "required",
+            "dateFormat",
+            "startDateFieldId",
+            "endDateFieldId",
+        ],
         "formats": ["yyyy-MM-dd", "dd/MM/yyyy", "MM/dd/yyyy"],
         "example": {
             "id": "birthDate",
             "label": "Date of Birth",
             "type": "datePicker",
-            "dateFormat": "yyyy-MM-dd"
-        }
+            "dateFormat": "yyyy-MM-dd",
+        },
     },
     "fileUpload": {
         "category": "standard",
@@ -136,10 +143,9 @@ FIELD_TYPE_INFO = {
             "label": "Upload Documents",
             "type": "fileUpload",
             "allowedTypes": ["pdf", "doc", "docx"],
-            "maxSize": 10485760
-        }
+            "maxSize": 10485760,
+        },
     },
-
     # Advanced fields (Phase 2)
     "customHTML": {
         "category": "advanced",
@@ -150,8 +156,8 @@ FIELD_TYPE_INFO = {
             "id": "instructions",
             "label": "Instructions",
             "type": "customHTML",
-            "html": "<div class='alert alert-info'>Please fill all required fields.</div>"
-        }
+            "html": "<div class='alert alert-info'>Please fill all required fields.</div>",
+        },
     },
     "idGenerator": {
         "category": "advanced",
@@ -163,8 +169,8 @@ FIELD_TYPE_INFO = {
             "id": "referenceNo",
             "label": "Reference Number",
             "type": "idGenerator",
-            "format": "REF-???"
-        }
+            "format": "REF-???",
+        },
     },
     "subform": {
         "category": "advanced",
@@ -177,8 +183,8 @@ FIELD_TYPE_INFO = {
             "type": "subform",
             "formId": "addressForm",
             "parentField": "id",
-            "foreignKeyField": "customerId"
-        }
+            "foreignKeyField": "customerId",
+        },
     },
     "grid": {
         "category": "advanced",
@@ -193,11 +199,10 @@ FIELD_TYPE_INFO = {
             "columns": [
                 {"id": "description", "label": "Description", "type": "textField"},
                 {"id": "quantity", "label": "Qty", "type": "textField"},
-                {"id": "price", "label": "Price", "type": "textField"}
-            ]
-        }
+                {"id": "price", "label": "Price", "type": "textField"},
+            ],
+        },
     },
-
     # Enterprise fields (Phase 3)
     "calculationField": {
         "category": "enterprise",
@@ -211,8 +216,8 @@ FIELD_TYPE_INFO = {
             "type": "calculationField",
             "equation": "quantity * unitPrice",
             "storeNumeric": True,
-            "readonly": True
-        }
+            "readonly": True,
+        },
     },
     "richTextEditor": {
         "category": "enterprise",
@@ -225,8 +230,8 @@ FIELD_TYPE_INFO = {
             "label": "Content",
             "type": "richTextEditor",
             "height": 300,
-            "editorType": "tinymce"
-        }
+            "editorType": "tinymce",
+        },
     },
     "formGrid": {
         "category": "enterprise",
@@ -242,9 +247,14 @@ FIELD_TYPE_INFO = {
                 {"id": "item", "label": "Item", "type": "selectBox"},
                 {"id": "qty", "label": "Quantity", "type": "textField"},
                 {"id": "price", "label": "Unit Price", "type": "textField"},
-                {"id": "total", "label": "Line Total", "type": "calculationField", "equation": "qty * price"}
-            ]
-        }
+                {
+                    "id": "total",
+                    "label": "Line Total",
+                    "type": "calculationField",
+                    "equation": "qty * price",
+                },
+            ],
+        },
     },
     "multiPagedForm": {
         "category": "enterprise",
@@ -258,10 +268,10 @@ FIELD_TYPE_INFO = {
             "pages": [
                 {"id": "page1", "label": "Personal Info", "fields": ["name", "email"]},
                 {"id": "page2", "label": "Address", "fields": ["street", "city"]},
-                {"id": "page3", "label": "Review", "fields": ["summary"]}
-            ]
-        }
-    }
+                {"id": "page3", "label": "Review", "fields": ["summary"]},
+            ],
+        },
+    },
 }
 
 
@@ -490,7 +500,7 @@ fields:
     options:
       - value: "accepted"
         label: "I accept the terms and conditions"
-"""
+""",
 }
 
 
@@ -508,25 +518,23 @@ class DiscoveryTools:
         registered = PatternRegistry.list_types()
 
         # Group by category
-        categories = {
-            "standard": [],
-            "advanced": [],
-            "enterprise": []
-        }
+        categories = {"standard": [], "advanced": [], "enterprise": []}
 
         for field_type in registered:
             info = FIELD_TYPE_INFO.get(field_type, {})
             category = info.get("category", "standard")
-            categories[category].append({
-                "type": field_type,
-                "description": info.get("description", "No description available"),
-                "use_cases": info.get("use_cases", [])
-            })
+            categories[category].append(
+                {
+                    "type": field_type,
+                    "description": info.get("description", "No description available"),
+                    "use_cases": info.get("use_cases", []),
+                }
+            )
 
         return {
             "total_types": len(registered),
             "categories": categories,
-            "registered_types": registered
+            "registered_types": registered,
         }
 
     def get_field_type_info(self, field_type: str) -> dict[str, Any]:
@@ -546,11 +554,11 @@ class DiscoveryTools:
                     "type": field_type,
                     "registered": True,
                     "documented": False,
-                    "message": f"Field type '{field_type}' is registered but documentation is pending"
+                    "message": f"Field type '{field_type}' is registered but documentation is pending",
                 }
             return {
                 "error": f"Unknown field type: '{field_type}'",
-                "available_types": PatternRegistry.list_types()
+                "available_types": PatternRegistry.list_types(),
             }
 
         info = FIELD_TYPE_INFO[field_type].copy()
@@ -575,13 +583,13 @@ class DiscoveryTools:
         if normalized_name not in EXAMPLES:
             return {
                 "error": f"Example not found: '{example_name}'",
-                "available_examples": list(EXAMPLES.keys())
+                "available_examples": list(EXAMPLES.keys()),
             }
 
         return {
             "name": normalized_name,
             "yaml_spec": EXAMPLES[normalized_name],
-            "description": f"Example specification: {normalized_name}"
+            "description": f"Example specification: {normalized_name}",
         }
 
     def get_field_types_documentation(self) -> str:

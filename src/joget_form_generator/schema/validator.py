@@ -95,13 +95,13 @@ class SchemaValidator:
         # Pattern validation errors (ID format)
         if error.validator == "pattern":
             if "id" in error.absolute_path:
-                return "ID must start with letter, contain only alphanumeric/underscore, max 20 chars"
+                return (
+                    "ID must start with letter, contain only alphanumeric/underscore, max 20 chars"
+                )
 
         # Missing required field
         if error.validator == "required":
-            missing_field = (
-                error.message.split("'")[1] if "'" in error.message else "field"
-            )
+            missing_field = error.message.split("'")[1] if "'" in error.message else "field"
             return f"Add required property: {missing_field}"
 
         # Enum mismatch (wrong field type)
@@ -135,14 +135,12 @@ class SchemaValidator:
             )
 
         # Check for cascading selectBox without parent field
-        for idx, field in enumerate(spec.get("fields", [])):
-            if field.get("type") == "selectBox":
-                options_src = field.get("optionsSource", {})
+        for idx, field_spec in enumerate(spec.get("fields", [])):
+            if field_spec.get("type") == "selectBox":
+                options_src = field_spec.get("optionsSource", {})
                 if options_src.get("type") == "formData":
-                    if not options_src.get("parentField") and not options_src.get(
-                        "filterField"
-                    ):
-                        field_id = field.get("id", f"field[{idx}]")
+                    if not options_src.get("parentField") and not options_src.get("filterField"):
+                        field_id = field_spec.get("id", f"field[{idx}]")
                         warnings.append(
                             f"Field '{field_id}' uses formData options but missing "
                             "'parentField' for cascading dropdown (may be intentional)"

@@ -41,11 +41,12 @@ def serve(
 
     # Configure logging
     import logging
+
     level = logging.DEBUG if debug else logging.INFO
     logging.basicConfig(
         level=level,
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-        stream=sys.stderr  # Log to stderr, stdout is for MCP protocol
+        stream=sys.stderr,  # Log to stderr, stdout is for MCP protocol
     )
 
     logger = logging.getLogger(__name__)
@@ -53,6 +54,7 @@ def serve(
 
     # Run the server
     from .server import main as server_main
+
     asyncio.run(server_main())
 
 
@@ -62,35 +64,41 @@ def list_tools():
     from .tools import (
         GenerationTools,
         ValidationTools,
-        DeploymentTools,
         DiscoveryTools,
         SpecificationTools,
     )
 
     tools = [
-        ("Generation", [
-            ("generate_form", "Generate Joget JSON from YAML specification"),
-            ("generate_multiple_forms", "Generate multiple forms from multi-form spec"),
-        ]),
-        ("Validation", [
-            ("validate_spec", "Validate YAML against JSON Schema"),
-            ("validate_joget_json", "Validate Joget JSON structure"),
-        ]),
-        ("Discovery", [
-            ("list_field_types", "List supported field types"),
-            ("get_field_type_info", "Get detailed field type documentation"),
-            ("get_example_spec", "Get example YAML specifications"),
-        ]),
-        ("Specification", [
-            ("create_form_spec", "Generate YAML from natural language"),
-            ("create_cascading_dropdown_spec", "Generate cascading dropdown pattern"),
-            ("add_field_to_spec", "Add field to existing specification"),
-        ]),
-        ("Deployment", [
-            ("deploy_form", "Deploy form to Joget instance"),
-            ("get_deployed_forms", "List forms in Joget application"),
-            ("test_joget_connection", "Test Joget connectivity"),
-        ]),
+        (
+            "Generation",
+            [
+                ("generate_form", "Generate Joget JSON from YAML specification"),
+                ("generate_multiple_forms", "Generate multiple forms from multi-form spec"),
+            ],
+        ),
+        (
+            "Validation",
+            [
+                ("validate_spec", "Validate YAML against JSON Schema"),
+                ("validate_joget_json", "Validate Joget JSON structure"),
+            ],
+        ),
+        (
+            "Discovery",
+            [
+                ("list_field_types", "List supported field types"),
+                ("get_field_type_info", "Get detailed field type documentation"),
+                ("get_example_spec", "Get example YAML specifications"),
+            ],
+        ),
+        (
+            "Specification",
+            [
+                ("create_form_spec", "Generate YAML from natural language"),
+                ("create_cascading_dropdown_spec", "Generate cascading dropdown pattern"),
+                ("add_field_to_spec", "Add field to existing specification"),
+            ],
+        ),
     ]
 
     typer.echo("\n🔧 Joget Form Generator MCP Tools\n")
