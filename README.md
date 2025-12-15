@@ -175,6 +175,7 @@ See [MCP Server README](src/joget_form_mcp/README.md) for detailed documentation
 | **[Pattern Development Guide](docs/PATTERN_DEVELOPMENT_GUIDE.md)** | Extend with custom field types |
 | **[MCP Server](src/joget_form_mcp/README.md)** | AI-assisted form development |
 | **[Examples](examples/)** | Working examples (MDM forms, etc.) |
+| **[Specs](specs/)** | Your form specifications go here |
 
 ---
 
