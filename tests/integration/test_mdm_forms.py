@@ -7,6 +7,7 @@ from joget_form_generator.transformers.engine import TransformEngine
 import yaml
 
 
+@pytest.mark.integration
 class TestMDMFormGeneration:
     """Test MDM form generation against production forms."""
 
@@ -284,6 +285,7 @@ class TestMDMFormGeneration:
         return True
 
 
+@pytest.mark.integration
 class TestFormValidation:
     """Test form validation and error handling."""
 

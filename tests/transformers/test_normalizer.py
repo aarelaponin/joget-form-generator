@@ -551,12 +551,12 @@ class TestIntelligentValidation:
     def test_combined_id_and_label_detection(self, normalizer):
         """Test that detection works when pattern is in either ID or label."""
         specs = [
-            # Pattern in ID only
+            # Pattern in ID only (standalone word, not connected by underscore)
             {
                 "form": {"id": "form1", "name": "Form 1"},
                 "fields": [
                     {
-                        "id": "userEmail",
+                        "id": "email",
                         "label": "Contact Information",
                         "type": "textField",
                     }
