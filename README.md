@@ -168,7 +168,8 @@ See [MCP Server README](src/joget_form_mcp/README.md) for detailed documentation
 
 | Document | Description |
 |----------|-------------|
-| **[User Guide](docs/USER_GUIDE.md)** | Complete YAML specification reference, field types, examples |
+| **[YAML Specification Reference](docs/YAML_SPECIFICATION.md)** | Complete reference for YAML input format, all 17 field types, options sources |
+| **[User Guide](docs/USER_GUIDE.md)** | Getting started, workflows, troubleshooting |
 | **[Enterprise Fields Guide](ENTERPRISE_FIELDS.md)** | Calculation Field, Rich Text Editor, Form Grid, Multi-Paged Form |
 | **[API Reference](docs/API_REFERENCE.md)** | Programmatic usage for Python integration |
 | **[Pattern Development Guide](docs/PATTERN_DEVELOPMENT_GUIDE.md)** | Extend with custom field types |
