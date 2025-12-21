@@ -1,0 +1,378 @@
+# Distribution Transaction Form
+# Records actual input distribution to farmers
+
+form:
+  id: imDistribution
+  name: Input Distribution
+  tableName: imDistribution
+  description: Records input distribution transactions to farmers
+
+fields:
+  - id: transactionCode
+    label: Transaction Code
+    type: idGenerator
+    format: "TXN-??????"
+
+  # ============================================
+  # Transaction Reference
+  # ============================================
+
+  - id: campaignCode
+    label: Campaign
+    type: selectBox
+    required: true
+    optionsSource:
+      type: formData
+      formId: imCampaign
+      valueColumn: campaignCode
+      labelColumn: campaignName
+      extraCondition: "c_status = 'ACTIVE'"
+      addEmptyOption: true
+      emptyLabel: "-- Select Campaign --"
+
+  - id: entitlementCode
+    label: Entitlement
+    type: selectBox
+    required: true
+    optionsSource:
+      type: formData
+      formId: imEntitlement
+      valueColumn: entitlementCode
+      labelColumn: entitlementCode
+      parentField: campaignCode
+      filterField: campaignCode
+      useAjax: true
+      addEmptyOption: true
+      emptyLabel: "-- Search by code or farmer --"
+
+  # ============================================
+  # Farmer Information (auto-populated)
+  # ============================================
+
+  - id: farmerCode
+    label: Farmer ID
+    type: textField
+    readonly: true
+
+  - id: farmerNationalId
+    label: National ID
+    type: textField
+    readonly: true
+
+  - id: farmerName
+    label: Farmer Name
+    type: textField
+    readonly: true
+    size: large
+
+  - id: farmerPhone
+    label: Phone
+    type: textField
+    readonly: true
+
+  # ============================================
+  # Distribution Details
+  # ============================================
+
+  - id: distributionDate
+    label: Distribution Date & Time
+    type: datePicker
+    required: true
+    dateFormat: yyyy-MM-dd HH:mm
+    defaultValue: "now"
+
+  - id: distPointCode
+    label: Distribution Point
+    type: selectBox
+    required: true
+    optionsSource:
+      type: formData
+      formId: md45DistribPoint
+      valueColumn: code
+      labelColumn: name
+      addEmptyOption: true
+
+  - id: distributionType
+    label: Distribution Type
+    type: selectBox
+    required: true
+    options:
+      - value: "VOUCHER_REDEMPTION"
+        label: Voucher Redemption
+      - value: "PHYSICAL_COLLECTION"
+        label: Physical Collection
+      - value: "DEALER_SALE"
+        label: Agro-Dealer Sale
+      - value: "DIRECT_DELIVERY"
+        label: Direct Delivery
+
+  - id: dealerCode
+    label: Agro-Dealer
+    type: selectBox
+    optionsSource:
+      type: formData
+      formId: imAgroDealer
+      valueColumn: dealerCode
+      labelColumn: businessName
+      extraCondition: "c_status = 'ACTIVE'"
+      addEmptyOption: true
+      emptyLabel: "-- Not via dealer --"
+
+  # ============================================
+  # Items Distributed (Grid)
+  # ============================================
+
+  - id: itemsSection
+    label: Items Distributed
+    type: section
+
+  - id: itemsDistributed
+    label: Distribution Items
+    type: formGrid
+    formId: imDistribItem
+    foreignKey: distributionCode
+    allowAddRow: true
+    allowDeleteRow: true
+    validateMinRow: 1
+    errorMessage: At least one item must be distributed
+    columns:
+      - value: inputCode
+        label: Input
+        formatType: text
+      - value: quantity
+        label: Qty
+        formatType: text
+      - value: unit
+        label: Unit
+        formatType: text
+      - value: unitPrice
+        label: Price
+        formatType: text
+      - value: subsidyAmount
+        label: Subsidy
+        formatType: text
+      - value: farmerPays
+        label: Farmer Pays
+        formatType: text
+
+  # ============================================
+  # Values
+  # ============================================
+
+  - id: totalValue
+    label: Total Value
+    type: textField
+    required: true
+    readonly: true
+    defaultValue: "0.00"
+
+  - id: subsidyAmount
+    label: Subsidy Amount
+    type: textField
+    readonly: true
+    defaultValue: "0.00"
+
+  - id: farmerPayment
+    label: Farmer Payment Due
+    type: textField
+    readonly: true
+    defaultValue: "0.00"
+
+  - id: paymentMethod
+    label: Payment Method
+    type: selectBox
+    options:
+      - value: "CASH"
+        label: Cash
+      - value: "MOBILE_MONEY"
+        label: Mobile Money
+      - value: "BANK_TRANSFER"
+        label: Bank Transfer
+      - value: "VOUCHER_DEDUCTION"
+        label: Voucher Deduction
+      - value: "WAIVED"
+        label: Payment Waived
+      - value: "NA"
+        label: Not Applicable (Fully Subsidized)
+
+  - id: paymentReference
+    label: Payment Reference
+    type: textField
+    placeholder: Receipt or transaction number
+    maxlength: 50
+
+  - id: paymentReceived
+    label: Payment Received
+    type: textField
+    placeholder: "0.00"
+    validation:
+      pattern: "^[0-9]+(\\.[0-9]{1,2})?$"
+      message: Enter a valid amount
+
+  # ============================================
+  # Verification
+  # ============================================
+
+  - id: verificationSection
+    label: Beneficiary Verification
+    type: section
+
+  - id: verificationMethod
+    label: Verification Method
+    type: selectBox
+    required: true
+    options:
+      - value: "NATIONAL_ID"
+        label: National ID Checked
+      - value: "BIOMETRIC"
+        label: Biometric Match
+      - value: "VOUCHER_PIN"
+        label: Voucher + PIN
+      - value: "SMS_OTP"
+        label: SMS OTP Verified
+      - value: "SIGNATURE"
+        label: Signature Match
+
+  - id: verifiedDocument
+    label: Document Verified
+    type: textField
+    placeholder: ID number or biometric score
+    maxlength: 50
+
+  # ============================================
+  # Collector Information
+  # ============================================
+
+  - id: collectorType
+    label: Collected By
+    type: selectBox
+    required: true
+    options:
+      - value: "FARMER"
+        label: Farmer (Self)
+      - value: "PROXY"
+        label: Authorized Proxy
+      - value: "GROUP_LEADER"
+        label: Group/Cooperative Leader
+
+  - id: proxyName
+    label: Proxy Name
+    type: textField
+    maxlength: 200
+
+  - id: proxyNationalId
+    label: Proxy National ID
+    type: textField
+    maxlength: 50
+
+  - id: proxyRelationship
+    label: Proxy Relationship
+    type: selectBox
+    optionsSource:
+      type: formData
+      formId: md12relationship
+      valueColumn: code
+      labelColumn: name
+      addEmptyOption: true
+
+  - id: proxyAuthDoc
+    label: Proxy Authorization Document
+    type: fileUpload
+    maxSize: 5
+    fileTypes: "pdf,jpg,jpeg,png"
+
+  # ============================================
+  # Evidence Capture
+  # ============================================
+
+  - id: evidenceSection
+    label: Evidence
+    type: section
+
+  - id: farmerSignature
+    label: Farmer/Proxy Signature
+    type: fileUpload
+    maxSize: 2
+    fileTypes: "png,jpg,jpeg"
+
+  - id: photoEvidence
+    label: Photo Evidence
+    type: fileUpload
+    maxSize: 5
+    fileTypes: "jpg,jpeg,png"
+
+  - id: gpsLatitude
+    label: GPS Latitude
+    type: textField
+    readonly: true
+    size: small
+
+  - id: gpsLongitude
+    label: GPS Longitude
+    type: textField
+    readonly: true
+    size: small
+
+  # ============================================
+  # Officer Information
+  # ============================================
+
+  - id: officerId
+    label: Distribution Officer ID
+    type: textField
+    required: true
+    readonly: true
+
+  - id: officerName
+    label: Officer Name
+    type: textField
+    readonly: true
+
+  - id: deviceId
+    label: Device ID
+    type: textField
+    readonly: true
+
+  - id: offlineSync
+    label: Offline Transaction
+    type: radio
+    defaultValue: "N"
+    options:
+      - value: "Y"
+        label: Yes (synced later)
+      - value: "N"
+        label: No (real-time)
+
+  - id: syncTimestamp
+    label: Sync Timestamp
+    type: datePicker
+    readonly: true
+    dateFormat: yyyy-MM-dd HH:mm:ss
+
+  # ============================================
+  # Status
+  # ============================================
+
+  - id: status
+    label: Transaction Status
+    type: selectBox
+    required: true
+    defaultValue: "COMPLETED"
+    options:
+      - value: "COMPLETED"
+        label: Completed
+      - value: "REVERSED"
+        label: Reversed
+      - value: "DISPUTED"
+        label: Disputed
+
+  - id: reversalReason
+    label: Reversal Reason
+    type: textArea
+    rows: 2
+
+  - id: notes
+    label: Notes
+    type: textArea
+    rows: 3
+    placeholder: Any additional notes about this distribution

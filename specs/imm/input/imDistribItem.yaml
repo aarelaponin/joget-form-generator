@@ -1,0 +1,95 @@
+# Distribution Item Form (Grid Sub-form)
+# Individual input items within a distribution transaction
+
+form:
+  id: imDistribItem
+  name: Distribution Item
+  tableName: imDistribItem
+  description: Individual input items distributed in a transaction
+
+fields:
+  - id: distributionCode
+    label: Distribution ID
+    type: hiddenField
+
+  - id: inputCode
+    label: Input
+    type: selectBox
+    required: true
+    optionsSource:
+      type: formData
+      formId: md44Input
+      valueColumn: code
+      labelColumn: name
+      addEmptyOption: true
+      emptyLabel: "-- Select Input --"
+
+  - id: inputName
+    label: Input Name
+    type: textField
+    readonly: true
+
+  - id: batchNumber
+    label: Batch Number
+    type: textField
+    placeholder: Batch/Lot number
+    maxlength: 50
+
+  - id: quantity
+    label: Quantity
+    type: textField
+    required: true
+    placeholder: "0"
+
+  - id: unit
+    label: Unit
+    type: selectBox
+    required: true
+    options:
+      - value: "kg"
+        label: kg
+      - value: "litre"
+        label: L
+      - value: "packet"
+        label: pkt
+      - value: "piece"
+        label: pc
+      - value: "dose"
+        label: dose
+      - value: "bag"
+        label: bag
+
+  - id: unitPrice
+    label: Unit Price
+    type: textField
+    readonly: true
+
+  - id: subsidyAmount
+    label: Subsidy
+    type: textField
+    readonly: true
+
+  - id: farmerPays
+    label: Farmer Pays
+    type: textField
+    readonly: true
+
+  - id: expiryDate
+    label: Expiry Date
+    type: datePicker
+    dateFormat: yyyy-MM-dd
+
+  - id: isSubstitute
+    label: Substitute Item?
+    type: radio
+    defaultValue: "N"
+    options:
+      - value: "Y"
+        label: "Yes"
+      - value: "N"
+        label: "No"
+
+  - id: originalInputCode
+    label: Original Input (if substitute)
+    type: textField
+    readonly: true

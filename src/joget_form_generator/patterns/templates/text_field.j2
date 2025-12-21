@@ -2,20 +2,25 @@
   "className": "org.joget.apps.form.lib.TextField",
   "properties": {
     "id": "{{ id }}",
-    "label": "{{ label }}",
-    "required": "{{ required }}",
+    "label": "{{ label }}"{% if validator %},
+    "encryption": "",
     "readonly": "{{ readonly }}",
+    "style": "{{ style }}",
+    "readonlyLabel": "",
+    "storeNumeric": "",
+    "iconIncluded": false,
     "value": "{{ value }}",
-    "size": "{{ size }}",
-    {% if maxlength %}
     "maxlength": "{{ maxlength }}",
-    {% endif %}
-    {% if placeholder %}
-    "placeholder": "{{ placeholder }}",
-    {% endif %}
-    {% if validator %}
     "validator": {{ validator | tojson_pretty }},
-    {% endif %}
-    "encryption": ""
+    "requiredSanitize": "",
+    "placeholder": "{{ placeholder }}",
+    "size": "",
+    "workflowVariable": "",
+    "disableIncrementDecrementArrow": ""{% else %}{% if style %},
+    "style": "{{ style }}"{% endif %}{% if readonly %},
+    "readonly": "{{ readonly }}"{% endif %}{% if value %},
+    "value": "{{ value }}"{% endif %}{% if maxlength %},
+    "maxlength": "{{ maxlength }}"{% endif %}{% if placeholder %},
+    "placeholder": "{{ placeholder }}"{% endif %}{% endif %}
   }
 }

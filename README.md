@@ -5,8 +5,8 @@
 Transform human-readable YAML specifications into production-ready Joget DX form JSON definitions.
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![Tests](https://img.shields.io/badge/tests-191%20passing-brightgreen.svg)](#testing)
-[![Coverage](https://img.shields.io/badge/coverage-62%25-yellow.svg)](#testing)
+[![Tests](https://img.shields.io/badge/tests-passing-brightgreen.svg)](#testing)
+[![Coverage](https://img.shields.io/badge/coverage-see%20pytest-yellow.svg)](#testing)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ---
@@ -171,6 +171,8 @@ See [MCP Server README](src/joget_form_mcp/README.md) for detailed documentation
 | **[YAML Specification Reference](docs/YAML_SPECIFICATION.md)** | Complete reference for YAML input format, all 17 field types, options sources |
 | **[User Guide](docs/USER_GUIDE.md)** | Getting started, workflows, troubleshooting |
 | **[Enterprise Fields Guide](ENTERPRISE_FIELDS.md)** | Calculation Field, Rich Text Editor, Form Grid, Multi-Paged Form |
+| **[Nested LOV Refactoring Pattern](docs/NESTED_LOV_REFACTORING_PATTERN.md)** | Convert flat dropdowns to hierarchical category-based selections |
+| **[AJAX Subform Pattern](docs/AJAX_SUBFORM_PATTERN.md)** | SelectBox + AjaxSubForm for dynamic record lookup |
 | **[API Reference](docs/API_REFERENCE.md)** | Programmatic usage for Python integration |
 | **[Pattern Development Guide](docs/PATTERN_DEVELOPMENT_GUIDE.md)** | Extend with custom field types |
 | **[MCP Server](src/joget_form_mcp/README.md)** | AI-assisted form development |
@@ -347,9 +349,14 @@ joget-form-generator/
 │   ├── schema/                    # Schema validation tests
 │   └── transformers/              # Normalizer tests
 │
-├── examples/                      # Working examples
+├── examples/                      # YAML specification examples
 │   ├── mdm/                       # MDM form examples
 │   └── sample_form.yaml
+│
+├── sample-forms/                  # Production Joget JSON reference
+│   ├── 01_nested_lovs/            # Cascading dropdown pattern
+│   ├── 04_farmer-application-form/ # Complex 7-page wizard
+│   └── 05_ajax-subform/           # AJAX Subform lookup pattern
 │
 └── docs/                          # Documentation
 ```
@@ -358,41 +365,17 @@ joget-form-generator/
 
 ## Testing
 
-**Current Status:** 191 tests (188 passing)
+Run the test suite to see current status:
 
 ```bash
-$ pytest --cov=src
+# Run all tests with coverage
+pytest --cov=src
 
-============================= test session starts ==============================
-collected 191 items
-
-tests/integration/test_mdm_forms.py ......
-tests/mcp/test_discovery.py ...........
-tests/mcp/test_generation.py ........
-tests/mcp/test_specification.py ..........
-tests/mcp/test_validation.py .......
-tests/patterns/test_calculation_field.py ....
-tests/patterns/test_check_box.py ...
-tests/patterns/test_custom_html.py ....
-tests/patterns/test_date_picker.py .....
-tests/patterns/test_file_upload.py ......
-tests/patterns/test_form_grid.py .......
-tests/patterns/test_grid.py ........
-tests/patterns/test_hidden_field.py ...
-tests/patterns/test_id_generator.py ......
-tests/patterns/test_mixins.py ............
-tests/patterns/test_multi_paged_form.py ......
-tests/patterns/test_password_field.py ....
-tests/patterns/test_radio.py ...
-tests/patterns/test_rich_text_editor.py ......
-tests/patterns/test_select_box.py ...
-tests/patterns/test_subform.py ........
-tests/patterns/test_text_area.py .....
-tests/patterns/test_text_field.py .............
-tests/schema/test_validator.py ................
-tests/transformers/test_normalizer.py ...............
-
-======================== 191 passed in 0.72s ================================
+# Run specific test categories
+pytest tests/patterns/ -v      # Pattern unit tests
+pytest tests/mcp/ -v           # MCP server tests
+pytest tests/integration/ -v   # Integration tests
+pytest -m integration          # Tests marked as integration
 ```
 
 ---
@@ -409,7 +392,7 @@ tests/transformers/test_normalizer.py ...............
 
 ### Planned
 - [ ] Additional Enterprise field types (Advanced Grid, Spreadsheet, Signature)
-- [ ] Section and Column layout patterns
+- [ ] Column layout patterns (Section pattern already implemented)
 - [ ] Process integration (workflow variables)
 - [ ] Import existing Joget forms to YAML (reverse transformation)
 - [ ] Web UI for form generation
@@ -448,5 +431,5 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ---
 
-**Version:** 0.1.0
+**Version:** 0.2.0
 **Maintained by:** Aare Laponin

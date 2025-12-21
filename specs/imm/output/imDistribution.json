@@ -1,0 +1,1036 @@
+{
+  "className": "org.joget.apps.form.model.Form",
+  "properties": {
+    "id": "imDistribution",
+    "name": "Input Distribution",
+    "tableName": "imDistribution",
+    "description": "Records input distribution transactions to farmers",
+    "loadBinder": {
+      "className": "org.joget.apps.form.lib.WorkflowFormBinder",
+      "properties": {}
+    },
+    "storeBinder": {
+      "className": "org.joget.apps.form.lib.WorkflowFormBinder",
+      "properties": {}
+    },
+    "noPermissionMessage": "",
+    "postProcessorRunOn": "create",
+    "permission": {
+      "className": "",
+      "properties": {}
+    },
+    "postProcessor": {
+      "className": "",
+      "properties": {}
+    }
+  },
+  "elements": [
+    {
+      "className": "org.joget.apps.form.model.Section",
+      "properties": {
+        "id": "section1",
+        "label": "Section"
+      },
+      "elements": [
+        {
+          "className": "org.joget.apps.form.model.Column",
+          "properties": {
+            "width": "100%"
+          },
+          "elements": [
+            {
+              "className": "org.joget.apps.form.lib.IdGeneratorField",
+              "properties": {
+                "id": "transactionCode",
+                "label": "Transaction Code",
+                "format": "TXN-??????",
+                "envVariable": "counter",
+                "isDistributedGeneration": "",
+                "hidden": "",
+                "workflowVariable": ""
+              }
+            },
+            {
+              "className": "org.joget.apps.form.lib.SelectBox",
+              "properties": {
+                "readonly": "",
+                "multiple": "",
+                "label": "Campaign",
+                "readonlyLabel": "",
+                "id": "campaignCode",
+                "iconIncluded": false,
+                "options": [],
+                "optionsBinder": {
+                  "className": "org.joget.apps.form.lib.FormOptionsBinder",
+                  "properties": {
+                    "formDefId": "imCampaign",
+                    "idColumn": "campaignCode",
+                    "labelColumn": "campaignName",
+                    "groupingColumn": "",
+                    "extraCondition": "c_status = 'ACTIVE'",
+                    "addEmptyOption": "true",
+                    "emptyLabel": "-- Select Campaign --",
+                    "useAjax": "",
+                    "cacheInterval": ""
+                  }
+                },
+                "value": "",
+                "validator": {
+                  "className": "org.joget.apps.form.lib.DefaultValidator",
+                  "properties": {
+                    "mandatory": "true",
+                    "type": "",
+                    "message": ""
+                  }
+                },
+                "controlField": "",
+                "size": "",
+                "workflowVariable": ""
+              }
+            },
+            {
+              "className": "org.joget.apps.form.lib.SelectBox",
+              "properties": {
+                "readonly": "",
+                "multiple": "",
+                "label": "Entitlement",
+                "readonlyLabel": "",
+                "id": "entitlementCode",
+                "iconIncluded": false,
+                "options": [],
+                "optionsBinder": {
+                  "className": "org.joget.apps.form.lib.FormOptionsBinder",
+                  "properties": {
+                    "formDefId": "imEntitlement",
+                    "idColumn": "entitlementCode",
+                    "labelColumn": "entitlementCode",
+                    "groupingColumn": "",
+                    "extraCondition": "",
+                    "addEmptyOption": "true",
+                    "emptyLabel": "-- Search by code or farmer --",
+                    "useAjax": "true",
+                    "cacheInterval": "",
+                    "parentField": "campaignCode",
+                    "filterField": "campaignCode"
+                  }
+                },
+                "value": "",
+                "validator": {
+                  "className": "org.joget.apps.form.lib.DefaultValidator",
+                  "properties": {
+                    "mandatory": "true",
+                    "type": "",
+                    "message": ""
+                  }
+                },
+                "controlField": "",
+                "size": "",
+                "workflowVariable": ""
+              }
+            },
+            {
+              "className": "org.joget.apps.form.lib.TextField",
+              "properties": {
+                "id": "farmerCode",
+                "label": "Farmer ID",
+                "readonly": "true"
+              }
+            },
+            {
+              "className": "org.joget.apps.form.lib.TextField",
+              "properties": {
+                "id": "farmerNationalId",
+                "label": "National ID",
+                "readonly": "true"
+              }
+            },
+            {
+              "className": "org.joget.apps.form.lib.TextField",
+              "properties": {
+                "id": "farmerName",
+                "label": "Farmer Name",
+                "readonly": "true"
+              }
+            },
+            {
+              "className": "org.joget.apps.form.lib.TextField",
+              "properties": {
+                "id": "farmerPhone",
+                "label": "Phone",
+                "readonly": "true"
+              }
+            },
+            {
+              "className": "org.joget.apps.form.lib.DatePicker",
+              "properties": {
+                "id": "distributionDate",
+                "label": "Distribution Date & Time",
+                "readonly": "",
+                "allowManual": "",
+                "yearRange": "c-10:c+10",
+                "dataFormat": "yyyy-MM-dd HH:mm",
+                "datePickerType": "",
+                "currentDateAs": "",
+                "disableWeekends": "",
+                "readonlyLabel": "",
+                "iconIncluded": false,
+                "value": "now",
+                "validator": {
+                  "className": "org.joget.apps.form.lib.DefaultValidator",
+                  "properties": {
+                    "mandatory": "true",
+                    "type": "",
+                    "message": ""
+                  }
+                },
+                "startDateFieldId": "",
+                "endDateFieldId": "",
+                "placeholder": "",
+                "format": "",
+                "workflowVariable": ""
+              }
+            },
+            {
+              "className": "org.joget.apps.form.lib.SelectBox",
+              "properties": {
+                "readonly": "",
+                "multiple": "",
+                "label": "Distribution Point",
+                "readonlyLabel": "",
+                "id": "distPointCode",
+                "iconIncluded": false,
+                "options": [],
+                "optionsBinder": {
+                  "className": "org.joget.apps.form.lib.FormOptionsBinder",
+                  "properties": {
+                    "formDefId": "md45DistribPoint",
+                    "idColumn": "code",
+                    "labelColumn": "name",
+                    "groupingColumn": "",
+                    "extraCondition": "",
+                    "addEmptyOption": "true",
+                    "emptyLabel": "",
+                    "useAjax": "",
+                    "cacheInterval": ""
+                  }
+                },
+                "value": "",
+                "validator": {
+                  "className": "org.joget.apps.form.lib.DefaultValidator",
+                  "properties": {
+                    "mandatory": "true",
+                    "type": "",
+                    "message": ""
+                  }
+                },
+                "controlField": "",
+                "size": "",
+                "workflowVariable": ""
+              }
+            },
+            {
+              "className": "org.joget.apps.form.lib.SelectBox",
+              "properties": {
+                "readonly": "",
+                "multiple": "",
+                "label": "Distribution Type",
+                "readonlyLabel": "",
+                "id": "distributionType",
+                "iconIncluded": false,
+                "options": [
+                  {
+                    "value": "VOUCHER_REDEMPTION",
+                    "label": "Voucher Redemption",
+                    "grouping": ""
+                  },
+                  {
+                    "value": "PHYSICAL_COLLECTION",
+                    "label": "Physical Collection",
+                    "grouping": ""
+                  },
+                  {
+                    "value": "DEALER_SALE",
+                    "label": "Agro-Dealer Sale",
+                    "grouping": ""
+                  },
+                  {
+                    "value": "DIRECT_DELIVERY",
+                    "label": "Direct Delivery",
+                    "grouping": ""
+                  }
+                ],
+                "optionsBinder": {
+                  "className": "",
+                  "properties": {}
+                },
+                "value": "",
+                "validator": {
+                  "className": "org.joget.apps.form.lib.DefaultValidator",
+                  "properties": {
+                    "mandatory": "true",
+                    "type": "",
+                    "message": ""
+                  }
+                },
+                "controlField": "",
+                "size": "",
+                "workflowVariable": ""
+              }
+            },
+            {
+              "className": "org.joget.apps.form.lib.SelectBox",
+              "properties": {
+                "readonly": "",
+                "multiple": "",
+                "label": "Agro-Dealer",
+                "readonlyLabel": "",
+                "id": "dealerCode",
+                "iconIncluded": false,
+                "options": [],
+                "optionsBinder": {
+                  "className": "org.joget.apps.form.lib.FormOptionsBinder",
+                  "properties": {
+                    "formDefId": "imAgroDealer",
+                    "idColumn": "dealerCode",
+                    "labelColumn": "businessName",
+                    "groupingColumn": "",
+                    "extraCondition": "c_status = 'ACTIVE'",
+                    "addEmptyOption": "true",
+                    "emptyLabel": "-- Not via dealer --",
+                    "useAjax": "",
+                    "cacheInterval": ""
+                  }
+                },
+                "value": "",
+                "validator": {
+                  "className": "",
+                  "properties": {}
+                },
+                "controlField": "",
+                "size": "",
+                "workflowVariable": ""
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "className": "org.joget.apps.form.model.Section",
+      "properties": {
+        "id": "itemsSection",
+        "label": "Items Distributed"
+      },
+      "elements": [
+        {
+          "className": "org.joget.apps.form.model.Column",
+          "properties": {
+            "width": "100%"
+          },
+          "elements": [
+            {
+              "className": "org.joget.plugin.enterprise.FormGrid",
+              "properties": {
+                "showRowNumber": "",
+                "disabledDelete": "",
+                "errorMessage": "At least one item must be distributed",
+                "deleteSubformData": "",
+                "pageSize": "20",
+                "label": "Distribution Items",
+                "enableSorting": "",
+                "deleteFiles": "",
+                "readonly": "",
+                "deleteGridData": "",
+                "disabledAdd": "",
+                "width": "",
+                "abortRelatedRunningProcesses": "",
+                "readonlyLabel": "",
+                "height": "",
+                "id": "itemsDistributed",
+                "formDefId": "imDistribItem",
+                "options": [
+                  {
+                    "value": "inputCode",
+                    "label": "Input",
+                    "formatType": "text",
+                    "format": "",
+                    "width": ""
+                  },
+                  {
+                    "value": "quantity",
+                    "label": "Qty",
+                    "formatType": "text",
+                    "format": "",
+                    "width": ""
+                  },
+                  {
+                    "value": "unit",
+                    "label": "Unit",
+                    "formatType": "text",
+                    "format": "",
+                    "width": ""
+                  },
+                  {
+                    "value": "unitPrice",
+                    "label": "Price",
+                    "formatType": "text",
+                    "format": "",
+                    "width": ""
+                  },
+                  {
+                    "value": "subsidyAmount",
+                    "label": "Subsidy",
+                    "formatType": "text",
+                    "format": "",
+                    "width": ""
+                  },
+                  {
+                    "value": "farmerPays",
+                    "label": "Farmer Pays",
+                    "formatType": "text",
+                    "format": "",
+                    "width": ""
+                  }
+                ],
+                "submit-label-normal": "",
+                "submit-label-readonly": "",
+                "deleteMessage": "",
+                "validator": {
+                  "className": "",
+                  "properties": {}
+                },
+                "uniqueKey": "",
+                "validateMinRow": "1",
+                "validateMaxRow": "",
+                "loadBinder": {
+                  "className": "org.joget.plugin.enterprise.MultirowFormBinder",
+                  "properties": {
+                    "formDefId": "imDistribItem",
+                    "foreignKey": "distributionCode"
+                  }
+                },
+                "storeBinder": {
+                  "className": "org.joget.plugin.enterprise.MultirowFormBinder",
+                  "properties": {
+                    "formDefId": "imDistribItem",
+                    "foreignKey": "distributionCode"
+                  }
+                },
+                "requestParams": []
+              }
+            },
+            {
+              "className": "org.joget.apps.form.lib.TextField",
+              "properties": {
+                "id": "totalValue",
+                "label": "Total Value",
+                "encryption": "",
+                "readonly": "true",
+                "style": "",
+                "readonlyLabel": "",
+                "storeNumeric": "",
+                "iconIncluded": false,
+                "value": "0.00",
+                "maxlength": "",
+                "validator": {
+                  "className": "org.joget.apps.form.lib.DefaultValidator",
+                  "properties": {
+                    "mandatory": "true",
+                    "type": "",
+                    "message": ""
+                  }
+                },
+                "requiredSanitize": "",
+                "placeholder": "",
+                "size": "",
+                "workflowVariable": "",
+                "disableIncrementDecrementArrow": ""
+              }
+            },
+            {
+              "className": "org.joget.apps.form.lib.TextField",
+              "properties": {
+                "id": "subsidyAmount",
+                "label": "Subsidy Amount",
+                "readonly": "true",
+                "value": "0.00"
+              }
+            },
+            {
+              "className": "org.joget.apps.form.lib.TextField",
+              "properties": {
+                "id": "farmerPayment",
+                "label": "Farmer Payment Due",
+                "readonly": "true",
+                "value": "0.00"
+              }
+            },
+            {
+              "className": "org.joget.apps.form.lib.SelectBox",
+              "properties": {
+                "readonly": "",
+                "multiple": "",
+                "label": "Payment Method",
+                "readonlyLabel": "",
+                "id": "paymentMethod",
+                "iconIncluded": false,
+                "options": [
+                  {
+                    "value": "CASH",
+                    "label": "Cash",
+                    "grouping": ""
+                  },
+                  {
+                    "value": "MOBILE_MONEY",
+                    "label": "Mobile Money",
+                    "grouping": ""
+                  },
+                  {
+                    "value": "BANK_TRANSFER",
+                    "label": "Bank Transfer",
+                    "grouping": ""
+                  },
+                  {
+                    "value": "VOUCHER_DEDUCTION",
+                    "label": "Voucher Deduction",
+                    "grouping": ""
+                  },
+                  {
+                    "value": "WAIVED",
+                    "label": "Payment Waived",
+                    "grouping": ""
+                  },
+                  {
+                    "value": "NA",
+                    "label": "Not Applicable (Fully Subsidized)",
+                    "grouping": ""
+                  }
+                ],
+                "optionsBinder": {
+                  "className": "",
+                  "properties": {}
+                },
+                "value": "",
+                "validator": {
+                  "className": "",
+                  "properties": {}
+                },
+                "controlField": "",
+                "size": "",
+                "workflowVariable": ""
+              }
+            },
+            {
+              "className": "org.joget.apps.form.lib.TextField",
+              "properties": {
+                "id": "paymentReference",
+                "label": "Payment Reference",
+                "maxlength": "50",
+                "placeholder": "Receipt or transaction number"
+              }
+            },
+            {
+              "className": "org.joget.apps.form.lib.TextField",
+              "properties": {
+                "id": "paymentReceived",
+                "label": "Payment Received",
+                "encryption": "",
+                "readonly": "",
+                "style": "",
+                "readonlyLabel": "",
+                "storeNumeric": "",
+                "iconIncluded": false,
+                "value": "",
+                "maxlength": "",
+                "validator": {
+                  "className": "org.joget.apps.form.lib.DefaultValidator",
+                  "properties": {
+                    "mandatory": "",
+                    "type": "regex",
+                    "message": "Enter a valid amount",
+                    "regex": "^[0-9]+(\\.[0-9]{1,2})?$"
+                  }
+                },
+                "requiredSanitize": "",
+                "placeholder": "0.00",
+                "size": "",
+                "workflowVariable": "",
+                "disableIncrementDecrementArrow": ""
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "className": "org.joget.apps.form.model.Section",
+      "properties": {
+        "id": "verificationSection",
+        "label": "Beneficiary Verification"
+      },
+      "elements": [
+        {
+          "className": "org.joget.apps.form.model.Column",
+          "properties": {
+            "width": "100%"
+          },
+          "elements": [
+            {
+              "className": "org.joget.apps.form.lib.SelectBox",
+              "properties": {
+                "readonly": "",
+                "multiple": "",
+                "label": "Verification Method",
+                "readonlyLabel": "",
+                "id": "verificationMethod",
+                "iconIncluded": false,
+                "options": [
+                  {
+                    "value": "NATIONAL_ID",
+                    "label": "National ID Checked",
+                    "grouping": ""
+                  },
+                  {
+                    "value": "BIOMETRIC",
+                    "label": "Biometric Match",
+                    "grouping": ""
+                  },
+                  {
+                    "value": "VOUCHER_PIN",
+                    "label": "Voucher + PIN",
+                    "grouping": ""
+                  },
+                  {
+                    "value": "SMS_OTP",
+                    "label": "SMS OTP Verified",
+                    "grouping": ""
+                  },
+                  {
+                    "value": "SIGNATURE",
+                    "label": "Signature Match",
+                    "grouping": ""
+                  }
+                ],
+                "optionsBinder": {
+                  "className": "",
+                  "properties": {}
+                },
+                "value": "",
+                "validator": {
+                  "className": "org.joget.apps.form.lib.DefaultValidator",
+                  "properties": {
+                    "mandatory": "true",
+                    "type": "",
+                    "message": ""
+                  }
+                },
+                "controlField": "",
+                "size": "",
+                "workflowVariable": ""
+              }
+            },
+            {
+              "className": "org.joget.apps.form.lib.TextField",
+              "properties": {
+                "id": "verifiedDocument",
+                "label": "Document Verified",
+                "maxlength": "50",
+                "placeholder": "ID number or biometric score"
+              }
+            },
+            {
+              "className": "org.joget.apps.form.lib.SelectBox",
+              "properties": {
+                "readonly": "",
+                "multiple": "",
+                "label": "Collected By",
+                "readonlyLabel": "",
+                "id": "collectorType",
+                "iconIncluded": false,
+                "options": [
+                  {
+                    "value": "FARMER",
+                    "label": "Farmer (Self)",
+                    "grouping": ""
+                  },
+                  {
+                    "value": "PROXY",
+                    "label": "Authorized Proxy",
+                    "grouping": ""
+                  },
+                  {
+                    "value": "GROUP_LEADER",
+                    "label": "Group/Cooperative Leader",
+                    "grouping": ""
+                  }
+                ],
+                "optionsBinder": {
+                  "className": "",
+                  "properties": {}
+                },
+                "value": "",
+                "validator": {
+                  "className": "org.joget.apps.form.lib.DefaultValidator",
+                  "properties": {
+                    "mandatory": "true",
+                    "type": "",
+                    "message": ""
+                  }
+                },
+                "controlField": "",
+                "size": "",
+                "workflowVariable": ""
+              }
+            },
+            {
+              "className": "org.joget.apps.form.lib.TextField",
+              "properties": {
+                "id": "proxyName",
+                "label": "Proxy Name",
+                "maxlength": "200"
+              }
+            },
+            {
+              "className": "org.joget.apps.form.lib.TextField",
+              "properties": {
+                "id": "proxyNationalId",
+                "label": "Proxy National ID",
+                "maxlength": "50"
+              }
+            },
+            {
+              "className": "org.joget.apps.form.lib.SelectBox",
+              "properties": {
+                "readonly": "",
+                "multiple": "",
+                "label": "Proxy Relationship",
+                "readonlyLabel": "",
+                "id": "proxyRelationship",
+                "iconIncluded": false,
+                "options": [],
+                "optionsBinder": {
+                  "className": "org.joget.apps.form.lib.FormOptionsBinder",
+                  "properties": {
+                    "formDefId": "md12relationship",
+                    "idColumn": "code",
+                    "labelColumn": "name",
+                    "groupingColumn": "",
+                    "extraCondition": "",
+                    "addEmptyOption": "true",
+                    "emptyLabel": "",
+                    "useAjax": "",
+                    "cacheInterval": ""
+                  }
+                },
+                "value": "",
+                "validator": {
+                  "className": "",
+                  "properties": {}
+                },
+                "controlField": "",
+                "size": "",
+                "workflowVariable": ""
+              }
+            },
+            {
+              "className": "org.joget.apps.form.lib.FileUpload",
+              "properties": {
+                "resizeMethod": "",
+                "permissionType": "",
+                "maxSizeMsg": "File size limit exceeded",
+                "removeFile": "",
+                "readonly": "",
+                "attachment": "true",
+                "fileTypeMsg": "Invalid file type",
+                "multiple": "",
+                "label": "Proxy Authorization Document",
+                "resizeQuality": "0.8",
+                "id": "proxyAuthDoc",
+                "validator": {
+                  "className": "",
+                  "properties": {}
+                },
+                "maxSize": "5",
+                "fileType": "pdf,jpg,jpeg,png",
+                "resizeWidth": "",
+                "resizeHeight": "",
+                "size": "",
+                "padding": ""
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "className": "org.joget.apps.form.model.Section",
+      "properties": {
+        "id": "evidenceSection",
+        "label": "Evidence"
+      },
+      "elements": [
+        {
+          "className": "org.joget.apps.form.model.Column",
+          "properties": {
+            "width": "100%"
+          },
+          "elements": [
+            {
+              "className": "org.joget.apps.form.lib.FileUpload",
+              "properties": {
+                "resizeMethod": "",
+                "permissionType": "",
+                "maxSizeMsg": "File size limit exceeded",
+                "removeFile": "",
+                "readonly": "",
+                "attachment": "true",
+                "fileTypeMsg": "Invalid file type",
+                "multiple": "",
+                "label": "Farmer/Proxy Signature",
+                "resizeQuality": "0.8",
+                "id": "farmerSignature",
+                "validator": {
+                  "className": "",
+                  "properties": {}
+                },
+                "maxSize": "2",
+                "fileType": "png,jpg,jpeg",
+                "resizeWidth": "",
+                "resizeHeight": "",
+                "size": "",
+                "padding": ""
+              }
+            },
+            {
+              "className": "org.joget.apps.form.lib.FileUpload",
+              "properties": {
+                "resizeMethod": "",
+                "permissionType": "",
+                "maxSizeMsg": "File size limit exceeded",
+                "removeFile": "",
+                "readonly": "",
+                "attachment": "true",
+                "fileTypeMsg": "Invalid file type",
+                "multiple": "",
+                "label": "Photo Evidence",
+                "resizeQuality": "0.8",
+                "id": "photoEvidence",
+                "validator": {
+                  "className": "",
+                  "properties": {}
+                },
+                "maxSize": "5",
+                "fileType": "jpg,jpeg,png",
+                "resizeWidth": "",
+                "resizeHeight": "",
+                "size": "",
+                "padding": ""
+              }
+            },
+            {
+              "className": "org.joget.apps.form.lib.TextField",
+              "properties": {
+                "id": "gpsLatitude",
+                "label": "GPS Latitude",
+                "readonly": "true"
+              }
+            },
+            {
+              "className": "org.joget.apps.form.lib.TextField",
+              "properties": {
+                "id": "gpsLongitude",
+                "label": "GPS Longitude",
+                "readonly": "true"
+              }
+            },
+            {
+              "className": "org.joget.apps.form.lib.TextField",
+              "properties": {
+                "id": "officerId",
+                "label": "Distribution Officer ID",
+                "encryption": "",
+                "readonly": "true",
+                "style": "",
+                "readonlyLabel": "",
+                "storeNumeric": "",
+                "iconIncluded": false,
+                "value": "",
+                "maxlength": "",
+                "validator": {
+                  "className": "org.joget.apps.form.lib.DefaultValidator",
+                  "properties": {
+                    "mandatory": "true",
+                    "type": "",
+                    "message": ""
+                  }
+                },
+                "requiredSanitize": "",
+                "placeholder": "",
+                "size": "",
+                "workflowVariable": "",
+                "disableIncrementDecrementArrow": ""
+              }
+            },
+            {
+              "className": "org.joget.apps.form.lib.TextField",
+              "properties": {
+                "id": "officerName",
+                "label": "Officer Name",
+                "readonly": "true"
+              }
+            },
+            {
+              "className": "org.joget.apps.form.lib.TextField",
+              "properties": {
+                "id": "deviceId",
+                "label": "Device ID",
+                "readonly": "true"
+              }
+            },
+            {
+              "className": "org.joget.apps.form.lib.Radio",
+              "properties": {
+                "fullWidth": "",
+                "readonly": "",
+                "label": "Offline Transaction",
+                "readonlyLabel": "",
+                "id": "offlineSync",
+                "options": [
+                  {
+                    "value": "Y",
+                    "label": "Yes (synced later)",
+                    "grouping": ""
+                  },
+                  {
+                    "value": "N",
+                    "label": "No (real-time)",
+                    "grouping": ""
+                  }
+                ],
+                "optionsBinder": {
+                  "className": "",
+                  "properties": {}
+                },
+                "value": "N",
+                "validator": {
+                  "className": "",
+                  "properties": {}
+                },
+                "controlField": "",
+                "workflowVariable": ""
+              }
+            },
+            {
+              "className": "org.joget.apps.form.lib.DatePicker",
+              "properties": {
+                "id": "syncTimestamp",
+                "label": "Sync Timestamp",
+                "readonly": "true",
+                "allowManual": "",
+                "yearRange": "c-10:c+10",
+                "dataFormat": "yyyy-MM-dd HH:mm:ss",
+                "datePickerType": "",
+                "currentDateAs": "",
+                "disableWeekends": "",
+                "readonlyLabel": "",
+                "iconIncluded": false,
+                "value": "",
+                "validator": {
+                  "className": "",
+                  "properties": {}
+                },
+                "startDateFieldId": "",
+                "endDateFieldId": "",
+                "placeholder": "",
+                "format": "",
+                "workflowVariable": ""
+              }
+            },
+            {
+              "className": "org.joget.apps.form.lib.SelectBox",
+              "properties": {
+                "readonly": "",
+                "multiple": "",
+                "label": "Transaction Status",
+                "readonlyLabel": "",
+                "id": "status",
+                "iconIncluded": false,
+                "options": [
+                  {
+                    "value": "COMPLETED",
+                    "label": "Completed",
+                    "grouping": ""
+                  },
+                  {
+                    "value": "REVERSED",
+                    "label": "Reversed",
+                    "grouping": ""
+                  },
+                  {
+                    "value": "DISPUTED",
+                    "label": "Disputed",
+                    "grouping": ""
+                  }
+                ],
+                "optionsBinder": {
+                  "className": "",
+                  "properties": {}
+                },
+                "value": "COMPLETED",
+                "validator": {
+                  "className": "org.joget.apps.form.lib.DefaultValidator",
+                  "properties": {
+                    "mandatory": "true",
+                    "type": "",
+                    "message": ""
+                  }
+                },
+                "controlField": "",
+                "size": "",
+                "workflowVariable": ""
+              }
+            },
+            {
+              "className": "org.joget.apps.form.lib.TextArea",
+              "properties": {
+                "readonly": "",
+                "label": "Reversal Reason",
+                "rows": "2",
+                "cols": "50",
+                "readonlyLabel": "",
+                "id": "reversalReason",
+                "value": "",
+                "validator": {
+                  "className": "",
+                  "properties": {}
+                },
+                "placeholder": "",
+                "encryption": "",
+                "workflowVariable": ""
+              }
+            },
+            {
+              "className": "org.joget.apps.form.lib.TextArea",
+              "properties": {
+                "readonly": "",
+                "label": "Notes",
+                "rows": "3",
+                "cols": "50",
+                "readonlyLabel": "",
+                "id": "notes",
+                "value": "",
+                "validator": {
+                  "className": "",
+                  "properties": {}
+                },
+                "placeholder": "Any additional notes about this distribution",
+                "encryption": "",
+                "workflowVariable": ""
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

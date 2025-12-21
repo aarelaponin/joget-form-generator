@@ -1,0 +1,70 @@
+# Dealer Category Master Data Form
+form:
+  id: md43DealerCategory
+  name: MD.43 - Dealer Category
+  tableName: md43DealerCategory
+  description: Categories/tiers of agro-dealers
+
+fields:
+  - id: code
+    label: Code
+    type: textField
+    required: true
+    maxlength: 30
+
+  - id: name
+    label: Name
+    type: textField
+    required: true
+    maxlength: 100
+
+  - id: description
+    label: Description
+    type: textArea
+    rows: 2
+
+  - id: minStorageSqm
+    label: Min Storage (sqm)
+    type: textField
+    placeholder: "0"
+
+  - id: minCapital
+    label: Min Capital
+    type: textField
+    placeholder: "0.00"
+
+  - id: requiresLicense
+    label: Requires Trading License
+    type: radio
+    defaultValue: "Y"
+    options:
+      - value: "Y"
+        label: "Yes"
+      - value: "N"
+        label: "No"
+
+  - id: allowedCategories
+    label: Allowed Input Categories
+    type: textField
+    placeholder: "e.g., SEED;FERTILIZER"
+    maxlength: 200
+
+  - id: commissionRatePct
+    label: Commission Rate (%)
+    type: textField
+    placeholder: "e.g., 10"
+
+  - id: sortOrder
+    label: Sort Order
+    type: textField
+    defaultValue: "0"
+
+  - id: isActive
+    label: Active
+    type: radio
+    defaultValue: "Y"
+    options:
+      - value: "Y"
+        label: "Yes"
+      - value: "N"
+        label: "No"

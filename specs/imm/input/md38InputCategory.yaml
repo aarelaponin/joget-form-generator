@@ -1,0 +1,82 @@
+# Input Category Master Data Form
+form:
+  id: md38InputCategory
+  name: MD.38 - Input Category
+  tableName: md38InputCategory
+  description: Categories for agricultural inputs (Seeds, Fertilizers, etc.)
+
+fields:
+  - id: code
+    label: Category Code
+    type: textField
+    required: true
+    placeholder: "e.g., SEED"
+    maxlength: 30
+
+  - id: name
+    label: Category Name
+    type: textField
+    required: true
+    placeholder: "e.g., Seeds"
+    maxlength: 100
+
+  - id: description
+    label: Description
+    type: textArea
+    rows: 2
+
+  - id: requiresBatchTrack
+    label: Requires Batch Tracking
+    type: radio
+    defaultValue: "Y"
+    options:
+      - value: "Y"
+        label: "Yes"
+      - value: "N"
+        label: "No"
+
+  - id: hasExpiryDate
+    label: Has Expiry Date
+    type: radio
+    defaultValue: "Y"
+    options:
+      - value: "Y"
+        label: "Yes"
+      - value: "N"
+        label: "No"
+
+  - id: requiresLicense
+    label: Requires Dealer License
+    type: radio
+    defaultValue: "N"
+    options:
+      - value: "Y"
+        label: "Yes"
+      - value: "N"
+        label: "No"
+
+  - id: coldChainRequired
+    label: Cold Chain Required
+    type: radio
+    defaultValue: "N"
+    options:
+      - value: "Y"
+        label: "Yes"
+      - value: "N"
+        label: "No"
+
+  - id: sortOrder
+    label: Sort Order
+    type: textField
+    defaultValue: "0"
+
+  - id: isActive
+    label: Active
+    type: radio
+    required: true
+    defaultValue: "Y"
+    options:
+      - value: "Y"
+        label: "Yes"
+      - value: "N"
+        label: "No"

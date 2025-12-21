@@ -79,9 +79,10 @@
             "calculationField",
             "richTextEditor",
             "formGrid",
-            "multiPagedForm"
+            "multiPagedForm",
+            "section"
           ],
-          "description": "Field type (Phase 1: 9 standard, Phase 2: 4 custom/advanced, Enterprise: 4 advanced fields)"
+          "description": "Field type (Phase 1: 9 standard, Phase 2: 4 custom/advanced, Enterprise: 4 advanced, Structural: section)"
         },
         "required": {
           "type": "boolean",
@@ -102,9 +103,9 @@
           "description": "Placeholder text (textField, textArea, passwordField)"
         },
         "size": {
-          "enum": ["small", "medium", "large"],
+          "enum": ["small", "medium", "large", "full"],
           "default": "medium",
-          "description": "Field size"
+          "description": "Field size (full = 100% width)"
         },
         "rows": {
           "type": "integer",
@@ -214,6 +215,10 @@
           "minimum": 1,
           "description": "Maximum number of rows (grid, formGrid)"
         },
+        "errorMessage": {
+          "type": "string",
+          "description": "Custom error message for grid validation (grid, formGrid)"
+        },
         "pages": {
           "type": "array",
           "items": {
@@ -290,8 +295,7 @@
         },
         "valueColumn": {
           "type": "string",
-          "default": "id",
-          "description": "Column for option value (formData, database)"
+          "description": "Column for option value (formData, database). Use 'code' for MDM forms or the specific code field (e.g., 'campaignCode') for transactional forms. NEVER use 'id'."
         },
         "labelColumn": {
           "type": "string",
@@ -445,32 +449,31 @@
     },
     "GridColumn": {
       "type": "object",
-      "required": ["id", "label", "type"],
+      "required": ["value", "label"],
       "properties": {
-        "id": {
+        "value": {
           "type": "string",
-          "pattern": "^[a-zA-Z][a-zA-Z0-9_]*$",
-          "description": "Column ID"
+          "description": "Field ID from child form to display in column"
         },
         "label": {
           "type": "string",
-          "description": "Column label"
+          "description": "Column header label"
         },
-        "type": {
-          "enum": ["textField", "selectBox", "datePicker", "checkBox"],
-          "description": "Column field type (subset of main field types)"
+        "formatType": {
+          "type": "string",
+          "enum": ["text", "options", "date"],
+          "default": "text",
+          "description": "Column display format type"
         },
-        "options": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/Option"
-          },
-          "description": "Options for selectBox columns"
+        "format": {
+          "type": "string",
+          "default": "",
+          "description": "Format pattern (for date columns)"
         },
-        "editable": {
-          "type": "boolean",
-          "default": true,
-          "description": "Whether column is editable"
+        "width": {
+          "type": "string",
+          "default": "",
+          "description": "Column width (e.g., '100px', '20%')"
         }
       }
     },

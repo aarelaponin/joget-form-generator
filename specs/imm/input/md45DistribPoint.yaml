@@ -1,0 +1,138 @@
+# Distribution Point Master Data Form
+form:
+  id: md45DistribPoint
+  name: MD.45 - Distribution Point
+  tableName: md45DistribPoint
+  description: Locations where inputs are distributed to farmers
+
+fields:
+  - id: code
+    label: Point Code
+    type: textField
+    required: true
+    maxlength: 30
+
+  - id: name
+    label: Point Name
+    type: textField
+    required: true
+    maxlength: 100
+
+  - id: pointType
+    label: Point Type
+    type: selectBox
+    required: true
+    options:
+      - value: "DEPOT"
+        label: Main Depot
+      - value: "SUB_DEPOT"
+        label: Sub-Depot
+      - value: "EXTENSION"
+        label: Extension Office
+      - value: "AGRO_DEALER"
+        label: Agro-Dealer
+      - value: "COOPERATIVE"
+        label: Cooperative
+      - value: "MOBILE"
+        label: Mobile Unit
+      - value: "COLLECTION"
+        label: Collection Point
+
+  - id: districtCode
+    label: District
+    type: selectBox
+    required: true
+    optionsSource:
+      type: formData
+      formId: md03district
+      valueColumn: code
+      labelColumn: name
+      addEmptyOption: true
+      emptyLabel: "-- Select District --"
+
+  - id: councilCode
+    label: Council/Community
+    type: textField
+    maxlength: 50
+
+  - id: village
+    label: Village
+    type: textField
+    maxlength: 100
+
+  - id: physicalAddress
+    label: Physical Address
+    type: textArea
+    rows: 2
+
+  - id: gpsLatitude
+    label: GPS Latitude
+    type: textField
+    placeholder: "-29.3167"
+
+  - id: gpsLongitude
+    label: GPS Longitude
+    type: textField
+    placeholder: "27.4833"
+
+  - id: capacityFarmersDay
+    label: Capacity (farmers/day)
+    type: textField
+    placeholder: "100"
+
+  - id: storageTonnes
+    label: Storage Capacity (tonnes)
+    type: textField
+    placeholder: "0"
+
+  - id: hasColdStorage
+    label: Has Cold Storage
+    type: radio
+    defaultValue: "N"
+    options:
+      - value: "Y"
+        label: "Yes"
+      - value: "N"
+        label: "No"
+
+  - id: contactPerson
+    label: Contact Person
+    type: textField
+    maxlength: 100
+
+  - id: contactPhone
+    label: Contact Phone
+    type: textField
+    maxlength: 20
+
+  - id: contactEmail
+    label: Contact Email
+    type: textField
+    maxlength: 100
+
+  - id: operatingHours
+    label: Operating Hours
+    type: textField
+    placeholder: "Mon-Fri 08:00-16:00"
+    maxlength: 100
+
+  - id: linkedDealerCode
+    label: Linked Dealer (if applicable)
+    type: selectBox
+    optionsSource:
+      type: formData
+      formId: imAgroDealer
+      valueColumn: dealerCode
+      labelColumn: businessName
+      addEmptyOption: true
+      emptyLabel: "-- Not linked --"
+
+  - id: isActive
+    label: Active
+    type: radio
+    defaultValue: "Y"
+    options:
+      - value: "Y"
+        label: "Yes"
+      - value: "N"
+        label: "No"

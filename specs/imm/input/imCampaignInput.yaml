@@ -1,0 +1,112 @@
+# Campaign Input Form (Grid Sub-form)
+# Used within Campaign Management form to define inputs available in a campaign
+
+form:
+  id: imCampaignInput
+  name: Campaign Input Configuration
+  tableName: imCampaignInput
+  description: Defines inputs available in a campaign and their allocation parameters
+
+fields:
+  - id: campaignCode
+    label: Campaign ID
+    type: hiddenField
+
+  - id: inputCode
+    label: Input
+    type: selectBox
+    required: true
+    optionsSource:
+      type: formData
+      formId: md44Input
+      valueColumn: code
+      labelColumn: name
+      addEmptyOption: true
+      emptyLabel: "-- Select Input --"
+
+  - id: inputCategory
+    label: Category
+    type: textField
+    readonly: true
+    size: small
+
+  - id: totalQtyAvailable
+    label: Total Quantity Available
+    type: textField
+    required: true
+    placeholder: "0"
+    validation:
+      pattern: "^[0-9]+(\\.[0-9]{1,2})?$"
+      message: Enter a valid quantity
+
+  - id: unit
+    label: Unit
+    type: selectBox
+    required: true
+    options:
+      - value: "kg"
+        label: Kilograms (kg)
+      - value: "litre"
+        label: Litres (L)
+      - value: "packet"
+        label: Packets
+      - value: "piece"
+        label: Pieces
+      - value: "dose"
+        label: Doses
+      - value: "bag"
+        label: Bags (50kg)
+
+  - id: allocationBasis
+    label: Allocation Basis
+    type: selectBox
+    required: true
+    optionsSource:
+      type: formData
+      formId: md41AllocBasis
+      valueColumn: code
+      labelColumn: name
+      addEmptyOption: true
+      emptyLabel: "-- Select --"
+
+  - id: allocationRate
+    label: Allocation Rate
+    type: textField
+    placeholder: "e.g., 10 (kg per hectare)"
+
+  - id: minPerFarmer
+    label: Min per Farmer
+    type: textField
+    placeholder: "0"
+
+  - id: maxPerFarmer
+    label: Max per Farmer
+    type: textField
+    placeholder: "0"
+
+  - id: subsidyRatePct
+    label: Subsidy Rate (%)
+    type: textField
+    placeholder: "e.g., 80"
+
+  - id: farmerContribution
+    label: Farmer Co-Payment
+    type: textField
+    placeholder: "0.00"
+
+  - id: ceilingPrice
+    label: Ceiling Price (per unit)
+    type: textField
+    placeholder: "0.00"
+
+  - id: qtyAllocated
+    label: Qty Allocated
+    type: textField
+    readonly: true
+    defaultValue: "0"
+
+  - id: qtyDistributed
+    label: Qty Distributed
+    type: textField
+    readonly: true
+    defaultValue: "0"

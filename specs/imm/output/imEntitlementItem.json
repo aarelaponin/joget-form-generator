@@ -1,0 +1,207 @@
+{
+  "className": "org.joget.apps.form.model.Form",
+  "properties": {
+    "id": "imEntitlementItem",
+    "name": "Entitlement Item",
+    "tableName": "imEntitlementItem",
+    "description": "Individual input items that make up a farmer entitlement",
+    "loadBinder": {
+      "className": "org.joget.apps.form.lib.WorkflowFormBinder",
+      "properties": {}
+    },
+    "storeBinder": {
+      "className": "org.joget.apps.form.lib.WorkflowFormBinder",
+      "properties": {}
+    },
+    "noPermissionMessage": "",
+    "postProcessorRunOn": "create",
+    "permission": {
+      "className": "",
+      "properties": {}
+    },
+    "postProcessor": {
+      "className": "",
+      "properties": {}
+    }
+  },
+  "elements": [
+    {
+      "className": "org.joget.apps.form.model.Section",
+      "properties": {
+        "id": "section1",
+        "label": "Section"
+      },
+      "elements": [
+        {
+          "className": "org.joget.apps.form.model.Column",
+          "properties": {
+            "width": "100%"
+          },
+          "elements": [
+            {
+              "className": "org.joget.apps.form.lib.HiddenField",
+              "properties": {
+                "useDefaultWhenEmpty": "",
+                "id": "entitlementCode",
+                "value": "",
+                "validator": {
+                  "className": "",
+                  "properties": {}
+                },
+                "workflowVariable": ""
+              }
+            },
+            {
+              "className": "org.joget.apps.form.lib.SelectBox",
+              "properties": {
+                "readonly": "true",
+                "multiple": "",
+                "label": "Input",
+                "readonlyLabel": "",
+                "id": "inputCode",
+                "iconIncluded": false,
+                "options": [],
+                "optionsBinder": {
+                  "className": "org.joget.apps.form.lib.FormOptionsBinder",
+                  "properties": {
+                    "formDefId": "md44Input",
+                    "idColumn": "code",
+                    "labelColumn": "name",
+                    "groupingColumn": "",
+                    "extraCondition": "",
+                    "addEmptyOption": "",
+                    "emptyLabel": "",
+                    "useAjax": "",
+                    "cacheInterval": ""
+                  }
+                },
+                "value": "",
+                "validator": {
+                  "className": "org.joget.apps.form.lib.DefaultValidator",
+                  "properties": {
+                    "mandatory": "true",
+                    "type": "",
+                    "message": ""
+                  }
+                },
+                "controlField": "",
+                "size": "",
+                "workflowVariable": ""
+              }
+            },
+            {
+              "className": "org.joget.apps.form.lib.TextField",
+              "properties": {
+                "id": "inputName",
+                "label": "Input Name",
+                "readonly": "true"
+              }
+            },
+            {
+              "className": "org.joget.apps.form.lib.TextField",
+              "properties": {
+                "id": "inputCategory",
+                "label": "Category",
+                "readonly": "true"
+              }
+            },
+            {
+              "className": "org.joget.apps.form.lib.TextField",
+              "properties": {
+                "id": "qtyEntitled",
+                "label": "Quantity Entitled",
+                "readonly": "true"
+              }
+            },
+            {
+              "className": "org.joget.apps.form.lib.TextField",
+              "properties": {
+                "id": "unit",
+                "label": "Unit",
+                "readonly": "true"
+              }
+            },
+            {
+              "className": "org.joget.apps.form.lib.TextField",
+              "properties": {
+                "id": "unitValue",
+                "label": "Unit Value",
+                "readonly": "true"
+              }
+            },
+            {
+              "className": "org.joget.apps.form.lib.TextField",
+              "properties": {
+                "id": "subsidyAmount",
+                "label": "Subsidy Amount",
+                "readonly": "true"
+              }
+            },
+            {
+              "className": "org.joget.apps.form.lib.TextField",
+              "properties": {
+                "id": "farmerContrib",
+                "label": "Farmer Pays",
+                "readonly": "true"
+              }
+            },
+            {
+              "className": "org.joget.apps.form.lib.TextField",
+              "properties": {
+                "id": "qtyRedeemed",
+                "label": "Qty Redeemed",
+                "readonly": "true",
+                "value": "0"
+              }
+            },
+            {
+              "className": "org.joget.apps.form.lib.SelectBox",
+              "properties": {
+                "readonly": "",
+                "multiple": "",
+                "label": "Status",
+                "readonlyLabel": "",
+                "id": "itemStatus",
+                "iconIncluded": false,
+                "options": [
+                  {
+                    "value": "PENDING",
+                    "label": "Pending",
+                    "grouping": ""
+                  },
+                  {
+                    "value": "PARTIAL",
+                    "label": "Partially Redeemed",
+                    "grouping": ""
+                  },
+                  {
+                    "value": "COMPLETE",
+                    "label": "Complete",
+                    "grouping": ""
+                  },
+                  {
+                    "value": "SUBSTITUTED",
+                    "label": "Substituted",
+                    "grouping": ""
+                  }
+                ],
+                "optionsBinder": {
+                  "className": "",
+                  "properties": {}
+                },
+                "value": "PENDING",
+                "validator": {
+                  "className": "",
+                  "properties": {}
+                },
+                "controlField": "",
+                "size": "",
+                "workflowVariable": ""
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

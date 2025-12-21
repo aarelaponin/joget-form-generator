@@ -1,0 +1,70 @@
+# Allocation Basis Master Data Form
+form:
+  id: md41AllocBasis
+  name: MD.41 - Allocation Basis
+  tableName: md41AllocBasis
+  description: Methods for calculating input allocations
+
+fields:
+  - id: code
+    label: Code
+    type: textField
+    required: true
+    maxlength: 30
+
+  - id: name
+    label: Name
+    type: textField
+    required: true
+    maxlength: 100
+
+  - id: description
+    label: Description
+    type: textArea
+    rows: 2
+
+  - id: calculationUnit
+    label: Calculation Unit
+    type: selectBox
+    options:
+      - value: "hectare"
+        label: Per Hectare
+      - value: "farmer"
+        label: Per Farmer
+      - value: "head"
+        label: Per Livestock Head
+      - value: "package"
+        label: Fixed Package
+      - value: "currency"
+        label: Currency Amount
+
+  - id: requiresFarmerData
+    label: Requires Farmer Data
+    type: radio
+    defaultValue: "N"
+    options:
+      - value: "Y"
+        label: "Yes"
+      - value: "N"
+        label: "No"
+
+  - id: formula
+    label: Calculation Formula
+    type: textField
+    placeholder: "e.g., land_hectares * rate"
+    maxlength: 200
+
+  - id: sortOrder
+    label: Sort Order
+    type: textField
+    defaultValue: "0"
+
+  - id: isActive
+    label: Active
+    type: radio
+    defaultValue: "Y"
+    options:
+      - value: "Y"
+        label: "Yes"
+      - value: "N"
+        label: "No"

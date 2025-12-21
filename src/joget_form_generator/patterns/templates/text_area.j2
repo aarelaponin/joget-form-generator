@@ -1,19 +1,23 @@
 {
   "className": "org.joget.apps.form.lib.TextArea",
   "properties": {
-    "id": "{{ id }}",
-    "label": "{{ label }}",
-    "required": "{{ required }}",
     "readonly": "{{ readonly }}",
-    "value": "{{ value }}",
+    "label": "{{ label }}",
     "rows": "{{ rows }}",
     "cols": "{{ cols }}",
-    {% if placeholder %}
-    "placeholder": "{{ placeholder }}",
-    {% endif %}
+    "readonlyLabel": "",
+    "id": "{{ id }}",
+    "value": "{{ value }}",
     {% if validator %}
     "validator": {{ validator | tojson_pretty }},
+    {% else %}
+    "validator": {
+      "className": "",
+      "properties": {}
+    },
     {% endif %}
-    "encryption": ""
+    "placeholder": "{{ placeholder }}",
+    "encryption": "",
+    "workflowVariable": ""
   }
 }

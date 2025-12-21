@@ -1,0 +1,451 @@
+# Agro-Dealer Form
+# Registration and management of agricultural input dealers
+
+form:
+  id: imAgroDealer
+  name: Agro-Dealer Registration
+  tableName: imAgroDealer
+  description: Registration and management of agricultural input dealers in the distribution network
+
+fields:
+  - id: dealerCode
+    label: Dealer Code
+    type: idGenerator
+    format: "AD-??????"
+
+  # ============================================
+  # Business Information
+  # ============================================
+
+  - id: businessSection
+    label: Business Information
+    type: section
+
+  - id: businessName
+    label: Business Name
+    type: textField
+    required: true
+    placeholder: Registered business name
+    maxlength: 1000
+    size: full
+
+  - id: businessRegNo
+    label: Business Registration Number
+    type: textField
+    placeholder: Company registration number
+    maxlength: 50
+
+  - id: taxId
+    label: Tax Identification Number
+    type: textField
+    placeholder: TIN
+    maxlength: 50
+
+  - id: dealerCategory
+    label: Dealer Category
+    type: selectBox
+    required: true
+    optionsSource:
+      type: formData
+      formId: md43DealerCategory
+      valueColumn: code
+      labelColumn: name
+      addEmptyOption: true
+      emptyLabel: "-- Select Category --"
+
+  - id: businessDescription
+    label: Business Description
+    type: textArea
+    rows: 3
+    placeholder: Brief description of business activities
+
+  # ============================================
+  # Owner Information
+  # ============================================
+
+  - id: ownerSection
+    label: Owner Information
+    type: section
+
+  - id: ownerName
+    label: Owner Full Name
+    type: textField
+    required: true
+    maxlength: 1000
+    size: full
+
+  - id: ownerNationalId
+    label: Owner National ID
+    type: textField
+    required: true
+    maxlength: 50
+    validation:
+      pattern: "^[A-Z0-9-]+$"
+      message: Enter a valid national ID
+
+  - id: ownerGender
+    label: Owner Gender
+    type: selectBox
+    options:
+      - value: "M"
+        label: Male
+      - value: "F"
+        label: Female
+
+  - id: ownerPhone
+    label: Owner Phone
+    type: textField
+    maxlength: 20
+    validation:
+      pattern: "^\\+?[0-9]{8,15}$"
+      message: Enter a valid phone number
+
+  - id: ownerEmail
+    label: Owner Email
+    type: textField
+    maxlength: 100
+    validation:
+      pattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+      message: Enter a valid email address
+
+  # ============================================
+  # Contact Information
+  # ============================================
+
+  - id: contactSection
+    label: Contact Information
+    type: section
+
+  - id: contactPerson
+    label: Contact Person
+    type: textField
+    maxlength: 1000
+    size: full
+    placeholder: If different from owner
+
+  - id: phonePrimary
+    label: Primary Phone
+    type: textField
+    required: true
+    maxlength: 20
+    validation:
+      pattern: "^\\+?[0-9]{8,15}$"
+      message: Enter a valid phone number
+
+  - id: phoneSecondary
+    label: Secondary Phone
+    type: textField
+    maxlength: 20
+
+  - id: email
+    label: Business Email
+    type: textField
+    maxlength: 100
+    validation:
+      pattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+      message: Enter a valid email address
+
+  # ============================================
+  # Location
+  # ============================================
+
+  - id: locationSection
+    label: Location
+    type: section
+
+  - id: districtCode
+    label: District
+    type: selectBox
+    required: true
+    optionsSource:
+      type: formData
+      formId: md03district
+      valueColumn: code
+      labelColumn: name
+      addEmptyOption: true
+      emptyLabel: "-- Select District --"
+
+  - id: village
+    label: Village / Town
+    type: textField
+    maxlength: 1000
+    size: full
+
+  - id: physicalAddress
+    label: Physical Address
+    type: textArea
+    required: true
+    rows: 3
+    placeholder: Street address, landmarks, etc.
+
+  - id: gpsLatitude
+    label: GPS Latitude
+    type: textField
+    placeholder: "-29.31667"
+    validation:
+      pattern: "^-?[0-9]{1,3}\\.[0-9]+$"
+      message: Enter valid latitude
+
+  - id: gpsLongitude
+    label: GPS Longitude
+    type: textField
+    placeholder: "27.48333"
+    validation:
+      pattern: "^-?[0-9]{1,3}\\.[0-9]+$"
+      message: Enter valid longitude
+
+  # ============================================
+  # Facilities
+  # ============================================
+
+  - id: facilitiesSection
+    label: Facilities
+    type: section
+
+  - id: storageCapacitySqm
+    label: Storage Capacity (sq meters)
+    type: textField
+    placeholder: "0"
+    validation:
+      pattern: "^[0-9]+(\\.[0-9]{1,2})?$"
+      message: Enter valid area
+
+  - id: hasColdStorage
+    label: Has Cold Storage?
+    type: radio
+    defaultValue: "N"
+    options:
+      - value: "Y"
+        label: "Yes"
+      - value: "N"
+        label: "No"
+
+  - id: coldStorageCapacity
+    label: Cold Storage Capacity (cubic meters)
+    type: textField
+    placeholder: "0"
+
+  - id: hasDisplayArea
+    label: Has Display/Shop Area?
+    type: radio
+    defaultValue: "Y"
+    options:
+      - value: "Y"
+        label: "Yes"
+      - value: "N"
+        label: "No"
+
+  # ============================================
+  # Banking
+  # ============================================
+
+  - id: bankingSection
+    label: Banking Information
+    type: section
+
+  - id: bankName
+    label: Bank Name
+    type: textField
+    maxlength: 100
+
+  - id: bankBranch
+    label: Bank Branch
+    type: textField
+    maxlength: 100
+
+  - id: bankAccountNo
+    label: Bank Account Number
+    type: textField
+    maxlength: 50
+
+  - id: bankAccountName
+    label: Account Holder Name
+    type: textField
+    maxlength: 200
+
+  - id: mobileMoneyNumber
+    label: Mobile Money Number
+    type: textField
+    maxlength: 20
+
+  - id: mobileMoneyProvider
+    label: Mobile Money Provider
+    type: selectBox
+    options:
+      - value: "MPESA"
+        label: M-Pesa
+      - value: "ECOCASH"
+        label: EcoCash
+      - value: "OTHER"
+        label: Other
+
+  # ============================================
+  # Licensing
+  # ============================================
+
+  - id: licensingSection
+    label: Licensing
+    type: section
+
+  - id: licenseNumber
+    label: Trading License Number
+    type: textField
+    maxlength: 50
+
+  - id: licenseIssueDate
+    label: License Issue Date
+    type: datePicker
+    dateFormat: yyyy-MM-dd
+
+  - id: licenseExpiry
+    label: License Expiry Date
+    type: datePicker
+    dateFormat: yyyy-MM-dd
+
+  - id: licenseDocument
+    label: License Document
+    type: fileUpload
+    maxSize: 5
+    fileTypes: "pdf,jpg,jpeg,png"
+
+  - id: pesticidesLicense
+    label: Pesticides Dealer License
+    type: textField
+    maxlength: 50
+    placeholder: Required for crop protection products
+
+  - id: pesticidesLicenseExp
+    label: Pesticides License Expiry
+    type: datePicker
+    dateFormat: yyyy-MM-dd
+
+  # ============================================
+  # Allowed Products
+  # ============================================
+
+  - id: productsSection
+    label: Allowed Products
+    type: section
+
+  - id: allowedCategories
+    label: Allowed Input Categories
+    type: checkBox
+    optionsSource:
+      type: formData
+      formId: md38InputCategory
+      valueColumn: code
+      labelColumn: name
+      addEmptyOption: false
+
+  # ============================================
+  # Commission & Terms
+  # ============================================
+
+  - id: termsSection
+    label: Terms
+    type: section
+
+  - id: commissionRatePct
+    label: Commission Rate (%)
+    type: textField
+    placeholder: "10.0"
+    validation:
+      pattern: "^[0-9]{1,2}(\\.[0-9]{1,2})?$"
+      message: Enter percentage (0-30)
+
+  - id: paymentTermsDays
+    label: Payment Terms (days)
+    type: textField
+    defaultValue: "30"
+    validation:
+      pattern: "^[0-9]+$"
+      message: Enter number of days
+
+  - id: creditLimit
+    label: Credit Limit
+    type: textField
+    placeholder: "0.00"
+
+  # ============================================
+  # Performance Metrics (read-only)
+  # ============================================
+
+  - id: metricsSection
+    label: Performance Metrics
+    type: section
+
+  - id: performanceScore
+    label: Performance Score
+    type: textField
+    readonly: true
+    defaultValue: "0"
+
+  - id: totalTransactions
+    label: Total Transactions
+    type: textField
+    readonly: true
+    defaultValue: "0"
+
+  - id: totalValueDistrib
+    label: Total Value Distributed
+    type: textField
+    readonly: true
+    defaultValue: "0.00"
+
+  - id: lastTransactionDate
+    label: Last Transaction Date
+    type: datePicker
+    readonly: true
+    dateFormat: yyyy-MM-dd
+
+  - id: farmerSatisfaction
+    label: Farmer Satisfaction Score
+    type: textField
+    readonly: true
+
+  # ============================================
+  # Status
+  # ============================================
+
+  - id: statusSection
+    label: Status
+    type: section
+
+  - id: status
+    label: Status
+    type: selectBox
+    required: true
+    defaultValue: "PENDING"
+    options:
+      - value: "PENDING"
+        label: Pending Approval
+      - value: "ACTIVE"
+        label: Active
+      - value: "SUSPENDED"
+        label: Suspended
+      - value: "INACTIVE"
+        label: Inactive
+      - value: "BLACKLISTED"
+        label: Blacklisted
+
+  - id: statusReason
+    label: Status Reason
+    type: textArea
+    rows: 2
+    placeholder: Reason for status change
+
+  - id: enrollmentDate
+    label: Enrollment Date
+    type: datePicker
+    dateFormat: yyyy-MM-dd
+
+  - id: approvedBy
+    label: Approved By
+    type: textField
+    readonly: true
+
+  - id: approvedDate
+    label: Approved Date
+    type: datePicker
+    readonly: true
+    dateFormat: yyyy-MM-dd

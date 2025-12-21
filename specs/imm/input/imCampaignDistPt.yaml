@@ -1,0 +1,102 @@
+# Campaign Distribution Point Form
+# Assigns distribution points to a campaign
+# NOTE: Managed as independent form via datalist, NOT embedded in imCampaign
+# (distribution point lists can be very long)
+#
+# POST-IMPORT CONFIG REQUIRED:
+# Add AJAX Subform after distPointCode to auto-populate distribution point details
+# See: IMM_AJAX_SUBFORM_CONFIG.md
+
+form:
+  id: imCampaignDistPt
+  name: Campaign Distribution Point
+  tableName: imCampaignDistPt
+  description: Links distribution points to campaigns with capacity settings
+
+fields:
+  - id: campaignCode
+    label: Campaign
+    type: selectBox
+    required: true
+    optionsSource:
+      type: formData
+      formId: imCampaign
+      valueColumn: campaignCode
+      labelColumn: campaignName
+      extraCondition: "c_status IN ('DRAFT', 'APPROVED', 'ACTIVE')"
+      addEmptyOption: true
+      emptyLabel: "-- Select Campaign --"
+
+  - id: distPointCode
+    label: Distribution Point
+    type: selectBox
+    required: true
+    optionsSource:
+      type: formData
+      formId: md45DistribPoint
+      valueColumn: code
+      labelColumn: name
+      addEmptyOption: true
+      emptyLabel: "-- Select Distribution Point --"
+
+  # Hidden fields to store AJAX Subform data (populated by imDistPtDetails subform)
+  - id: distPointName
+    label: Point Name
+    type: hiddenField
+
+  - id: distPointType
+    label: Point Type
+    type: hiddenField
+
+  - id: districtCode
+    label: District Code
+    type: hiddenField
+
+  # POST-IMPORT: Add AJAX Subform after distPointCode (see IMM_AJAX_SUBFORM_CONFIG.md)
+
+  - id: assignedCapacity
+    label: Assigned Capacity (farmers)
+    type: textField
+    placeholder: "0"
+
+  - id: scheduleStart
+    label: Distribution Start
+    type: datePicker
+    dateFormat: yyyy-MM-dd
+
+  - id: scheduleEnd
+    label: Distribution End
+    type: datePicker
+    dateFormat: yyyy-MM-dd
+
+  - id: contactPerson
+    label: Contact Person
+    type: textField
+    maxlength: 100
+
+  - id: contactPhone
+    label: Contact Phone
+    type: textField
+    maxlength: 20
+
+  - id: isActive
+    label: Active
+    type: radio
+    defaultValue: "Y"
+    options:
+      - value: "Y"
+        label: "Yes"
+      - value: "N"
+        label: "No"
+
+  - id: farmersAssigned
+    label: Farmers Assigned
+    type: textField
+    readonly: true
+    defaultValue: "0"
+
+  - id: farmersServed
+    label: Farmers Served
+    type: textField
+    readonly: true
+    defaultValue: "0"

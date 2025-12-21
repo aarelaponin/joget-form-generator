@@ -1,0 +1,51 @@
+# Target Category Master Data Form
+form:
+  id: md42TargetCategory
+  name: MD.42 - Target Farmer Category
+  tableName: md42TargetCategory
+  description: Categories of farmers targeted for input support
+
+fields:
+  - id: code
+    label: Code
+    type: textField
+    required: true
+    maxlength: 30
+
+  - id: name
+    label: Name
+    type: textField
+    required: true
+    maxlength: 100
+
+  - id: description
+    label: Description
+    type: textArea
+    rows: 2
+
+  - id: priorityWeight
+    label: Priority Weight
+    type: textField
+    defaultValue: "1.0"
+    placeholder: "e.g., 1.0, 1.2, 0.8"
+
+  - id: eligibilityCriteria
+    label: Eligibility Criteria
+    type: textArea
+    rows: 2
+    placeholder: "e.g., Land area < 2 hectares"
+
+  - id: sortOrder
+    label: Sort Order
+    type: textField
+    defaultValue: "0"
+
+  - id: isActive
+    label: Active
+    type: radio
+    defaultValue: "Y"
+    options:
+      - value: "Y"
+        label: "Yes"
+      - value: "N"
+        label: "No"

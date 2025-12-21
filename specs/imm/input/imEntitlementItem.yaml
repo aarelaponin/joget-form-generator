@@ -1,0 +1,82 @@
+# Entitlement Item Form (Grid Sub-form)
+# Individual input items within an entitlement
+
+form:
+  id: imEntitlementItem
+  name: Entitlement Item
+  tableName: imEntitlementItem
+  description: Individual input items that make up a farmer entitlement
+
+fields:
+  - id: entitlementCode
+    label: Entitlement ID
+    type: hiddenField
+
+  - id: inputCode
+    label: Input
+    type: selectBox
+    required: true
+    optionsSource:
+      type: formData
+      formId: md44Input
+      valueColumn: code
+      labelColumn: name
+      addEmptyOption: false
+    readonly: true
+
+  - id: inputName
+    label: Input Name
+    type: textField
+    readonly: true
+
+  - id: inputCategory
+    label: Category
+    type: textField
+    readonly: true
+    size: small
+
+  - id: qtyEntitled
+    label: Quantity Entitled
+    type: textField
+    readonly: true
+
+  - id: unit
+    label: Unit
+    type: textField
+    readonly: true
+    size: small
+
+  - id: unitValue
+    label: Unit Value
+    type: textField
+    readonly: true
+
+  - id: subsidyAmount
+    label: Subsidy Amount
+    type: textField
+    readonly: true
+
+  - id: farmerContrib
+    label: Farmer Pays
+    type: textField
+    readonly: true
+
+  - id: qtyRedeemed
+    label: Qty Redeemed
+    type: textField
+    readonly: true
+    defaultValue: "0"
+
+  - id: itemStatus
+    label: Status
+    type: selectBox
+    defaultValue: "PENDING"
+    options:
+      - value: "PENDING"
+        label: Pending
+      - value: "PARTIAL"
+        label: Partially Redeemed
+      - value: "COMPLETE"
+        label: Complete
+      - value: "SUBSTITUTED"
+        label: Substituted

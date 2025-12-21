@@ -3,10 +3,14 @@
   "properties": {
     "id": "{{ id }}",
     "label": "{{ label }}",
-    "equation": "{{ equation }}",
+    "style": "{{ style }}",
+    "numOfDecimal": "{{ numOfDecimal }}",
     "storeNumeric": "{{ storeNumeric }}",
-    "value": "{{ defaultValue }}",
-    "required": "{{ required }}",
-    "readonly": "{{ readonly }}"
+    "readonly": "{{ readonly }}",
+    "readonlyLabel": "",
+    "variables": {{ variables | tojson_pretty }},
+    "equation": "{{ equation }}",
+    "value": "",
+    "workflowVariable": ""
   }
 }

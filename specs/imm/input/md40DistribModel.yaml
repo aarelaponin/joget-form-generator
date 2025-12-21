@@ -1,0 +1,79 @@
+# Distribution Model Master Data Form
+form:
+  id: md40DistribModel
+  name: MD.40 - Distribution Model
+  tableName: md40DistribModel
+  description: Methods for distributing inputs to farmers
+
+fields:
+  - id: code
+    label: Code
+    type: textField
+    required: true
+    maxlength: 30
+
+  - id: name
+    label: Name
+    type: textField
+    required: true
+    maxlength: 100
+
+  - id: description
+    label: Description
+    type: textArea
+    rows: 2
+
+  - id: requiresVoucher
+    label: Requires Voucher
+    type: radio
+    defaultValue: "N"
+    options:
+      - value: "Y"
+        label: "Yes"
+      - value: "N"
+        label: "No"
+
+  - id: requiresDealer
+    label: Requires Dealer
+    type: radio
+    defaultValue: "N"
+    options:
+      - value: "Y"
+        label: "Yes"
+      - value: "N"
+        label: "No"
+
+  - id: requiresVerification
+    label: Requires Verification
+    type: radio
+    defaultValue: "Y"
+    options:
+      - value: "Y"
+        label: "Yes"
+      - value: "N"
+        label: "No"
+
+  - id: allowPartial
+    label: Allow Partial Redemption
+    type: radio
+    defaultValue: "N"
+    options:
+      - value: "Y"
+        label: "Yes"
+      - value: "N"
+        label: "No"
+
+  - id: sortOrder
+    label: Sort Order
+    type: textField
+    defaultValue: "0"
+
+  - id: isActive
+    label: Active
+    type: radio
+    defaultValue: "Y"
+    options:
+      - value: "Y"
+        label: "Yes"
+      - value: "N"
+        label: "No"

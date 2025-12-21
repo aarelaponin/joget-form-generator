@@ -1,7 +1,7 @@
 # Joget Form Generator - API Reference
 
-**Version:** 1.0.0
-**Last Updated:** 2025-01-10
+**Version:** 0.2.0
+**Last Updated:** 2025-12-19
 
 ## Table of Contents
 
@@ -772,6 +772,6 @@ mypy your_script.py
 
 ---
 
-**Document Version:** 1.0.0
-**API Version:** 1.0.0
-**Last Updated:** 2025-01-10
+**Document Version:** 0.2.0
+**API Version:** 0.2.0
+**Last Updated:** 2025-12-19

@@ -1,0 +1,212 @@
+# Input Catalogue Master Data Form
+# Master list of all agricultural inputs available for distribution
+
+form:
+  id: md44Input
+  name: MD.44 - Input Catalogue
+  tableName: md44Input
+  description: Master data for agricultural inputs (seeds, fertilizers, chemicals, equipment)
+
+fields:
+  - id: code
+    label: Input Code
+    type: textField
+    required: true
+    placeholder: "e.g., MAIZE_SEED_SC513"
+    maxlength: 50
+    validation:
+      pattern: "^[A-Z0-9_]+$"
+      message: Use uppercase letters, numbers, and underscores only
+
+  - id: name
+    label: Input Name
+    type: textField
+    required: true
+    placeholder: "e.g., Maize Seed SC513"
+    maxlength: 200
+    size: large
+
+  - id: categoryCode
+    label: Category
+    type: selectBox
+    required: true
+    optionsSource:
+      type: formData
+      formId: md38InputCategory
+      valueColumn: code
+      labelColumn: name
+      addEmptyOption: true
+      emptyLabel: "-- Select Category --"
+
+  # NOTE: subcategory depends on md44InputSubcat form (cascading from category)
+  # This form needs to be created or subcategory feature disabled
+  - id: subcategoryCode
+    label: Subcategory
+    type: selectBox
+    optionsSource:
+      type: formData
+      formId: md44InputSubcat  # External: needs to be created
+      valueColumn: code
+      labelColumn: name
+      parentField: categoryCode
+      filterField: categoryCode
+      useAjax: true
+      addEmptyOption: true
+
+  - id: description
+    label: Description
+    type: textArea
+    rows: 3
+    placeholder: Detailed description of the input
+
+  - id: unitOfMeasure
+    label: Unit of Measure
+    type: selectBox
+    required: true
+    options:
+      - value: "kg"
+        label: Kilograms (kg)
+      - value: "litre"
+        label: Litres (L)
+      - value: "packet"
+        label: Packets
+      - value: "piece"
+        label: Pieces
+      - value: "dose"
+        label: Doses
+      - value: "bag"
+        label: Bags
+
+  - id: packageSize
+    label: Standard Package Size
+    type: textField
+    placeholder: "e.g., 25 (kg per bag)"
+    validation:
+      pattern: "^[0-9]+(\\.[0-9]+)?$"
+      message: Enter a number
+
+  - id: shelfLifeMonths
+    label: Shelf Life (months)
+    type: textField
+    placeholder: "12"
+    validation:
+      pattern: "^[0-9]+$"
+      message: Enter number of months
+
+  - id: storageRequirements
+    label: Storage Requirements
+    type: selectBox
+    options:
+      - value: "DRY"
+        label: Dry Storage
+      - value: "DRY_COOL"
+        label: Dry & Cool
+      - value: "COOL_DARK"
+        label: Cool & Dark
+      - value: "COLD_CHAIN"
+        label: Cold Chain Required
+      - value: "REFRIGERATED"
+        label: Refrigerated
+
+  - id: applicableCrops
+    label: Applicable Crops
+    type: checkBox
+    optionsSource:
+      type: formData
+      formId: md19crops
+      valueColumn: code
+      labelColumn: name
+      addEmptyOption: false
+
+  - id: applicableZones
+    label: Applicable Agro-Ecological Zones
+    type: checkBox
+    optionsSource:
+      type: formData
+      formId: md04agroEcologicalZone
+      valueColumn: code
+      labelColumn: name
+      addEmptyOption: false
+
+  - id: ceilingPrice
+    label: Ceiling Price (per unit)
+    type: textField
+    placeholder: "0.00"
+    validation:
+      pattern: "^[0-9]+(\\.[0-9]{1,2})?$"
+      message: Enter a valid price
+
+  - id: defaultSubsidyPct
+    label: Default Subsidy Rate (%)
+    type: textField
+    placeholder: "80"
+    validation:
+      pattern: "^[0-9]{1,3}(\\.[0-9]{1,2})?$"
+      message: Enter percentage (0-100)
+
+  - id: requiresLicense
+    label: Requires Dealer License?
+    type: radio
+    defaultValue: "N"
+    options:
+      - value: "Y"
+        label: "Yes"
+      - value: "N"
+        label: "No"
+
+  - id: coldChainRequired
+    label: Cold Chain Required?
+    type: radio
+    defaultValue: "N"
+    options:
+      - value: "Y"
+        label: "Yes"
+      - value: "N"
+        label: "No"
+
+  - id: batchTracking
+    label: Batch Tracking Required?
+    type: radio
+    defaultValue: "Y"
+    options:
+      - value: "Y"
+        label: "Yes"
+      - value: "N"
+        label: "No"
+
+  - id: manufacturer
+    label: Manufacturer
+    type: textField
+    maxlength: 200
+
+  # NOTE: supplierCode references external Supplier MDM form
+  - id: supplierCode
+    label: Preferred Supplier
+    type: selectBox
+    optionsSource:
+      type: formData
+      formId: mdSupplier  # External: Supplier management module
+      valueColumn: code
+      labelColumn: name
+      addEmptyOption: true
+
+  - id: isActive
+    label: Active
+    type: radio
+    required: true
+    defaultValue: "Y"
+    options:
+      - value: "Y"
+        label: "Yes"
+      - value: "N"
+        label: "No"
+
+  - id: effectiveFrom
+    label: Effective From
+    type: datePicker
+    dateFormat: yyyy-MM-dd
+
+  - id: effectiveTo
+    label: Effective To
+    type: datePicker
+    dateFormat: yyyy-MM-dd

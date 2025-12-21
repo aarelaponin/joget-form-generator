@@ -1,0 +1,314 @@
+# Farmer Entitlement Form
+# Records calculated and approved input entitlements for farmers
+
+form:
+  id: imEntitlement
+  name: Farmer Entitlement
+  tableName: imEntitlement
+  description: Tracks input entitlements calculated for eligible farmers
+
+fields:
+  - id: entitlementCode
+    label: Entitlement Code
+    type: idGenerator
+    format: "ENT-??????"
+
+  # ============================================
+  # Campaign & Farmer Reference
+  # ============================================
+
+  - id: campaignCode
+    label: Campaign
+    type: selectBox
+    required: true
+    optionsSource:
+      type: formData
+      formId: imCampaign
+      valueColumn: campaignCode
+      labelColumn: campaignName
+      extraCondition: "c_status IN ('APPROVED', 'ACTIVE')"
+      addEmptyOption: true
+      emptyLabel: "-- Select Campaign --"
+
+  # campaignCode display is now handled by the selectBox above
+
+  # NOTE: farmerId references external form from Farmers Portal module
+  # Form 'farmerBasicInfo' must exist in target Joget instance
+  - id: farmerCode
+    label: Farmer
+    type: selectBox
+    required: true
+    optionsSource:
+      type: formData
+      formId: farmerBasicInfo  # External: Farmers Portal module
+      valueColumn: code
+      labelColumn: fullName
+      addEmptyOption: true
+      emptyLabel: "-- Select Farmer --"
+      useAjax: true
+
+  - id: farmerNationalId
+    label: National ID
+    type: textField
+    readonly: true
+    size: medium
+
+  - id: farmerName
+    label: Farmer Name
+    type: textField
+    readonly: true
+    size: large
+
+  - id: farmerPhone
+    label: Phone
+    type: textField
+    readonly: true
+
+  - id: districtCode
+    label: District
+    type: textField
+    readonly: true
+
+  # ============================================
+  # Distribution Assignment
+  # ============================================
+
+  - id: distPointCode
+    label: Assigned Distribution Point
+    type: selectBox
+    optionsSource:
+      type: formData
+      formId: imCampaignDistPt
+      valueColumn: distPointCode
+      labelColumn: distPointName
+      parentField: campaignCode
+      filterField: campaignCode
+      useAjax: true
+      addEmptyOption: true
+      emptyLabel: "-- Auto-assign --"
+
+  - id: distPointName
+    label: Distribution Point Name
+    type: textField
+    readonly: true
+
+  - id: scheduledDate
+    label: Scheduled Collection Date
+    type: datePicker
+    dateFormat: yyyy-MM-dd
+
+  # ============================================
+  # Package / Entitlement Details
+  # ============================================
+
+  - id: packageCode
+    label: Input Package
+    type: selectBox
+    optionsSource:
+      type: formData
+      formId: md46InputPackage
+      valueColumn: code
+      labelColumn: name
+      addEmptyOption: true
+      emptyLabel: "-- Custom allocation --"
+
+  - id: entitlementItems
+    label: Entitlement Items
+    type: formGrid
+    formId: imEntitlementItem
+    foreignKey: entitlementCode
+    allowAddRow: false
+    allowDeleteRow: false
+    readonly: true
+    columns:
+      - value: inputCode
+        label: Input
+        formatType: text
+      - value: qtyEntitled
+        label: Qty
+        formatType: text
+      - value: unit
+        label: Unit
+        formatType: text
+      - value: subsidyAmount
+        label: Subsidy
+        formatType: text
+      - value: farmerContrib
+        label: Farmer Pays
+        formatType: text
+      - value: qtyRedeemed
+        label: Redeemed
+        formatType: text
+      - value: itemStatus
+        label: Status
+        formatType: options
+
+  # ============================================
+  # Values
+  # ============================================
+
+  - id: totalEntitleValue
+    label: Total Entitlement Value
+    type: textField
+    readonly: true
+    defaultValue: "0.00"
+
+  - id: totalSubsidyValue
+    label: Total Subsidy Value
+    type: textField
+    readonly: true
+    defaultValue: "0.00"
+
+  - id: farmerContribTotal
+    label: Farmer Contribution
+    type: textField
+    readonly: true
+    defaultValue: "0.00"
+
+  # ============================================
+  # Eligibility & Priority
+  # ============================================
+
+  - id: eligibilityScore
+    label: Eligibility Score
+    type: textField
+    readonly: true
+    defaultValue: "0"
+
+  - id: priorityRank
+    label: Priority Rank
+    type: textField
+    readonly: true
+
+  - id: calculationDetails
+    label: Calculation Details
+    type: textArea
+    rows: 4
+    readonly: true
+
+  # ============================================
+  # Voucher Details (if e-voucher model)
+  # ============================================
+
+  - id: voucherSection
+    label: Voucher Information
+    type: customHTML
+    html: |
+      <h4>E-Voucher Details</h4>
+
+  - id: voucherCode
+    label: Voucher Code
+    type: textField
+    readonly: true
+    size: medium
+
+  - id: voucherPin
+    label: Voucher PIN
+    type: passwordField
+    readonly: true
+    size: small
+
+  - id: voucherIssueDate
+    label: Voucher Issue Date
+    type: datePicker
+    readonly: true
+    dateFormat: yyyy-MM-dd
+
+  - id: voucherExpiry
+    label: Voucher Expiry Date
+    type: datePicker
+    readonly: true
+    dateFormat: yyyy-MM-dd
+
+  - id: voucherBalance
+    label: Voucher Balance
+    type: textField
+    readonly: true
+    defaultValue: "0.00"
+
+  # ============================================
+  # Status & Tracking
+  # ============================================
+
+  - id: status
+    label: Status
+    type: selectBox
+    required: true
+    defaultValue: "CALCULATED"
+    options:
+      - value: "CALCULATED"
+        label: Calculated
+      - value: "APPROVED"
+        label: Approved
+      - value: "VOUCHER_ISSUED"
+        label: Voucher Issued
+      - value: "READY"
+        label: Ready for Collection
+      - value: "PARTIAL"
+        label: Partially Redeemed
+      - value: "COMPLETE"
+        label: Fully Redeemed
+      - value: "EXPIRED"
+        label: Expired
+      - value: "CANCELLED"
+        label: Cancelled
+
+  - id: collectionStatus
+    label: Collection Status
+    type: selectBox
+    defaultValue: "PENDING"
+    options:
+      - value: "PENDING"
+        label: Pending
+      - value: "SCHEDULED"
+        label: Scheduled
+      - value: "NOTIFIED"
+        label: Notified
+      - value: "COLLECTED"
+        label: Collected
+      - value: "NOT_COLLECTED"
+        label: Not Collected
+
+  # ============================================
+  # Timestamps
+  # ============================================
+
+  - id: createdDate
+    label: Created Date
+    type: datePicker
+    readonly: true
+    dateFormat: yyyy-MM-dd HH:mm
+
+  - id: approvedDate
+    label: Approved Date
+    type: datePicker
+    readonly: true
+    dateFormat: yyyy-MM-dd HH:mm
+
+  - id: firstRedemptionDate
+    label: First Redemption Date
+    type: datePicker
+    readonly: true
+    dateFormat: yyyy-MM-dd HH:mm
+
+  - id: completionDate
+    label: Completion Date
+    type: datePicker
+    readonly: true
+    dateFormat: yyyy-MM-dd HH:mm
+
+  - id: smsNotifSent
+    label: SMS Notification Sent
+    type: radio
+    defaultValue: "N"
+    options:
+      - value: "Y"
+        label: "Yes"
+      - value: "N"
+        label: "No"
+
+  - id: smsNotifDate
+    label: SMS Sent Date
+    type: datePicker
+    readonly: true
+    dateFormat: yyyy-MM-dd HH:mm

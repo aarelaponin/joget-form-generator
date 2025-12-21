@@ -3,14 +3,28 @@
   "properties": {
     "id": "{{ id }}",
     "label": "{{ label }}",
-    "required": "{{ required }}",
     "readonly": "{{ readonly }}",
+    "allowManual": "",
+    "yearRange": "c-10:c+10",
+    "dataFormat": "{{ dataFormat }}",
+    "datePickerType": "",
+    "currentDateAs": "",
+    "disableWeekends": "",
+    "readonlyLabel": "",
+    "iconIncluded": false,
     "value": "{{ value }}",
-    "format": "{{ format }}",
-    "yearRange": "c-100:c+10",
     {% if validator %}
     "validator": {{ validator | tojson_pretty }},
+    {% else %}
+    "validator": {
+      "className": "",
+      "properties": {}
+    },
     {% endif %}
-    "currentDateAs": ""
+    "startDateFieldId": "",
+    "endDateFieldId": "",
+    "placeholder": "",
+    "format": "",
+    "workflowVariable": ""
   }
 }

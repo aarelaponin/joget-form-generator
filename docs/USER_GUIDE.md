@@ -1,7 +1,7 @@
 # Joget Form Generator - User Guide
 
-**Version:** 1.0.0
-**Last Updated:** 2025-01-10
+**Version:** 0.2.0
+**Last Updated:** 2025-12-19
 
 ## Table of Contents
 
@@ -53,6 +53,14 @@ The **Joget Form Generator** is a command-line tool that transforms human-readab
 11. ID Generator
 12. Subform (master-detail)
 13. Grid (tabular data)
+
+**Phase 3 (Enterprise Fields):**
+14. Calculation Field
+15. Rich Text Editor
+16. Form Grid
+17. Multi Paged Form
+
+See [Enterprise Fields Guide](../ENTERPRISE_FIELDS.md) for detailed documentation on Enterprise field types.
 
 ---
 
@@ -745,14 +753,17 @@ Generates:
 ```json
 {
   "validator": {
-    "className": "org.joget.apps.form.lib.RegexValidator",
+    "className": "org.joget.apps.form.lib.DefaultValidator",
     "properties": {
-      "pattern": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
-      "errorMessage": "Please enter a valid email address"
+      "type": "regex",
+      "regex": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+      "message": "Please enter a valid email address"
     }
   }
 }
 ```
+
+**Note:** Joget DX uses `DefaultValidator` with `type: "regex"` for pattern validation. There is no separate `RegexValidator` class.
 
 ### Validation Properties
 
@@ -1141,10 +1152,17 @@ If you encounter issues not covered here:
 
 - **[API Reference](API_REFERENCE.md)** - For programmatic usage
 - **[Pattern Development Guide](PATTERN_DEVELOPMENT_GUIDE.md)** - For extending with custom field types
-- **[Examples](../examples/)** - More real-world examples
+- **[Examples](../examples/)** - YAML specification examples
+- **[Sample Forms](../sample-forms/)** - Production-quality Joget JSON examples
+  - `01_nested_lovs/` - Cascading dropdown pattern with comprehensive guide
+  - `04_farmer-application-form/` - Complex 7-page wizard (excellent syntax reference)
+  - `05_ajax-subform/` - AJAX Subform lookup pattern
+- **[Nested LOV Refactoring Pattern](NESTED_LOV_REFACTORING_PATTERN.md)** - Convert flat dropdown lists to hierarchical category-based selections
+- **[AJAX Subform Pattern](AJAX_SUBFORM_PATTERN.md)** - Critical undocumented behaviors for dynamic form loading
+- **[Enterprise Fields](../ENTERPRISE_FIELDS.md)** - Enterprise Edition field types and composite patterns
 
 ---
 
-**Document Version:** 1.0.0
-**Generator Version:** 1.0.0
-**Last Updated:** 2025-01-10
+**Document Version:** 0.2.0
+**Generator Version:** 0.2.0
+**Last Updated:** 2025-12-22

@@ -1,7 +1,7 @@
 # Pattern Development Guide
 
-**Version:** 1.0.0
-**Last Updated:** 2025-01-10
+**Version:** 0.2.0
+**Last Updated:** 2025-12-19
 
 ## Table of Contents
 
@@ -890,5 +890,5 @@ class PhoneFieldPattern(ValidationMixin, BasePattern):
 
 ---
 
-**Document Version:** 1.0.0
-**Last Updated:** 2025-01-10
+**Document Version:** 0.2.0
+**Last Updated:** 2025-12-19

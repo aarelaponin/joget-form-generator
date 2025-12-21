@@ -1,0 +1,63 @@
+# Campaign Type Master Data Form
+form:
+  id: md39CampaignType
+  name: MD.39 - Campaign Type
+  tableName: md39CampaignType
+  description: Types of input distribution campaigns
+
+fields:
+  - id: code
+    label: Code
+    type: textField
+    required: true
+    maxlength: 30
+
+  - id: name
+    label: Name
+    type: textField
+    required: true
+    maxlength: 100
+
+  - id: description
+    label: Description
+    type: textArea
+    rows: 2
+
+  - id: typicalDuration
+    label: Typical Duration (months)
+    type: textField
+
+  - id: requiresBudgetApproval
+    label: Requires Budget Approval
+    type: radio
+    defaultValue: "Y"
+    options:
+      - value: "Y"
+        label: "Yes"
+      - value: "N"
+        label: "No"
+
+  - id: allowCarryover
+    label: Allow Budget Carryover
+    type: radio
+    defaultValue: "N"
+    options:
+      - value: "Y"
+        label: "Yes"
+      - value: "N"
+        label: "No"
+
+  - id: sortOrder
+    label: Sort Order
+    type: textField
+    defaultValue: "0"
+
+  - id: isActive
+    label: Active
+    type: radio
+    defaultValue: "Y"
+    options:
+      - value: "Y"
+        label: "Yes"
+      - value: "N"
+        label: "No"

@@ -1,0 +1,356 @@
+# Campaign Management Form
+# Inputs Management Module - Main Campaign Form
+# This is a multi-page form for comprehensive campaign configuration
+
+form:
+  id: imCampaign
+  name: Campaign Management
+  tableName: imCampaign
+  description: Create and manage input distribution campaigns
+
+fields:
+  - id: campaignCode
+    label: Campaign Code
+    type: idGenerator
+    format: "CAMP-??????"
+
+  - id: status
+    label: Status
+    type: hiddenField
+    defaultValue: "DRAFT"
+
+  # ============================================
+  # PAGE 1: Basic Campaign Information
+  # ============================================
+  
+  - id: campaignName
+    label: Campaign Name
+    type: textField
+    required: true
+    placeholder: e.g., Summer Planting Season 2025
+    maxlength: 200
+    size: large
+
+  - id: campaignType
+    label: Campaign Type
+    type: selectBox
+    required: true
+    optionsSource:
+      type: formData
+      formId: md39CampaignType
+      valueColumn: code
+      labelColumn: name
+      addEmptyOption: true
+      emptyLabel: "-- Select Campaign Type --"
+
+  - id: programCode
+    label: Linked Program
+    type: selectBox
+    required: true
+    optionsSource:
+      type: formData
+      formId: md20supportProgram
+      valueColumn: code
+      labelColumn: name
+      addEmptyOption: true
+      emptyLabel: "-- Select Program --"
+
+  - id: description
+    label: Description
+    type: textArea
+    rows: 4
+    placeholder: Brief description of the campaign objectives and scope
+    maxlength: 1000
+
+  # ============================================
+  # PAGE 2: Timeline
+  # ============================================
+
+  - id: timelineSection
+    label: Campaign Timeline
+    type: section
+
+  - id: startDate
+    label: Campaign Start Date
+    type: datePicker
+    required: true
+    dateFormat: yyyy-MM-dd
+
+  - id: endDate
+    label: Campaign End Date
+    type: datePicker
+    required: true
+    dateFormat: yyyy-MM-dd
+
+  - id: registrationStart
+    label: Registration Opens
+    type: datePicker
+    required: true
+    dateFormat: yyyy-MM-dd
+
+  - id: registrationEnd
+    label: Registration Closes
+    type: datePicker
+    required: true
+    dateFormat: yyyy-MM-dd
+
+  - id: distributionStart
+    label: Distribution Begins
+    type: datePicker
+    required: true
+    dateFormat: yyyy-MM-dd
+
+  - id: distributionEnd
+    label: Distribution Ends
+    type: datePicker
+    required: true
+    dateFormat: yyyy-MM-dd
+
+  # ============================================
+  # PAGE 3: Budget
+  # ============================================
+
+  - id: budgetSection
+    label: Budget Information
+    type: section
+
+  - id: totalBudget
+    label: Total Budget
+    type: textField
+    required: true
+    placeholder: "0.00"
+    validation:
+      pattern: "^[0-9]+(\\.[0-9]{1,2})?$"
+      message: Please enter a valid amount (e.g., 5000000.00)
+
+  - id: reservePct
+    label: Reserve Percentage (%)
+    type: textField
+    defaultValue: "10"
+    validation:
+      pattern: "^[0-9]{1,2}$"
+      message: Enter a percentage between 0 and 30
+
+  - id: estimatedBeneficiaries
+    label: Target Number of Beneficiaries
+    type: textField
+    placeholder: "0"
+    validation:
+      pattern: "^[0-9]+$"
+      message: Please enter a whole number
+
+  - id: budgetPerBeneficiary
+    label: Estimated Budget per Beneficiary
+    type: calculationField
+    equation: "({totalBudget} * (1 - {reservePct}/100)) / {estimatedBeneficiaries}"
+    storeNumeric: true
+    readonly: true
+
+  # ============================================
+  # PAGE 4: Geographic Targeting
+  # ============================================
+
+  - id: coverageType
+    label: Geographic Coverage
+    type: radio
+    required: true
+    defaultValue: "ALL"
+    options:
+      - value: "ALL"
+        label: All Districts
+      - value: "SPECIFIC"
+        label: Specific Districts Only
+
+  - id: targetDistricts
+    label: Target Districts
+    type: checkBox
+    optionsSource:
+      type: formData
+      formId: md03district
+      valueColumn: code
+      labelColumn: name
+      addEmptyOption: false
+
+  - id: targetZones
+    label: Target Agro-Ecological Zones (Optional)
+    type: checkBox
+    optionsSource:
+      type: formData
+      formId: md04agroEcologicalZone
+      valueColumn: code
+      labelColumn: name
+      addEmptyOption: false
+
+  # ============================================
+  # PAGE 5: Distribution Model
+  # ============================================
+  # NOTE: Eligibility/targeting is handled by Subsidy Program Module
+  # IMM only manages the campaign logistics and input distribution
+
+  - id: distributionModel
+    label: Distribution Model
+    type: selectBox
+    required: true
+    optionsSource:
+      type: formData
+      formId: md40DistribModel
+      valueColumn: code
+      labelColumn: name
+      addEmptyOption: true
+      emptyLabel: "-- Select Distribution Model --"
+
+  # E-Voucher Settings (conditional)
+  - id: voucherSettingsHeader
+    label: E-Voucher Settings
+    type: section
+
+  - id: voucherExpiryDays
+    label: Voucher Validity (Days)
+    type: textField
+    defaultValue: "60"
+    validation:
+      pattern: "^[0-9]+$"
+      message: Enter number of days
+
+  - id: allowPartialRedeem
+    label: Allow Partial Redemption?
+    type: radio
+    defaultValue: "YES"
+    options:
+      - value: "YES"
+        label: Yes - Farmers can redeem in multiple visits
+      - value: "NO"
+        label: No - Must redeem all at once
+
+  - id: requirePin
+    label: Require PIN for Redemption?
+    type: radio
+    defaultValue: "YES"
+    options:
+      - value: "YES"
+        label: "Yes"
+      - value: "NO"
+        label: "No"
+
+  # Physical Distribution Settings
+  - id: physicalSettingsHeader
+    label: Physical Distribution Settings
+    type: section
+
+  - id: verificationMethod
+    label: Beneficiary Verification Method
+    type: selectBox
+    required: true
+    options:
+      - value: "NATIONAL_ID"
+        label: National ID Check
+      - value: "BIOMETRIC"
+        label: Biometric Verification
+      - value: "SMS_OTP"
+        label: SMS One-Time Password
+      - value: "VOUCHER_PIN"
+        label: Voucher + PIN
+
+  - id: allowProxy
+    label: Allow Proxy Collection?
+    type: radio
+    defaultValue: "YES"
+    options:
+      - value: "YES"
+        label: Yes - With authorization
+      - value: "NO"
+        label: No - Farmer must collect personally
+
+  - id: requireSignature
+    label: Require Signature on Collection?
+    type: radio
+    defaultValue: "YES"
+    options:
+      - value: "YES"
+        label: "Yes"
+      - value: "NO"
+        label: "No"
+
+  - id: requirePhoto
+    label: Require Photo Evidence?
+    type: radio
+    defaultValue: "NO"
+    options:
+      - value: "YES"
+        label: "Yes"
+      - value: "NO"
+        label: "No"
+
+  # ============================================
+  # PAGE 7: Campaign Inputs (Grid)
+  # ============================================
+
+  - id: inputsHeader
+    label: Campaign Inputs
+    type: section
+
+  - id: campaignInputs
+    label: Campaign Inputs
+    type: formGrid
+    formId: imCampaignInput
+    foreignKey: campaignCode
+    allowAddRow: true
+    allowDeleteRow: true
+    validateMinRow: 1
+    errorMessage: At least one input must be configured
+    columns:
+      - value: inputCode
+        label: Input
+        formatType: text
+      - value: unit
+        label: Unit
+        formatType: text
+      - value: totalQtyAvailable
+        label: Qty Available
+        formatType: text
+      - value: subsidyRatePct
+        label: Subsidy %
+        formatType: text
+      - value: maxPerFarmer
+        label: Max/Farmer
+        formatType: text
+
+  # ============================================
+  # NOTE: Distribution Points are managed separately
+  # via imCampaignDistPt form (linked by campaignId)
+  # Not embedded here due to potentially long lists
+  # ============================================
+
+  # ============================================
+  # Approval & Audit Fields
+  # ============================================
+
+  - id: createdBy
+    label: Created By
+    type: hiddenField
+
+  - id: createdDate
+    label: Created Date
+    type: hiddenField
+
+  - id: submittedBy
+    label: Submitted By
+    type: hiddenField
+
+  - id: submittedDate
+    label: Submitted Date
+    type: hiddenField
+
+  - id: approvedBy
+    label: Approved By
+    type: hiddenField
+
+  - id: approvedDate
+    label: Approved Date
+    type: hiddenField
+
+  - id: approverComments
+    label: Approver Comments
+    type: textArea
+    rows: 3
+    readonly: true

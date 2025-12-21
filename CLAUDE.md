@@ -101,10 +101,11 @@ The pattern library (`src/joget_form_generator/patterns/`) uses a registry-based
 
 - **PatternRegistry** (`registry.py`): Central registry mapping field types to pattern classes
   - Registration happens in `patterns/__init__.py`
-  - Supports 17 field types:
+  - Supports 17 data field types + 1 structural element:
     - **Standard (9)**: hiddenField, textField, passwordField, textArea, selectBox, checkBox, radio, datePicker, fileUpload
     - **Advanced (4)**: customHTML, idGenerator, subform, grid
     - **Enterprise (4)**: calculationField, richTextEditor, formGrid, multiPagedForm
+    - **Structural (1)**: section (for grouping fields into sections)
 
 - **Pattern Classes**: Each field type has:
   - A Python class (e.g., `TextFieldPattern` in `text_field.py`)
@@ -197,6 +198,31 @@ fields:
 
 See `examples/sample_form.yaml` for a complete example.
 
+## Sample Forms Reference
+
+The `sample-forms/` directory contains tested, working Joget JSON exports that serve as syntax and pattern references:
+
+```
+sample-forms/
+├── 01_nested_lovs/           # Cascading dropdown pattern (with comprehensive guide)
+├── 02_master_details/        # Master-detail relationships
+├── 03_tabs/                  # Tab-based layouts
+├── 04_farmer-application-form/  # Complex 7-page wizard (excellent syntax reference)
+└── 05_ajax-subform/          # AJAX Subform lookup pattern
+```
+
+### Key Reference Examples
+
+- **04_farmer-application-form**: Production-quality multi-tab wizard demonstrating:
+  - `MultiPagedForm` with 7 pages
+  - `FormGrid` with `MultirowFormBinder`
+  - Various validators (`DefaultValidator`, `DuplicateValueValidator`)
+  - `FormOptionsBinder` for MDM lookups
+
+- **01_nested_lovs**: Complete cascading dropdown implementation with `JOGET_NESTED_LOV_GUIDE.md`
+
+- **05_ajax-subform**: AJAX Subform pattern (see `docs/AJAX_SUBFORM_PATTERN.md` for critical undocumented behaviors)
+
 ## Package Structure
 
 ```
@@ -228,3 +254,116 @@ src/
 - Field IDs become database column names - validate for uniqueness
 - All forms have className: `org.joget.apps.form.model.Form`
 - Elements array contains field definitions as nested JSON
+
+### Composite Patterns (Enterprise)
+
+These patterns combine multiple elements for advanced functionality:
+
+1. **AJAX Subform Pattern**: SelectBox + AjaxSubForm for dynamic record lookup
+   - CRITICAL: SelectBox `idColumn` MUST be empty (use primary key)
+   - AjaxSubForm `ajax` MUST be `"true"`
+   - AjaxSubForm `parentSubFormId` must match SelectBox ID
+   - See `docs/AJAX_SUBFORM_PATTERN.md` for complete documentation
+
+2. **Cascading Dropdown Pattern**: Parent SelectBox → Child SelectBox with filtering
+   - Child needs `groupingColumn` (field in source form referencing parent)
+   - Child needs `controlField` (parent field ID in current form)
+   - Child needs `useAjax: "true"` for dynamic filtering
+   - **CRITICAL**: Category field in child MDM MUST be a SelectBox (not TextField)
+   - See `docs/NESTED_LOV_REFACTORING_PATTERN.md` for refactoring long flat LOVs
+   - See `sample-forms/01_nested_lovs/JOGET_NESTED_LOV_GUIDE.md` for implementation guide
+
+3. **Multi-Page Wizard**: MultiPagedForm element with multiple sub-forms
+   - See `sample-forms/04_farmer-application-form/` for 7-page example
+
+### Validator Classes
+
+Joget DX has limited built-in validator classes. **Do NOT use non-existent classes**:
+
+| Correct Class | Usage |
+|---------------|-------|
+| `org.joget.apps.form.lib.DefaultValidator` | Standard validator for mandatory, regex, email, alphanumeric, etc. |
+
+**Classes that DO NOT exist** (never generate these):
+- ~~`org.joget.apps.form.lib.RegexValidator`~~ - Use `DefaultValidator` with `type: "regex"`
+- ~~`org.joget.apps.form.lib.MultiValidator`~~ - Combine validations in single `DefaultValidator`
+- ~~`org.joget.apps.form.lib.TextFieldLengthValidator`~~ - Use `DefaultValidator` with regex pattern
+
+Example of correct validator structure:
+```json
+{
+  "className": "org.joget.apps.form.lib.DefaultValidator",
+  "properties": {
+    "mandatory": "true",
+    "type": "regex",
+    "regex": "^[A-Z0-9_]+$",
+    "message": "Invalid format"
+  }
+}
+```
+
+## Form Generation Rules
+
+### Do NOT Add System-Managed Fields
+
+These rules apply to **ALL forms** (MDM, transactional, etc.). Joget automatically manages these fields - **never add them to any form**:
+
+- `id` - Joget auto-generates the primary key (do NOT add as hidden field either)
+- `createdBy` - Audit trail field (auto-managed)
+- `createdDate` / `dateCreated` - Audit trail field (auto-managed)
+- `modifiedBy` - Audit trail field (auto-managed)
+- `modifiedDate` / `dateModified` - Audit trail field (auto-managed)
+
+## MDM Form Rules
+
+When creating Master Data Management (MDM) forms, follow these additional rules:
+
+### 1. Form Naming Convention
+- Form ID: `mdXX<EntityName>` (e.g., `md38InputCategory`)
+- Form Name: `MD.XX - <Display Name>` (e.g., `MD.38 - Input Category`)
+- The XX index should be consistent between ID and name
+
+### 2. Required Fields for Every MDM Form
+Every MDM form **must** have these fields as the first two fields:
+- `code` - Unique business identifier (required, textField)
+- `name` - Display name (required, textField)
+
+### 3. Standard MDM Form Structure
+```yaml
+form:
+  id: mdXXEntityName
+  name: MD.XX - Entity Name
+  tableName: mdXXEntityName
+  description: Description of the master data
+
+fields:
+  - id: code
+    label: Code
+    type: textField
+    required: true
+    maxlength: 30
+
+  - id: name
+    label: Name
+    type: textField
+    required: true
+    maxlength: 100
+
+  # ... additional entity-specific fields ...
+
+  - id: isActive
+    label: Active
+    type: radio
+    required: true
+    defaultValue: "Y"
+    options:
+      - value: "Y"
+        label: "Yes"
+      - value: "N"
+        label: "No"
+```
+
+### 4. Common Optional Fields
+- `description` - textArea for additional details
+- `sortOrder` - textField for display ordering (default: "0")
+- `isActive` - radio Y/N for soft delete pattern (recommended for all MDM)

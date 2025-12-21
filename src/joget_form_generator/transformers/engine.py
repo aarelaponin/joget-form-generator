@@ -69,12 +69,31 @@ class TransformEngine:
         form_meta = normalized_spec["form"]
         fields = normalized_spec["fields"]
 
-        # Transform each field using pattern library
+        # Transform each field using pattern library, grouping by sections
         context = {"form": form_meta}
-        field_elements = []
+        sections = []
+        current_section_fields: list[dict[str, Any]] = []
+        current_section_id = "section1"
+        current_section_label = "Section"
 
         for field in fields:
             field_type = field["type"]
+
+            # Handle section type - starts a new section
+            if field_type == "section":
+                # Save current section if it has fields
+                if current_section_fields:
+                    sections.append(
+                        self._build_section(
+                            current_section_id, current_section_label, current_section_fields
+                        )
+                    )
+                    current_section_fields = []
+
+                # Start new section
+                current_section_id = field["id"]
+                current_section_label = field.get("label", "")
+                continue
 
             # Get pattern class from registry
             pattern_class = PatternRegistry.get(field_type)
@@ -83,21 +102,20 @@ class TransformEngine:
             pattern = pattern_class()
             field_json = pattern.render(field, context)
 
-            # Add to field list
-            field_elements.append(field_json)
+            # Add to current section's field list
+            current_section_fields.append(field_json)
 
-        # Wrap fields in Section → Column layout (MDM pattern)
-        section = {
-            "className": "org.joget.apps.form.model.Section",
-            "properties": {"id": "section1", "label": "Section"},
-            "elements": [
-                {
-                    "className": "org.joget.apps.form.model.Column",
-                    "properties": {"width": "100%"},
-                    "elements": field_elements,
-                }
-            ],
-        }
+        # Don't forget the last section
+        if current_section_fields:
+            sections.append(
+                self._build_section(
+                    current_section_id, current_section_label, current_section_fields
+                )
+            )
+
+        # If no sections were created (no section markers), create default section
+        if not sections:
+            sections.append(self._build_section("section1", "Section", []))
 
         # Build form structure with WorkflowFormBinder (MDM pattern)
         form_json = {
@@ -120,16 +138,42 @@ class TransformEngine:
                 "permission": {"className": "", "properties": {}},
                 "postProcessor": {"className": "", "properties": {}},
             },
-            "elements": [section],
+            "elements": sections,
         }
 
         return form_json
+
+    def _build_section(
+        self, section_id: str, section_label: str, field_elements: list[dict[str, Any]]
+    ) -> dict[str, Any]:
+        """
+        Build a Joget Section element with Column and fields.
+
+        Args:
+            section_id: Section ID
+            section_label: Section label/title
+            field_elements: List of field JSON elements
+
+        Returns:
+            Section JSON structure
+        """
+        return {
+            "className": "org.joget.apps.form.model.Section",
+            "properties": {"id": section_id, "label": section_label},
+            "elements": [
+                {
+                    "className": "org.joget.apps.form.model.Column",
+                    "properties": {"width": "100%"},
+                    "elements": field_elements,
+                }
+            ],
+        }
 
     def _post_process(
         self, form_json: dict[str, Any], normalized_spec: dict[str, Any]
     ) -> dict[str, Any]:
         """
-        Post-process form JSON (add metadata, cleanup).
+        Post-process form JSON (cleanup).
 
         Args:
             form_json: Generated form JSON
@@ -138,11 +182,5 @@ class TransformEngine:
         Returns:
             Post-processed form JSON
         """
-        # Add generator metadata as comment
-        form_json["_metadata"] = {
-            "generator": "joget-form-generator",
-            "version": "0.1.0",
-            "field_count": len(form_json["elements"]),
-        }
-
+        # No metadata - Joget doesn't accept extra fields
         return form_json

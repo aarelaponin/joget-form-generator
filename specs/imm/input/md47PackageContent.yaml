@@ -1,0 +1,80 @@
+# Package Content Form (Grid Sub-form)
+# Items within an input package
+
+form:
+  id: md47PackageContent
+  name: MD.47 - Package Content
+  tableName: md47PackageContent
+  description: Items that make up an input package
+
+fields:
+  - id: code
+    label: Content Code
+    type: textField
+    required: true
+    maxlength: 30
+
+  - id: name
+    label: Content Name
+    type: textField
+    required: true
+    maxlength: 100
+
+  - id: packageCode
+    label: Package Code
+    type: hiddenField
+
+  - id: inputCode
+    label: Input
+    type: selectBox
+    required: true
+    optionsSource:
+      type: formData
+      formId: md44Input
+      valueColumn: code
+      labelColumn: name
+      addEmptyOption: true
+      emptyLabel: "-- Select Input --"
+
+  - id: quantity
+    label: Quantity
+    type: textField
+    required: true
+    placeholder: "0"
+
+  - id: unit
+    label: Unit
+    type: selectBox
+    required: true
+    options:
+      - value: "kg"
+        label: kg
+      - value: "litre"
+        label: L
+      - value: "packet"
+        label: packet
+      - value: "piece"
+        label: piece
+      - value: "dose"
+        label: dose
+
+  - id: isOptional
+    label: Optional Item
+    type: radio
+    defaultValue: "N"
+    options:
+      - value: "Y"
+        label: "Yes"
+      - value: "N"
+        label: "No"
+
+  - id: substitutes
+    label: Allowed Substitutes
+    type: textField
+    placeholder: "e.g., INPUT1;INPUT2"
+    maxlength: 200
+
+  - id: notes
+    label: Notes
+    type: textField
+    maxlength: 200

@@ -16,7 +16,7 @@ class TextFieldPattern(BasePattern, ReadOnlyMixin, ValidationMixin):
             "id": field["id"],
             "label": field["label"],
             "value": field.get("defaultValue", ""),
-            "size": field.get("size", "medium"),
+            "style": "",
             "maxlength": field.get("maxlength", ""),
             "placeholder": field.get("placeholder", ""),
             "validator": self.build_validator(field),

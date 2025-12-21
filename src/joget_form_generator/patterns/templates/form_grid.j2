@@ -1,14 +1,48 @@
 {
   "className": "org.joget.plugin.enterprise.FormGrid",
   "properties": {
-    "id": "{{ id }}",
+    "showRowNumber": "",
+    "disabledDelete": "{{ 'true' if not allowDeleteRow else '' }}",
+    "errorMessage": "{{ errorMessage }}",
+    "deleteSubformData": "",
+    "pageSize": "20",
     "label": "{{ label }}",
-    "formDefId": "{{ formId }}",
-    "columns": {{ columns | tojson_pretty }},
+    "enableSorting": "",
+    "deleteFiles": "",
     "readonly": "{{ readonly }}",
+    "deleteGridData": "",
+    "disabledAdd": "{{ 'true' if not allowAddRow else '' }}",
+    "width": "",
+    "abortRelatedRunningProcesses": "",
+    "readonlyLabel": "",
+    "height": "",
+    "id": "{{ id }}",
+    "formDefId": "{{ formId }}",
+    "options": {{ columns | tojson_pretty }},
+    "submit-label-normal": "",
+    "submit-label-readonly": "",
+    "deleteMessage": "",
+    "validator": {
+      "className": "",
+      "properties": {}
+    },
+    "uniqueKey": "",
     "validateMinRow": "{{ validateMinRow }}",
     "validateMaxRow": "{{ validateMaxRow }}",
-    "allowAddRow": "{{ allowAddRow }}",
-    "allowDeleteRow": "{{ allowDeleteRow }}"
+    "loadBinder": {
+      "className": "org.joget.plugin.enterprise.MultirowFormBinder",
+      "properties": {
+        "formDefId": "{{ formId }}",
+        "foreignKey": "{{ foreignKey }}"
+      }
+    },
+    "storeBinder": {
+      "className": "org.joget.plugin.enterprise.MultirowFormBinder",
+      "properties": {
+        "formDefId": "{{ formId }}",
+        "foreignKey": "{{ foreignKey }}"
+      }
+    },
+    "requestParams": []
   }
 }

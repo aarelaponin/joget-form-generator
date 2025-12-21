@@ -88,10 +88,8 @@ class Normalizer:
             if "fileTypes" not in normalized_field:
                 normalized_field["fileTypes"] = "*"
 
-        # Apply intelligent validation for textField types
-        if field_type == "textField":
-            normalized_field = self._apply_intelligent_validation(normalized_field)
-
+        # NOTE: Intelligent validation disabled - causes issues with Joget import
+        # Only add validation if explicitly specified in YAML
         return normalized_field
 
     def _apply_intelligent_validation(self, field: dict[str, Any]) -> dict[str, Any]:

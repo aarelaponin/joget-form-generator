@@ -33,6 +33,25 @@ def generate(
         "-o",
         help="Output directory for generated forms",
     ),
+    mdm_dir: Optional[Path] = typer.Option(
+        None,
+        "--mdm-dir",
+        exists=True,
+        dir_okay=True,
+        file_okay=False,
+        help="Directory containing MDM CSV files for form reference validation",
+    ),
+    specs_dir: Optional[Path] = typer.Option(
+        None,
+        "--specs-dir",
+        exists=True,
+        dir_okay=True,
+        file_okay=False,
+        help="Directory containing YAML specs for form reference validation",
+    ),
+    strict: bool = typer.Option(
+        False, "--strict", help="Treat unknown form references as errors (not warnings)"
+    ),
     validate_only: bool = typer.Option(
         False, "--validate-only", help="Only validate spec, don't generate forms"
     ),
@@ -78,7 +97,11 @@ def generate(
 
         from ..validators import DualValidator
 
-        validator = DualValidator()
+        validator = DualValidator(
+            mdm_dir=mdm_dir,
+            specs_dir=specs_dir,
+            strict_dependencies=strict,
+        )
         result, form_spec = validator.validate(spec)
 
         progress.update(task, completed=True)
@@ -159,16 +182,42 @@ def generate(
 def validate(
     spec_file: Path = typer.Argument(
         ..., exists=True, dir_okay=False, readable=True, help="Path to YAML specification file"
-    )
+    ),
+    mdm_dir: Optional[Path] = typer.Option(
+        None,
+        "--mdm-dir",
+        exists=True,
+        dir_okay=True,
+        file_okay=False,
+        help="Directory containing MDM CSV files for form reference validation",
+    ),
+    specs_dir: Optional[Path] = typer.Option(
+        None,
+        "--specs-dir",
+        exists=True,
+        dir_okay=True,
+        file_okay=False,
+        help="Directory containing YAML specs for form reference validation",
+    ),
+    strict: bool = typer.Option(
+        False, "--strict", help="Treat unknown form references as errors (not warnings)"
+    ),
 ):
     """
     Validate specification without generating forms.
 
     Example:
         joget-form-gen validate myform.yaml
+        joget-form-gen validate myform.yaml --mdm-dir specs/existing-mdm --specs-dir specs/imm --strict
     """
     # Delegate to generate with validate_only=True
-    generate(spec_file=spec_file, validate_only=True)
+    generate(
+        spec_file=spec_file,
+        validate_only=True,
+        mdm_dir=mdm_dir,
+        specs_dir=specs_dir,
+        strict=strict,
+    )
 
 
 @app.command(name="generate-from-excel")

@@ -26,9 +26,14 @@ class ValidationMixin:
         """
         Build Joget validator configuration from validation spec.
 
-        For MDM forms:
-        - If field is required, always add DefaultValidator with mandatory="true"
-        - Additional validations (regex, length) are added as separate validators
+        Uses DefaultValidator which is the standard validator in Joget DX.
+        DefaultValidator requires all three properties:
+        - mandatory: "true" for required fields, "" otherwise
+        - type: "regex" for custom regex validation, "" otherwise
+        - message: error message for validation failure, "" if none
+
+        Note: Joget does NOT have separate RegexValidator or MultiValidator classes.
+        All validation is done through DefaultValidator with appropriate properties.
 
         Args:
             field: Field specification with optional 'validation' key and 'required' flag
@@ -36,70 +41,59 @@ class ValidationMixin:
         Returns:
             Joget validator dict or None if no validation
         """
-        validators = []
+        is_required = field.get("required", False)
+        validation = field.get("validation")
 
-        # Add DefaultValidator for required fields (MDM pattern)
-        if field.get("required", False):
-            validators.append(
-                {
-                    "className": "org.joget.apps.form.lib.DefaultValidator",
-                    "properties": {"mandatory": "true"},
-                }
-            )
+        # No validation needed
+        if not is_required and not validation:
+            return None
+
+        # Build DefaultValidator properties - always include all three
+        props: dict[str, Any] = {
+            "mandatory": "true" if is_required else "",
+            "type": "",
+            "message": "",
+        }
 
         # Check for additional validation rules
-        validation = field.get("validation")
         if validation:
             # Regex pattern validator
             if pattern := validation.get("pattern"):
-                validators.append(
-                    {
-                        "className": "org.joget.apps.form.lib.RegexValidator",
-                        "properties": {
-                            "regex": pattern,
-                            "message": validation.get("message", "Invalid format"),
-                        },
-                    }
-                )
+                props["type"] = "regex"
+                props["regex"] = pattern
+                props["message"] = validation.get("message", "Invalid format")
 
-            # Minimum length validator
-            if (min_len := validation.get("minLength")) is not None:
-                validators.append(
-                    {
-                        "className": "org.joget.apps.form.lib.TextFieldLengthValidator",
-                        "properties": {
-                            "minLength": str(min_len),
-                            "message": validation.get(
-                                "message", f"Minimum {min_len} characters required"
-                            ),
-                        },
-                    }
-                )
+            # Min/max length - implemented via regex pattern
+            min_len = validation.get("minLength")
+            max_len = validation.get("maxLength")
 
-            # Maximum length validator
-            if (max_len := validation.get("maxLength")) is not None:
-                validators.append(
-                    {
-                        "className": "org.joget.apps.form.lib.TextFieldLengthValidator",
-                        "properties": {
-                            "maxLength": str(max_len),
-                            "message": validation.get(
-                                "message", f"Maximum {max_len} characters allowed"
-                            ),
-                        },
-                    }
-                )
+            if min_len is not None or max_len is not None:
+                # If we already have a pattern, we can't add length validation easily
+                # Only add length validation if no explicit pattern
+                if "regex" not in props:
+                    if min_len is not None and max_len is not None:
+                        props["type"] = "regex"
+                        props["regex"] = f"^.{{{min_len},{max_len}}}$"
+                        props["message"] = validation.get(
+                            "message", f"Must be between {min_len} and {max_len} characters"
+                        )
+                    elif min_len is not None:
+                        props["type"] = "regex"
+                        props["regex"] = f"^.{{{min_len},}}$"
+                        props["message"] = validation.get(
+                            "message", f"Minimum {min_len} characters required"
+                        )
+                    elif max_len is not None:
+                        props["type"] = "regex"
+                        props["regex"] = f"^.{{0,{max_len}}}$"
+                        props["message"] = validation.get(
+                            "message", f"Maximum {max_len} characters allowed"
+                        )
 
-        # Return single validator or multi-validator
-        if len(validators) == 0:
-            return None
-        elif len(validators) == 1:
-            return validators[0]
-        else:
-            return {
-                "className": "org.joget.apps.form.lib.MultiValidator",
-                "properties": {"validators": validators},
-            }
+        return {
+            "className": "org.joget.apps.form.lib.DefaultValidator",
+            "properties": props,
+        }
 
 
 class OptionsMixin:
@@ -128,12 +122,23 @@ class OptionsMixin:
 
     def _build_static_options(self, options: list[dict]) -> dict[str, Any]:
         """Build FormOptionsBinder for static options."""
-        option_list = [{"value": opt["value"], "label": opt["label"]} for opt in options]
+        # Joget requires grouping field in each option
+        option_list = [
+            {"value": opt["value"], "label": opt["label"], "grouping": ""}
+            for opt in options
+        ]
 
         return {
-            "className": "org.joget.apps.form.lib.FormOptionsBinder",
-            "properties": {"formDefId": "", "options": option_list},
+            "className": "",
+            "properties": {},
         }
+
+    def build_static_options_array(self, options: list[dict]) -> list[dict[str, str]]:
+        """Build static options array with grouping field for CheckBox/Radio/SelectBox."""
+        return [
+            {"value": opt["value"], "label": opt["label"], "grouping": ""}
+            for opt in options
+        ]
 
     def _build_dynamic_options(
         self, options_source: dict[str, Any], context: dict[str, Any]
@@ -148,15 +153,27 @@ class OptionsMixin:
             add_empty = options_source.get("addEmptyOption", True)
             use_ajax = options_source.get("useAjax", False)
 
+            props = {
+                "formDefId": options_source["formId"],
+                "idColumn": options_source.get("valueColumn", "code"),
+                "labelColumn": options_source.get("labelColumn", "name"),
+                "groupingColumn": options_source.get("groupingColumn", ""),
+                "extraCondition": options_source.get("extraCondition", ""),
+                "addEmptyOption": "true" if add_empty else "",
+                "emptyLabel": options_source.get("emptyLabel", ""),
+                "useAjax": "true" if use_ajax else "",
+                "cacheInterval": "",
+            }
+
+            # Cascading dropdown support
+            if parent_field := options_source.get("parentField"):
+                props["parentField"] = parent_field
+            if filter_field := options_source.get("filterField"):
+                props["filterField"] = filter_field
+
             return {
                 "className": "org.joget.apps.form.lib.FormOptionsBinder",
-                "properties": {
-                    "formDefId": options_source["formId"],
-                    "idColumn": options_source.get("valueColumn", "code"),
-                    "labelColumn": options_source.get("labelColumn", "name"),
-                    "addEmptyOption": "true" if add_empty else "false",
-                    "useAjax": "true" if use_ajax else "false",
-                },
+                "properties": props,
             }
 
         elif source_type == "api":

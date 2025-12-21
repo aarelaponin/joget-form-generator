@@ -1,0 +1,41 @@
+code,name,category,default_unit,estimated_cost_per_unit
+NPK,NPK Fertilizer (23:10:5),FERTILIZER,50kg_bags,450
+UREA,Urea (46% N),FERTILIZER,50kg_bags,420
+CAN,Calcium Ammonium Nitrate,FERTILIZER,50kg_bags,400
+DAP,Di-Ammonium Phosphate,FERTILIZER,50kg_bags,480
+LIME,Agricultural Lime,FERTILIZER,tonnes,800
+COMPOST,Compost,FERTILIZER,tonnes,300
+MANURE,Animal Manure,FERTILIZER,tonnes,150
+GYPSUM,Gypsum,FERTILIZER,50kg_bags,380
+POTASH,Potassium Chloride,FERTILIZER,50kg_bags,500
+FOLIAR,Foliar Fertilizer,FERTILIZER,litres,85
+INSECT_GENERAL,General Purpose Insecticide,PESTICIDES,litres,120
+INSECT_APHID,Aphid Control,PESTICIDES,litres,150
+INSECT_BOLLWORM,Bollworm Control,PESTICIDES,litres,140
+HERB_BROADLEAF,Broadleaf Herbicide,PESTICIDES,litres,180
+HERB_GRASS,Grass Herbicide,PESTICIDES,litres,160
+HERB_PREEMERGENT,Pre-emergent Herbicide,PESTICIDES,litres,200
+FUNG_RUST,Rust Control,PESTICIDES,litres,250
+FUNG_BLIGHT,Blight Control,PESTICIDES,litres,240
+FUNG_MILDEW,Mildew Control,PESTICIDES,litres,230
+RODENT,Rodenticide,PESTICIDES,kg,90
+VACCINE_FMD,Foot & Mouth Disease Vaccine,LIVESTOCK_VET,doses,15
+VACCINE_ANTHRAX,Anthrax Vaccine,LIVESTOCK_VET,doses,12
+VACCINE_RABIES,Rabies Vaccine,LIVESTOCK_VET,doses,20
+DEWORMER_CATTLE,Cattle Dewormer,LIVESTOCK_VET,doses,8
+DEWORMER_SHEEP,Sheep/Goat Dewormer,LIVESTOCK_VET,doses,5
+ANTIBIOTICS,General Antibiotics,LIVESTOCK_VET,doses,25
+FEED_CONCENTRATE,Livestock Feed Concentrate,LIVESTOCK_VET,50kg_bags,350
+FEED_SUPPLEMENT,Mineral Supplement,LIVESTOCK_VET,kg,45
+DIPPING_CHEMICAL,Dipping Chemical,LIVESTOCK_VET,litres,180
+SPRAYING_CHEM,Livestock Spray,LIVESTOCK_VET,litres,95
+PIPE_PVC_50MM,PVC Pipe 50mm,IRRIGATION,metres,18
+PIPE_PVC_75MM,PVC Pipe 75mm,IRRIGATION,metres,28
+PIPE_PVC_110MM,PVC Pipe 110mm,IRRIGATION,metres,42
+DRIP_TAPE,Drip Irrigation Tape,IRRIGATION,metres,5
+DRIP_EMITTER,Drip Emitters,IRRIGATION,pieces,3
+SPRINKLER_HEAD,Sprinkler Heads,IRRIGATION,pieces,85
+FITTING_ELBOW,Pipe Elbows,IRRIGATION,pieces,8
+FITTING_TEE,Pipe Tees,IRRIGATION,pieces,10
+VALVE,Control Valves,IRRIGATION,pieces,120
+FILTER,Water Filter,IRRIGATION,pieces,450

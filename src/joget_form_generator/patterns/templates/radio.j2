@@ -1,10 +1,27 @@
 {
   "className": "org.joget.apps.form.lib.Radio",
   "properties": {
-    "id": "{{ id }}",
-    "label": "{{ label }}",
-    "required": "{{ required }}",
+    "fullWidth": "",
     "readonly": "{{ readonly }}",
-    "optionsBinder": {{ options_binder | tojson_pretty }}
+    "label": "{{ label }}",
+    "readonlyLabel": "",
+    "id": "{{ id }}",
+    {% if options %}
+    "options": {{ options | tojson_pretty }},
+    {% else %}
+    "options": [],
+    {% endif %}
+    "optionsBinder": {{ options_binder | tojson_pretty }},
+    "value": "{{ value }}",
+    {% if validator %}
+    "validator": {{ validator | tojson_pretty }},
+    {% else %}
+    "validator": {
+      "className": "",
+      "properties": {}
+    },
+    {% endif %}
+    "controlField": "",
+    "workflowVariable": ""
   }
 }

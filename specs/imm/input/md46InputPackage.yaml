@@ -1,0 +1,89 @@
+# Input Package Master Data Form
+form:
+  id: md46InputPackage
+  name: MD.46 - Input Package
+  tableName: md46InputPackage
+  description: Pre-defined bundles of inputs
+
+fields:
+  - id: code
+    label: Package Code
+    type: textField
+    required: true
+    maxlength: 30
+
+  - id: name
+    label: Package Name
+    type: textField
+    required: true
+    maxlength: 100
+
+  - id: description
+    label: Description
+    type: textArea
+    rows: 2
+
+  - id: targetCategory
+    label: Target Farmer Category
+    type: selectBox
+    optionsSource:
+      type: formData
+      formId: md42TargetCategory
+      valueColumn: code
+      labelColumn: name
+      addEmptyOption: true
+      emptyLabel: "-- Any category --"
+
+  - id: packageValue
+    label: Package Value
+    type: textField
+    placeholder: "0.00"
+
+  - id: applicableZones
+    label: Applicable Zones
+    type: textField
+    placeholder: "e.g., lowlands;foothills"
+    maxlength: 200
+
+  - id: minLandHectares
+    label: Min Land (ha)
+    type: textField
+    placeholder: "0"
+
+  - id: maxLandHectares
+    label: Max Land (ha)
+    type: textField
+    placeholder: "0"
+
+  - id: packageContents
+    label: Package Contents
+    type: formGrid
+    formId: md47PackageContent
+    foreignKey: packageCode
+    allowAddRow: true
+    allowDeleteRow: true
+    validateMinRow: 1
+    errorMessage: Package must have at least one item
+    columns:
+      - value: inputCode
+        label: Input
+        formatType: text
+      - value: quantity
+        label: Qty
+        formatType: text
+      - value: unit
+        label: Unit
+        formatType: text
+      - value: isOptional
+        label: Optional
+        formatType: options
+
+  - id: isActive
+    label: Active
+    type: radio
+    defaultValue: "Y"
+    options:
+      - value: "Y"
+        label: "Yes"
+      - value: "N"
+        label: "No"

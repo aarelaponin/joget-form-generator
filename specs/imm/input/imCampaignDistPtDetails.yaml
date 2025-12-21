@@ -1,0 +1,25 @@
+# Distribution Point Details Subform
+# Display-only subform used by AJAX Subform in imCampaignDistPt
+# Data loaded via Bean Shell Form Binder - no table storage
+
+form:
+  id: imDistPtDetails
+  name: Distribution Point Details
+  tableName: imDistPtDetails
+  description: Display-only subform for distribution point details (loaded via Bean Shell)
+
+fields:
+  - id: distPointName
+    label: Point Name
+    type: textField
+    readonly: true
+
+  - id: distPointType
+    label: Type
+    type: textField
+    readonly: true
+
+  - id: districtCode
+    label: District
+    type: textField
+    readonly: true

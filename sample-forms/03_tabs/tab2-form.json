@@ -1,0 +1,83 @@
+{
+    "className": "org.joget.apps.form.model.Form",
+    "properties": {
+        "id": "page2",
+        "name": "Page 2 Form",
+        "tableName": "page2_form",
+        "loadBinder": {
+            "className": "org.joget.apps.form.lib.WorkflowFormBinder"
+        },
+        "storeBinder": {
+            "className": "org.joget.apps.form.lib.WorkflowFormBinder"
+        },
+        "description": ""
+    },
+    "elements": [
+        {
+            "elements": [
+                {
+                    "elements": [
+                        {
+                            "className": "org.joget.apps.form.lib.SelectBox",
+                            "properties": {
+                                "readonly": "",
+                                "multiple": "",
+                                "label": "Select Box",
+                                "readonlyLabel": "",
+                                "id": "field1",
+                                "options": [
+                                    {
+                                        "value": "value1",
+                                        "label": "Value 1",
+                                        "grouping": ""
+                                    },
+                                    {
+                                        "value": "value2",
+                                        "label": "Value 2",
+                                        "grouping": ""
+                                    }
+                                ],
+                                "optionsBinder": {
+                                    "className": "",
+                                    "properties": {}
+                                },
+                                "value": "",
+                                "validator": {
+                                    "className": "",
+                                    "properties": {}
+                                },
+                                "controlField": "",
+                                "size": "",
+                                "workflowVariable": ""
+                            }
+                        },
+                        {
+                            "className": "org.joget.apps.form.lib.DatePicker",
+                            "properties": {
+                                "readonly": "False",
+                                "allowManual": "False",
+                                "yearRange": "c-10:c+10",
+                                "dataFormat": "yyyy-MM-dd",
+                                "label": "Date Picker",
+                                "datePickerType": "",
+                                "currentDateAs": "",
+                                "disableWeekends": "False",
+                                "readonlyLabel": "False",
+                                "id": "field2"
+                            }
+                        }
+                    ],
+                    "className": "org.joget.apps.form.model.Column",
+                    "properties": {
+                        "width": "100%"
+                    }
+                }
+            ],
+            "className": "org.joget.apps.form.model.Section",
+            "properties": {
+                "label": "Section",
+                "id": "section1"
+            }
+        }
+    ]
+}
