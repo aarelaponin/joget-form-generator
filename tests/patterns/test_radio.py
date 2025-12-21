@@ -31,7 +31,10 @@ def test_basic_radio(pattern):
 
 
 def test_radio_with_options(pattern):
-    """Test radio button options rendering."""
+    """Test radio button options rendering.
+
+    Note: Joget uses options array directly, not optionsBinder for static options.
+    """
     field = {
         "id": "status",
         "label": "Status",
@@ -46,14 +49,19 @@ def test_radio_with_options(pattern):
 
     result = pattern.render(field, context)
 
+    # Static options are in options array
+    assert len(result["properties"]["options"]) == 3
+    assert result["properties"]["options"][2]["value"] == "pending"
+    # optionsBinder should be empty for static options
     options_binder = result["properties"]["optionsBinder"]
-    assert options_binder["className"] == "org.joget.apps.form.lib.FormOptionsBinder"
-    assert len(options_binder["properties"]["options"]) == 3
-    assert options_binder["properties"]["options"][2]["value"] == "pending"
+    assert options_binder["className"] == ""
 
 
 def test_required_radio(pattern):
-    """Test required radio button with validation."""
+    """Test required radio button with validation.
+
+    Note: Joget uses validator with mandatory, not a required property.
+    """
     field = {
         "id": "priority",
         "label": "Priority",
@@ -69,5 +77,7 @@ def test_required_radio(pattern):
 
     result = pattern.render(field, context)
 
-    # Radio outputs required as string property, not validator
-    assert result["properties"]["required"] == "true"
+    # Radio uses validator with mandatory for required
+    validator = result["properties"]["validator"]
+    assert validator["className"] == "org.joget.apps.form.lib.DefaultValidator"
+    assert validator["properties"]["mandatory"] == "true"

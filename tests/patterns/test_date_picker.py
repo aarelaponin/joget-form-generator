@@ -27,7 +27,10 @@ def test_basic_date_picker(pattern):
 
 
 def test_date_picker_with_format(pattern):
-    """Test date picker with custom date format."""
+    """Test date picker with custom date format.
+
+    Note: Joget uses 'dataFormat' property, not 'format'.
+    """
     field = {
         "id": "eventDate",
         "label": "Event Date",
@@ -38,7 +41,8 @@ def test_date_picker_with_format(pattern):
 
     result = pattern.render(field, context)
 
-    assert result["properties"]["format"] == "dd/MM/yyyy"
+    # Joget uses dataFormat for the date format
+    assert result["properties"]["dataFormat"] == "dd/MM/yyyy"
 
 
 def test_date_picker_default_format(pattern):
@@ -52,8 +56,9 @@ def test_date_picker_default_format(pattern):
 
     result = pattern.render(field, context)
 
-    # Should have format property (default: yyyy-MM-dd)
-    assert "format" in result["properties"]
+    # Should have dataFormat property (default: yyyy-MM-dd)
+    assert "dataFormat" in result["properties"]
+    assert result["properties"]["dataFormat"] == "yyyy-MM-dd"
 
 
 def test_required_date_picker(pattern):

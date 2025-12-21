@@ -27,7 +27,10 @@ def test_basic_file_upload(pattern):
 
 
 def test_file_upload_with_max_size(pattern):
-    """Test file upload with max size limit."""
+    """Test file upload with max size limit.
+
+    Note: maxSize is passed as-is (in MB), not converted to bytes.
+    """
     field = {
         "id": "document",
         "label": "Document",
@@ -38,8 +41,8 @@ def test_file_upload_with_max_size(pattern):
 
     result = pattern.render(field, context)
 
-    # maxSize is converted to bytes (5 MB = 5 * 1024 * 1024 = 5242880)
-    assert result["properties"]["maxSize"] == "5242880"
+    # maxSize is passed through as string
+    assert result["properties"]["maxSize"] == "5"
 
 
 def test_file_upload_with_file_types(pattern):
@@ -74,7 +77,10 @@ def test_file_upload_default_settings(pattern):
 
 
 def test_required_file_upload(pattern):
-    """Test required file upload with validation."""
+    """Test required file upload with validation.
+
+    Note: Joget uses validator with mandatory, not a required property.
+    """
     field = {
         "id": "proofOfId",
         "label": "Proof of ID",
@@ -85,12 +91,17 @@ def test_required_file_upload(pattern):
 
     result = pattern.render(field, context)
 
-    # FileUpload outputs required as string property, not validator
-    assert result["properties"]["required"] == "true"
+    # FileUpload uses validator with mandatory for required
+    validator = result["properties"]["validator"]
+    assert validator["className"] == "org.joget.apps.form.lib.DefaultValidator"
+    assert validator["properties"]["mandatory"] == "true"
 
 
 def test_file_upload_pdf_only(pattern):
-    """Test file upload restricted to PDF files."""
+    """Test file upload restricted to PDF files.
+
+    Note: maxSize is passed as-is (in MB), not converted to bytes.
+    """
     field = {
         "id": "pdfDocument",
         "label": "PDF Document",
@@ -103,5 +114,5 @@ def test_file_upload_pdf_only(pattern):
     result = pattern.render(field, context)
 
     assert result["properties"]["fileType"] == "*.pdf"
-    # maxSize is converted to bytes (20 MB = 20 * 1024 * 1024 = 20971520)
-    assert result["properties"]["maxSize"] == "20971520"
+    # maxSize is passed through as string
+    assert result["properties"]["maxSize"] == "20"

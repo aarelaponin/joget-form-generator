@@ -31,7 +31,10 @@ def test_basic_check_box(pattern):
 
 
 def test_check_box_with_options(pattern):
-    """Test checkbox options rendering."""
+    """Test checkbox options rendering.
+
+    Note: Joget uses options array directly, not optionsBinder for static options.
+    """
     field = {
         "id": "hobbies",
         "label": "Hobbies",
@@ -46,15 +49,20 @@ def test_check_box_with_options(pattern):
 
     result = pattern.render(field, context)
 
+    # Static options are in options array, optionsBinder is empty
+    assert len(result["properties"]["options"]) == 3
+    assert result["properties"]["options"][0]["value"] == "reading"
+    assert result["properties"]["options"][1]["label"] == "Gaming"
+    # optionsBinder should be empty for static options
     options_binder = result["properties"]["optionsBinder"]
-    assert options_binder["className"] == "org.joget.apps.form.lib.FormOptionsBinder"
-    assert len(options_binder["properties"]["options"]) == 3
-    assert options_binder["properties"]["options"][0]["value"] == "reading"
-    assert options_binder["properties"]["options"][1]["label"] == "Gaming"
+    assert options_binder["className"] == ""
 
 
 def test_required_check_box(pattern):
-    """Test required checkbox with validation."""
+    """Test required checkbox with validation.
+
+    Note: Joget uses validator with mandatory, not a required property.
+    """
     field = {
         "id": "terms",
         "label": "Terms",
@@ -68,5 +76,7 @@ def test_required_check_box(pattern):
 
     result = pattern.render(field, context)
 
-    # CheckBox outputs required as string property, not validator
-    assert result["properties"]["required"] == "true"
+    # CheckBox uses validator with mandatory for required
+    validator = result["properties"]["validator"]
+    assert validator["className"] == "org.joget.apps.form.lib.DefaultValidator"
+    assert validator["properties"]["mandatory"] == "true"

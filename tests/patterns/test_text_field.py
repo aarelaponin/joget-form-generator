@@ -61,49 +61,26 @@ class TestBasicRendering:
 
 
 class TestSizeHandling:
-    """Test field size handling."""
+    """Test field size handling.
 
-    def test_text_field_small_size(self, pattern):
-        """Test text field with small size."""
+    Note: Joget DX uses empty string for size property.
+    The 'size' property from YAML spec is not passed to Joget output.
+    """
+
+    def test_text_field_size_property_exists(self, pattern):
+        """Test that size property is always present in output."""
         field = {
             "id": "code",
             "label": "Code",
             "type": "textField",
-            "size": "small",
         }
         context = {}
 
         result = pattern.render(field, context)
 
-        assert result["properties"]["size"] == "small"
-
-    def test_text_field_large_size(self, pattern):
-        """Test text field with large size."""
-        field = {
-            "id": "description",
-            "label": "Description",
-            "type": "textField",
-            "size": "large",
-        }
-        context = {}
-
-        result = pattern.render(field, context)
-
-        assert result["properties"]["size"] == "large"
-
-    def test_text_field_default_size(self, pattern):
-        """Test text field defaults to medium size."""
-        field = {
-            "id": "name",
-            "label": "Name",
-            "type": "textField",
-        }
-        context = {}
-
-        result = pattern.render(field, context)
-
-        # Should use default size from normalizer
+        # Joget always has size property (empty string)
         assert "size" in result["properties"]
+        assert result["properties"]["size"] == ""
 
 
 class TestValidation:

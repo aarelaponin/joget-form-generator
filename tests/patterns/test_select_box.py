@@ -11,7 +11,10 @@ def pattern():
 
 
 def test_select_box_with_static_options(pattern):
-    """Test select box with static options."""
+    """Test select box with static options.
+
+    Note: Joget uses options array directly, not optionsBinder for static options.
+    """
     field = {
         "id": "status",
         "label": "Status",
@@ -26,10 +29,12 @@ def test_select_box_with_static_options(pattern):
     result = pattern.render(field, context)
 
     assert result["className"] == "org.joget.apps.form.lib.SelectBox"
+    # Static options are in options array
+    assert len(result["properties"]["options"]) == 2
+    assert result["properties"]["options"][0]["value"] == "active"
+    # optionsBinder should be empty for static options
     binder = result["properties"]["optionsBinder"]
-    assert binder["className"] == "org.joget.apps.form.lib.FormOptionsBinder"
-    assert len(binder["properties"]["options"]) == 2
-    assert binder["properties"]["options"][0]["value"] == "active"
+    assert binder["className"] == ""
 
 
 def test_select_box_with_nested_lov(pattern):

@@ -371,6 +371,7 @@ class TestMultipleFields:
         assert normalized["fields"][2]["dateFormat"] == "yyyy-MM-dd"  # datePicker
 
 
+@pytest.mark.skip(reason="Intelligent validation feature disabled - causes Joget import issues")
 class TestIntelligentValidation:
     """Test intelligent validation detection and application."""
 

@@ -59,18 +59,27 @@ class TestOptionsMixin:
     """Test OptionsMixin functionality."""
 
     def test_build_static_options(self):
-        """Test static options builder."""
+        """Test static options builder.
+
+        Note: Joget uses empty optionsBinder for static options.
+        The options are placed in the 'options' array directly via build_static_options_array().
+        """
         mixin = OptionsMixin()
         options = [
             {"value": "opt1", "label": "Option 1"},
             {"value": "opt2", "label": "Option 2"},
         ]
 
+        # Static options return empty binder
         options_binder = mixin._build_static_options(options)
+        assert options_binder["className"] == ""
+        assert options_binder["properties"] == {}
 
-        assert options_binder["className"] == "org.joget.apps.form.lib.FormOptionsBinder"
-        assert len(options_binder["properties"]["options"]) == 2
-        assert options_binder["properties"]["options"][0]["value"] == "opt1"
+        # Use build_static_options_array for the actual options
+        options_array = mixin.build_static_options_array(options)
+        assert len(options_array) == 2
+        assert options_array[0]["value"] == "opt1"
+        assert options_array[0]["grouping"] == ""  # Joget requires grouping field
 
     def test_build_dynamic_options_form_data(self):
         """Test dynamic options with formData source."""

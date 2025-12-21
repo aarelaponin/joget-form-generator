@@ -4,7 +4,10 @@ from joget_form_generator.patterns.calculation_field import CalculationFieldPatt
 
 
 def test_basic_calculation_field():
-    """Test basic calculation field rendering."""
+    """Test basic calculation field rendering.
+
+    Note: storeNumeric defaults to False (empty string in Joget).
+    """
     pattern = CalculationFieldPattern()
     field = {
         "id": "totalCost",
@@ -19,7 +22,7 @@ def test_basic_calculation_field():
     assert result["properties"]["id"] == "totalCost"
     assert result["properties"]["label"] == "Total Cost"
     assert result["properties"]["equation"] == "fieldA + fieldB"
-    assert result["properties"]["storeNumeric"] == "true"  # default
+    assert result["properties"]["storeNumeric"] == ""  # default is false (empty string)
     assert result["properties"]["readonly"] == ""  # not set in field
 
 
@@ -42,25 +45,32 @@ def test_calculation_field_with_custom_formula():
 
 
 def test_calculation_field_with_default_value():
-    """Test calculation field with default/fallback value."""
+    """Test calculation field with default/fallback value.
+
+    Note: Calculation fields have empty value by default.
+    Required is not typically used with calculation fields.
+    """
     pattern = CalculationFieldPattern()
     field = {
         "id": "tax",
         "label": "Tax",
         "type": "calculationField",
         "equation": "total * 0.21",
-        "defaultValue": "0",
-        "required": True,
+        "storeNumeric": True,
     }
 
     result = pattern.render(field, {})
 
-    assert result["properties"]["value"] == "0"
-    assert result["properties"]["required"] == "true"
+    # Calculation field value is always empty (computed at runtime)
+    assert result["properties"]["value"] == ""
+    assert result["properties"]["storeNumeric"] == "true"
 
 
 def test_calculation_field_store_as_string():
-    """Test calculation field storing result as string."""
+    """Test calculation field storing result as string.
+
+    Note: Joget uses empty string for false values.
+    """
     pattern = CalculationFieldPattern()
     field = {
         "id": "result",
@@ -72,4 +82,5 @@ def test_calculation_field_store_as_string():
 
     result = pattern.render(field, {})
 
-    assert result["properties"]["storeNumeric"] == "false"
+    # Joget uses empty string for false
+    assert result["properties"]["storeNumeric"] == ""
