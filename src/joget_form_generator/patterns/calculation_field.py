@@ -42,11 +42,13 @@ class CalculationFieldPattern(BasePattern, ReadOnlyMixin):
         # Build variables array - each variable uses "sum" operation by default
         variables = []
         for field_id in unique_refs:
-            variables.append({
-                "variableName": field_id,
-                "fieldId": field_id,
-                "operation": "sum",
-            })
+            variables.append(
+                {
+                    "variableName": field_id,
+                    "fieldId": field_id,
+                    "operation": "sum",
+                }
+            )
 
         return variables
 

@@ -121,13 +121,11 @@ class OptionsMixin:
         return self._build_static_options(options)
 
     def _build_static_options(self, options: list[dict]) -> dict[str, Any]:
-        """Build FormOptionsBinder for static options."""
-        # Joget requires grouping field in each option
-        option_list = [
-            {"value": opt["value"], "label": opt["label"], "grouping": ""}
-            for opt in options
-        ]
+        """Build empty optionsBinder for static options.
 
+        Note: Static options are placed in the 'options' array directly,
+        not in optionsBinder. Use build_static_options_array() for that.
+        """
         return {
             "className": "",
             "properties": {},
@@ -135,10 +133,7 @@ class OptionsMixin:
 
     def build_static_options_array(self, options: list[dict]) -> list[dict[str, str]]:
         """Build static options array with grouping field for CheckBox/Radio/SelectBox."""
-        return [
-            {"value": opt["value"], "label": opt["label"], "grouping": ""}
-            for opt in options
-        ]
+        return [{"value": opt["value"], "label": opt["label"], "grouping": ""} for opt in options]
 
     def _build_dynamic_options(
         self, options_source: dict[str, Any], context: dict[str, Any]

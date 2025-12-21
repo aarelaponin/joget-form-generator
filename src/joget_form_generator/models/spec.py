@@ -18,7 +18,7 @@ from pydantic import AnyUrl, BaseModel, Field
 
 
 class FormMetadata(BaseModel):
-    id: str = Field(..., max_length=20, pattern='^[a-zA-Z][a-zA-Z0-9_]{0,19}$')
+    id: str = Field(..., max_length=20, pattern="^[a-zA-Z][a-zA-Z0-9_]{0,19}$")
     """
     Form ID (must match tableName, max 20 chars)
     """
@@ -26,7 +26,7 @@ class FormMetadata(BaseModel):
     """
     Human-readable form name displayed in Joget
     """
-    tableName: str | None = Field(None, max_length=20, pattern='^[a-zA-Z][a-zA-Z0-9_]{0,19}$')
+    tableName: str | None = Field(None, max_length=20, pattern="^[a-zA-Z][a-zA-Z0-9_]{0,19}$")
     """
     Database table name (must match id)
     """
@@ -41,24 +41,24 @@ class Type(Enum):
     Field type (Phase 1: 9 standard, Phase 2: 4 custom/advanced, Enterprise: 4 advanced, Structural: section)
     """
 
-    hiddenField = 'hiddenField'
-    textField = 'textField'
-    passwordField = 'passwordField'
-    textArea = 'textArea'
-    selectBox = 'selectBox'
-    checkBox = 'checkBox'
-    radio = 'radio'
-    datePicker = 'datePicker'
-    fileUpload = 'fileUpload'
-    customHTML = 'customHTML'
-    idGenerator = 'idGenerator'
-    subform = 'subform'
-    grid = 'grid'
-    calculationField = 'calculationField'
-    richTextEditor = 'richTextEditor'
-    formGrid = 'formGrid'
-    multiPagedForm = 'multiPagedForm'
-    section = 'section'
+    hiddenField = "hiddenField"
+    textField = "textField"
+    passwordField = "passwordField"
+    textArea = "textArea"
+    selectBox = "selectBox"
+    checkBox = "checkBox"
+    radio = "radio"
+    datePicker = "datePicker"
+    fileUpload = "fileUpload"
+    customHTML = "customHTML"
+    idGenerator = "idGenerator"
+    subform = "subform"
+    grid = "grid"
+    calculationField = "calculationField"
+    richTextEditor = "richTextEditor"
+    formGrid = "formGrid"
+    multiPagedForm = "multiPagedForm"
+    section = "section"
 
 
 class Size(Enum):
@@ -66,10 +66,10 @@ class Size(Enum):
     Field size (full = 100% width)
     """
 
-    small = 'small'
-    medium = 'medium'
-    large = 'large'
-    full = 'full'
+    small = "small"
+    medium = "medium"
+    large = "large"
+    full = "full"
 
 
 class Editor(Enum):
@@ -77,8 +77,8 @@ class Editor(Enum):
     Rich text editor type (richTextEditor)
     """
 
-    tinymce = 'tinymce'
-    quill = 'quill'
+    tinymce = "tinymce"
+    quill = "quill"
 
 
 class Option(BaseModel):
@@ -97,9 +97,9 @@ class Type1(Enum):
     Options source type
     """
 
-    formData = 'formData'
-    api = 'api'
-    database = 'database'
+    formData = "formData"
+    api = "api"
+    database = "database"
 
 
 class RequestType(Enum):
@@ -107,10 +107,10 @@ class RequestType(Enum):
     HTTP request method (api type)
     """
 
-    GET = 'GET'
-    POST = 'POST'
-    PUT = 'PUT'
-    DELETE = 'DELETE'
+    GET = "GET"
+    POST = "POST"
+    PUT = "PUT"
+    DELETE = "DELETE"
 
 
 class PostMethod(Enum):
@@ -118,9 +118,9 @@ class PostMethod(Enum):
     POST/PUT body format (api type)
     """
 
-    parameters = 'parameters'
-    jsonPayload = 'jsonPayload'
-    custom = 'custom'
+    parameters = "parameters"
+    jsonPayload = "jsonPayload"
+    custom = "custom"
 
 
 class Param(BaseModel):
@@ -142,11 +142,11 @@ class OptionsSource(BaseModel):
     """
     Source form ID (formData type)
     """
-    valueColumn: str | None = 'id'
+    valueColumn: str | None = "id"
     """
     Column for option value (formData, database)
     """
-    labelColumn: str | None = 'name'
+    labelColumn: str | None = "name"
     """
     Column for option label (formData, database)
     """
@@ -166,7 +166,7 @@ class OptionsSource(BaseModel):
     """
     Add empty first option (formData, api)
     """
-    emptyLabel: str | None = ''
+    emptyLabel: str | None = ""
     """
     Label for empty option
     """
@@ -178,11 +178,11 @@ class OptionsSource(BaseModel):
     """
     API endpoint URL (api type)
     """
-    requestType: RequestType | None = 'GET'
+    requestType: RequestType | None = "GET"
     """
     HTTP request method (api type)
     """
-    postMethod: PostMethod | None = 'parameters'
+    postMethod: PostMethod | None = "parameters"
     """
     POST/PUT body format (api type)
     """
@@ -206,7 +206,7 @@ class OptionsSource(BaseModel):
     """
     Base JSON object path for array extraction (api type)
     """
-    jdbcDatasource: str | None = 'default'
+    jdbcDatasource: str | None = "default"
     """
     JDBC datasource name (database type)
     """
@@ -248,9 +248,9 @@ class FormatType(Enum):
     Column display format type
     """
 
-    text = 'text'
-    options = 'options'
-    date = 'date'
+    text = "text"
+    options = "options"
+    date = "date"
 
 
 class GridColumn(BaseModel):
@@ -262,15 +262,15 @@ class GridColumn(BaseModel):
     """
     Column header label
     """
-    formatType: FormatType | None = 'text'
+    formatType: FormatType | None = "text"
     """
     Column display format type
     """
-    format: str | None = ''
+    format: str | None = ""
     """
     Format pattern (for date columns)
     """
-    width: str | None = ''
+    width: str | None = ""
     """
     Column width (e.g., '100px', '20%')
     """
@@ -292,7 +292,7 @@ class Page(BaseModel):
 
 
 class FieldModel(BaseModel):
-    id: str = Field(..., max_length=50, pattern='^[a-zA-Z][a-zA-Z0-9_]*$')
+    id: str = Field(..., max_length=50, pattern="^[a-zA-Z][a-zA-Z0-9_]*$")
     """
     Field ID (database column name)
     """
@@ -320,7 +320,7 @@ class FieldModel(BaseModel):
     """
     Placeholder text (textField, textArea, passwordField)
     """
-    size: Size | None = 'medium'
+    size: Size | None = "medium"
     """
     Field size (full = 100% width)
     """
@@ -348,7 +348,7 @@ class FieldModel(BaseModel):
     """
     Allow multiple selections (selectBox, checkBox)
     """
-    dateFormat: str | None = 'yyyy-MM-dd'
+    dateFormat: str | None = "yyyy-MM-dd"
     """
     Date format pattern (datePicker)
     """
@@ -392,7 +392,7 @@ class FieldModel(BaseModel):
     """
     Store result as numeric value (calculationField)
     """
-    editor: Editor | None = 'tinymce'
+    editor: Editor | None = "tinymce"
     """
     Rich text editor type (richTextEditor)
     """

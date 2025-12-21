@@ -1,7 +1,6 @@
 """JSON Schema validation for form specifications."""
 
 import json
-import csv
 from pathlib import Path
 from typing import Any
 from dataclasses import dataclass, field
@@ -64,8 +63,9 @@ class FormRegistry:
             else:
                 # Split camelCase/snake_case into words
                 import re
-                form_words = set(re.split(r'[_\s]|(?=[A-Z])', form_id_lower))
-                known_words = set(re.split(r'[_\s]|(?=[A-Z])', known_lower))
+
+                form_words = set(re.split(r"[_\s]|(?=[A-Z])", form_id_lower))
+                known_words = set(re.split(r"[_\s]|(?=[A-Z])", known_lower))
                 form_words = {w.lower() for w in form_words if len(w) > 2}
                 known_words = {w.lower() for w in known_words if len(w) > 2}
 
@@ -195,36 +195,40 @@ class SchemaValidator:
             # Check optionsSource.formId (selectBox, checkBox, radio)
             options_src = field_spec.get("optionsSource", {})
             if options_src.get("type") == "formData" and options_src.get("formId"):
-                references.append({
-                    "field_id": field_id,
-                    "form_id": options_src["formId"],
-                    "context": "optionsSource",
-                    "required": is_required,
-                })
+                references.append(
+                    {
+                        "field_id": field_id,
+                        "form_id": options_src["formId"],
+                        "context": "optionsSource",
+                        "required": is_required,
+                    }
+                )
 
             # Check formGrid.formId
             if field_type == "formGrid" and field_spec.get("formId"):
-                references.append({
-                    "field_id": field_id,
-                    "form_id": field_spec["formId"],
-                    "context": "formGrid",
-                    "required": True,  # FormGrid always needs the child form
-                })
+                references.append(
+                    {
+                        "field_id": field_id,
+                        "form_id": field_spec["formId"],
+                        "context": "formGrid",
+                        "required": True,  # FormGrid always needs the child form
+                    }
+                )
 
             # Check subform.formId
             if field_type == "subform" and field_spec.get("formId"):
-                references.append({
-                    "field_id": field_id,
-                    "form_id": field_spec["formId"],
-                    "context": "subform",
-                    "required": True,
-                })
+                references.append(
+                    {
+                        "field_id": field_id,
+                        "form_id": field_spec["formId"],
+                        "context": "subform",
+                        "required": True,
+                    }
+                )
 
         return references
 
-    def _validate_form_dependencies(
-        self, spec: dict[str, Any]
-    ) -> tuple[list[str], list[str]]:
+    def _validate_form_dependencies(self, spec: dict[str, Any]) -> tuple[list[str], list[str]]:
         """
         Validate all form references against the registry.
 
@@ -247,10 +251,7 @@ class SchemaValidator:
 
             if not self.form_registry.is_known(form_id):
                 # Build error/warning message
-                msg = (
-                    f"Field '{field_id}' references unknown form '{form_id}' "
-                    f"in {context}"
-                )
+                msg = f"Field '{field_id}' references unknown form '{form_id}' " f"in {context}"
 
                 # Try to find similar forms for suggestion
                 similar = self.form_registry.find_similar(form_id)
@@ -340,28 +341,33 @@ class SchemaValidator:
         # Rule: Field IDs ending in 'Id' with optionsSource should use '*Code' instead
         # Exception: actual ID fields like 'nationalId', 'taxId', 'deviceId' are allowed
         import re
-        allowed_id_suffixes = {'nationalId', 'taxId', 'deviceId', 'officerId', 'registrationId'}
+
+        allowed_id_suffixes = {"nationalId", "taxId", "deviceId", "officerId", "registrationId"}
         for field_spec in spec.get("fields", []):
             field_id = field_spec.get("id", "")
             options_src = field_spec.get("optionsSource", {})
             field_type = field_spec.get("type", "")
 
             # Check if field ends with 'Id' (but not in allowed list) and has optionsSource
-            if (re.search(r'[a-z]Id$', field_id) and
-                field_id not in allowed_id_suffixes and
-                not any(field_id.endswith(suffix) for suffix in allowed_id_suffixes)):
+            if (
+                re.search(r"[a-z]Id$", field_id)
+                and field_id not in allowed_id_suffixes
+                and not any(field_id.endswith(suffix) for suffix in allowed_id_suffixes)
+            ):
 
                 # If it has optionsSource, it's a FK field and should use *Code
                 if options_src.get("type") == "formData":
-                    suggested_name = re.sub(r'Id$', 'Code', field_id)
+                    suggested_name = re.sub(r"Id$", "Code", field_id)
                     errors.append(
                         f"Field '{field_id}': FK field names should end with 'Code', not 'Id'. "
                         f"Rename to '{suggested_name}'. "
                         f"Joget reserves 'id' and '*Id' patterns can cause conflicts."
                     )
                 # If it's a hidden field used as FK (e.g., in child forms), also flag it
-                elif field_type == "hiddenField" and re.search(r'(campaign|program|entitlement|distribution|dealer|farmer)Id$', field_id, re.I):
-                    suggested_name = re.sub(r'Id$', 'Code', field_id)
+                elif field_type == "hiddenField" and re.search(
+                    r"(campaign|program|entitlement|distribution|dealer|farmer)Id$", field_id, re.I
+                ):
+                    suggested_name = re.sub(r"Id$", "Code", field_id)
                     errors.append(
                         f"Field '{field_id}': FK field names should end with 'Code', not 'Id'. "
                         f"Rename to '{suggested_name}'. "
