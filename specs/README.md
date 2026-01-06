@@ -1,50 +1,54 @@
 # Form Specifications
 
-This folder contains YAML specifications for Joget DX forms organized by component/module.
+This folder contains YAML specifications for Joget DX forms organized by module and component.
+
+For complete governance rules, see [Configuration Management Plan](CONFIGURATION_MANAGEMENT_PLAN.md).
 
 ## Folder Structure
 
-Each component folder follows a standardized structure:
-
 ```
 specs/
-├── <component>/
-│   ├── input/      # YAML specifications (source files)
-│   ├── output/     # Generated JSON files (Joget form definitions)
-│   └── data/       # CSV reference/seed data for master data
-│       └── archive/  # Archived/consolidated CSV files
+├── CONFIGURATION_MANAGEMENT_PLAN.md   # Governance rules and templates
+├── README.md                          # This file
+│
+├── <module>/                          # System module (e.g., frs, imm, spm)
+│   ├── <MODULE>_OVERVIEW.md           # System specification
+│   ├── <MODULE>_FORM_MODEL.md         # Entity relationships
+│   ├── <MODULE>_CHANGELOG.md          # Version history
+│   │
+│   ├── <component>/                   # Functional component
+│   │   ├── input/                     # YAML specifications (source)
+│   │   ├── output/                    # Generated JSON forms
+│   │   └── data/                      # Reference/seed data (CSV)
+│   │
+│   └── _archive/                      # Superseded specifications
+│
+├── mdm/                               # Master Data Management (shared)
+└── gis/                               # GIS Integration (shared)
 ```
 
-### Current Components
+## Current Modules
 
-- `existing-farmer/` - Farmer registration forms (existing system)
-- `existing-mdm/` - Master Data Management reference data (existing system)
-- `imm/` - Input Management Module forms
+| Module | Description | Status | Components |
+|--------|-------------|--------|------------|
+| `frs/` | Farmer Registration System | Active | farm, parcel |
+| `imm/` | Input Management Module | Active | campaign, allocation, distribution |
+| `spm/` | Social Protection Module | Active | program, application, eligibility |
+| `mdm/` | Master Data Management | Active | (shared reference data) |
+| `gis/` | GIS Integration | Planning | (shared spatial services) |
+| `jre/` | Joget Rules Engine | Active | rules, fields, scopes |
 
-### Nested LOV Pattern Applied
-
-The following MDM data has been consolidated using the [Nested LOV Refactoring Pattern](../docs/NESTED_LOV_REFACTORING_PATTERN.md):
-
-| Parent Form | Child Form | Description |
-|-------------|------------|-------------|
-| md191cropCategory | md19crops | Crop types by category (cereals, legumes, etc.) |
-| md161livestockCategory | md16livestockType | Livestock by category (poultry, large livestock, etc.) |
-| md25equipmentCategory | md25equipmentType | Equipment by category (tillage, planting, etc.) |
-| md27inputCategory | md27inputType | Agricultural inputs by category (fertilizer, pesticides, etc.) |
-
-Original separate CSV files are archived in `existing-mdm/data/archive/`.
-
-## Usage
+## Quick Start
 
 ### Generate forms from YAML specifications
 
 ```bash
 # Generate a single form
-joget-form-gen generate specs/imm/input/md38InputCategory.yaml -o specs/imm/output/
+joget-form-gen generate specs/frs/farm/input/frFarmer.yaml -o specs/frs/farm/output/
 
 # Generate all specs in a component
-for f in specs/imm/input/*.yaml; do
-  joget-form-gen generate "$f" -o specs/imm/output/
+for f in specs/frs/farm/input/*.yaml; do
+  joget-form-gen generate "$f" -o specs/frs/farm/output/
 done
 ```
 
@@ -52,10 +56,10 @@ done
 
 ```bash
 # Validate a single spec
-joget-form-gen validate specs/imm/input/md38InputCategory.yaml
+joget-form-gen validate specs/frs/farm/input/frFarmer.yaml
 
-# Validate all specs in a component
-for f in specs/imm/input/*.yaml; do
+# Validate all specs in a module
+for f in specs/frs/*/input/*.yaml; do
   echo "=== Validating: $f ==="
   joget-form-gen validate "$f"
 done
@@ -63,22 +67,37 @@ done
 
 ## Naming Conventions
 
-### YAML Specifications (input/)
-- MDM forms: `md<NN><EntityName>.yaml` (e.g., `md38InputCategory.yaml`)
-- Transaction forms: `<module><EntityName>.yaml` (e.g., `imCampaign.yaml`)
+### Form IDs by Module
 
-### Generated JSON (output/)
-- Same base name as YAML: `md38InputCategory.json`, `imCampaign.json`
+| Module | Pattern | Example |
+|--------|---------|---------|
+| MDM | `md<NN><EntityName>` | `md03district`, `md19crops` |
+| FRS | `fr<EntityName>` | `frFarmer`, `frParcel` |
+| IMM | `im<EntityName>` | `imCampaign`, `imAllocation` |
+| SPM | `sp<EntityName>` | `spProgram`, `spApplication` |
+| GIS | `gs<EntityName>` | `gsParcelBoundary` |
 
-### Reference Data (data/)
-- CSV files matching MDM form names: `md38InputCategory.csv`
-- Used for seeding master data tables
+### Files
 
-## Specification Reference
+| Type | Convention | Example |
+|------|------------|---------|
+| YAML spec | `<formId>.yaml` | `frFarmer.yaml` |
+| Generated JSON | `<formId>.json` | `frFarmer.json` |
+| Reference data | `<formId>.csv` | `md03district.csv` |
 
-See [YAML Specification Reference](../docs/YAML_SPECIFICATION.md) for complete documentation on:
-- Form metadata requirements
-- All 17 supported field types
-- Options sources (static, formData, api, database)
-- Validation rules
-- Examples
+## Nested LOV Pattern
+
+The following MDM data uses cascading dropdowns via the [Nested LOV Pattern](../docs/NESTED_LOV_REFACTORING_PATTERN.md):
+
+| Parent Form | Child Form | Description |
+|-------------|------------|-------------|
+| md191cropCategory | md19crops | Crop types by category |
+| md161livestockCategory | md16livestockType | Livestock by category |
+| md25equipmentCategory | md25equipmentType | Equipment by category |
+| md27inputCategory | md27inputType | Agricultural inputs by category |
+
+## References
+
+- [Configuration Management Plan](CONFIGURATION_MANAGEMENT_PLAN.md) - Governance rules
+- [YAML Specification Reference](../docs/YAML_SPECIFICATION.md) - Field types and options
+- [API Reference](../docs/API_REFERENCE.md) - Generator API documentation

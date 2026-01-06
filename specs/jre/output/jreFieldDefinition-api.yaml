@@ -1,0 +1,432 @@
+components: 
+  schemas: 
+    "jreFieldDefinition-FormData": 
+      type: object
+      properties: 
+        aggregationFunctions: 
+          description: "Aggregation\x20Functions"
+          type: string
+        createdByName: 
+          type: string
+        helpText: 
+          description: "Help\x20Text"
+          type: string
+        lookupValues: 
+          description: "Static\x20Lookup\x20Values"
+          type: string
+        displayOrder: 
+          description: "Display\x20Order"
+          type: string
+        dateModified: 
+          format: date
+          type: string
+        isActive: 
+          description: Active
+          type: string
+        lookupFormId: 
+          description: "Lookup\x20Form\x20ID"
+          type: string
+        isGrid: 
+          description: "Is\x20Grid\x20Field"
+          type: string
+        dateCreated: 
+          format: date
+          type: string
+        modifiedByName: 
+          type: string
+        scopeCode: 
+          description: "Scope\x20Code"
+          type: string
+        createdBy: 
+          type: string
+        fieldLabel: 
+          description: "Field\x20Label"
+          type: string
+        applicableOperators: 
+          description: "Applicable\x20Operators"
+          type: string
+        modifiedBy: 
+          type: string
+        id: 
+          type: string
+        category: 
+          description: Category
+          type: string
+        fieldType: 
+          description: "Field\x20Type"
+          type: string
+        gridParentField: 
+          description: "Grid\x20Parent\x20Field"
+          type: string
+        fieldId: 
+          description: "Field\x20ID"
+          type: string
+    "jreFieldDefinition-FormDataWithFiles": 
+      type: object
+      properties: 
+        aggregationFunctions: 
+          description: "Aggregation\x20Functions"
+          type: string
+        createdByName: 
+          type: string
+        helpText: 
+          description: "Help\x20Text"
+          type: string
+        lookupValues: 
+          description: "Static\x20Lookup\x20Values"
+          type: string
+        displayOrder: 
+          description: "Display\x20Order"
+          type: string
+        dateModified: 
+          format: date
+          type: string
+        isActive: 
+          description: Active
+          type: string
+        lookupFormId: 
+          description: "Lookup\x20Form\x20ID"
+          type: string
+        isGrid: 
+          description: "Is\x20Grid\x20Field"
+          type: string
+        dateCreated: 
+          format: date
+          type: string
+        modifiedByName: 
+          type: string
+        scopeCode: 
+          description: "Scope\x20Code"
+          type: string
+        createdBy: 
+          type: string
+        fieldLabel: 
+          description: "Field\x20Label"
+          type: string
+        applicableOperators: 
+          description: "Applicable\x20Operators"
+          type: string
+        modifiedBy: 
+          type: string
+        id: 
+          type: string
+        category: 
+          description: Category
+          type: string
+        fieldType: 
+          description: "Field\x20Type"
+          type: string
+        gridParentField: 
+          description: "Grid\x20Parent\x20Field"
+          type: string
+        fieldId: 
+          description: "Field\x20ID"
+          type: string
+    FormDataResponse: 
+      type: object
+      properties: 
+        id: 
+          type: string
+        errors: 
+          additionalProperties: 
+            type: string
+          type: object
+    ApiResponse: 
+      type: object
+      properties: 
+        date: 
+          format: date
+          type: string
+        code: 
+          format: int32
+          type: integer
+        message: 
+          type: string
+  securitySchemes: 
+    Authorization: 
+      in: header
+      name: Authorization
+      type: apiKey
+    api_id: 
+      in: header
+      name: api_id
+      type: apiKey
+    api_key: 
+      in: header
+      name: api_key
+      type: apiKey
+    token: 
+      in: header
+      name: token
+      type: apiKey
+servers: 
+  - url: "http\x3A//localhost\x3A8084/jw/api"
+openapi: "3.0.1"
+paths: 
+  "/form/jreFieldDefinition/saveOrUpdate": 
+    post: 
+      summary: "Save\x20or\x20update\x20form\x20data"
+      security: 
+        - api_id: 
+          api_key: 
+        - api_id: 
+          api_key: 
+          token: 
+        - Authorization: 
+          api_id: 
+          api_key: 
+      requestBody: 
+        description: "The\x20parameters\x20required\x20here\x20is\x20highly\x20dependent\x20on\x20the\x20form\x20data\x20schema\x20of\x20the\x20specified\x20form.\x20A\x20uniquely\x20generated\x20form\x20record\x20ID\x20will\x20be\x20returned\x20as\x20the\x20success\x20response."
+        content: 
+          "application/json": 
+            schema: 
+              "\x24ref": "\x23/components/schemas/jreFieldDefinition-FormData"
+      description: "Save\x20or\x20update\x20form\x20data"
+      operationId: saveOrUpdateFormData
+      responses: 
+        200: 
+          description: "Successful\x20operation"
+          content: 
+            "application/json": 
+              schema: 
+                "\x24ref": "\x23/components/schemas/FormDataResponse"
+        405: 
+          description: "Invalid\x20input"
+          content: 
+            "application/json": 
+      tags: 
+        - "form/jreFieldDefinition"
+  "/form/jreFieldDefinition/updateWithFiles": 
+    post: 
+      summary: "Update\x20form\x20data\x20with\x20file\x20upload"
+      security: 
+        - api_id: 
+          api_key: 
+        - api_id: 
+          api_key: 
+          token: 
+        - Authorization: 
+          api_id: 
+          api_key: 
+      requestBody: 
+        description: "The\x20parameters\x20required\x20here\x20is\x20highly\x20dependent\x20on\x20the\x20form\x20data\x20schema\x20of\x20the\x20specified\x20form.\x20The\x20record\x20ID\x20specified\x20must\x20be\x20of\x20an\x20existing\x20record\x20of\x20the\x20form\x2C\x20to\x20update\x20its\x20records\x20successfully.\x20The\x20same\x20form\x20record\x20ID\x20as\x20specified\x20in\x20the\x20body\x20parameters\x20will\x20be\x20returned\x20as\x20the\x20success\x20response."
+        content: 
+          "multipart/form-data": 
+            schema: 
+              "\x24ref": "\x23/components/schemas/jreFieldDefinition-FormDataWithFiles"
+      description: "Update\x20a\x20record\x20of\x20the\x20specified\x20form."
+      operationId: updateFormDataWithFiles
+      responses: 
+        200: 
+          description: "Successful\x20operation"
+          content: 
+            "application/json": 
+              schema: 
+                "\x24ref": "\x23/components/schemas/FormDataResponse"
+        404: 
+          description: "Data\x20not\x20found"
+          content: 
+            "application/json": 
+        405: 
+          description: "Invalid\x20input"
+          content: 
+            "application/json": 
+      parameters: 
+        - schema: 
+            type: string
+          in: query
+          name: appendFile
+          description: "Append\x20File\x20When\x20Update\x20With\x20Files\x28true/false\x29."
+          required: false
+      tags: 
+        - "form/jreFieldDefinition"
+  "/form/jreFieldDefinition/addWithFiles": 
+    post: 
+      summary: "Add\x20form\x20data\x20with\x20file\x20upload"
+      security: 
+        - api_id: 
+          api_key: 
+        - api_id: 
+          api_key: 
+          token: 
+        - Authorization: 
+          api_id: 
+          api_key: 
+      requestBody: 
+        description: "The\x20parameters\x20required\x20here\x20is\x20highly\x20dependent\x20on\x20the\x20form\x20data\x20schema\x20of\x20the\x20specified\x20form.\x20A\x20uniquely\x20generated\x20form\x20record\x20ID\x20will\x20be\x20returned\x20as\x20the\x20success\x20response."
+        content: 
+          "multipart/form-data": 
+            schema: 
+              "\x24ref": "\x23/components/schemas/jreFieldDefinition-FormDataWithFiles"
+      description: "Add\x20a\x20new\x20record\x20to\x20the\x20specified\x20form."
+      operationId: addFormDataWithFiles
+      responses: 
+        200: 
+          description: "Successful\x20operation"
+          content: 
+            "application/json": 
+              schema: 
+                "\x24ref": "\x23/components/schemas/FormDataResponse"
+        405: 
+          description: "Invalid\x20input"
+          content: 
+            "application/json": 
+      tags: 
+        - "form/jreFieldDefinition"
+  "/form/jreFieldDefinition": 
+    post: 
+      summary: "Add\x20form\x20data"
+      security: 
+        - api_id: 
+          api_key: 
+        - api_id: 
+          api_key: 
+          token: 
+        - Authorization: 
+          api_id: 
+          api_key: 
+      requestBody: 
+        description: "The\x20parameters\x20required\x20here\x20is\x20highly\x20dependent\x20on\x20the\x20form\x20data\x20schema\x20of\x20the\x20specified\x20form.\x20A\x20uniquely\x20generated\x20form\x20record\x20ID\x20will\x20be\x20returned\x20as\x20the\x20success\x20response."
+        content: 
+          "application/json": 
+            schema: 
+              "\x24ref": "\x23/components/schemas/jreFieldDefinition-FormData"
+      description: "Add\x20a\x20new\x20record\x20to\x20the\x20specified\x20form."
+      operationId: addFormData
+      responses: 
+        200: 
+          description: "Successful\x20operation"
+          content: 
+            "application/json": 
+              schema: 
+                "\x24ref": "\x23/components/schemas/FormDataResponse"
+        405: 
+          description: "Invalid\x20input"
+          content: 
+            "application/json": 
+      tags: 
+        - "form/jreFieldDefinition"
+    put: 
+      summary: "Update\x20form\x20data"
+      security: 
+        - api_id: 
+          api_key: 
+        - api_id: 
+          api_key: 
+          token: 
+        - Authorization: 
+          api_id: 
+          api_key: 
+      requestBody: 
+        description: "The\x20parameters\x20required\x20here\x20is\x20highly\x20dependent\x20on\x20the\x20form\x20data\x20schema\x20of\x20the\x20specified\x20form.\x20The\x20record\x20ID\x20specified\x20must\x20be\x20of\x20an\x20existing\x20record\x20of\x20the\x20form\x2C\x20to\x20update\x20its\x20records\x20successfully.\x20The\x20same\x20form\x20record\x20ID\x20as\x20specified\x20in\x20the\x20body\x20parameters\x20will\x20be\x20returned\x20as\x20the\x20success\x20response."
+        content: 
+          "application/json": 
+            schema: 
+              "\x24ref": "\x23/components/schemas/jreFieldDefinition-FormData"
+      description: "Update\x20a\x20record\x20of\x20the\x20specified\x20form."
+      operationId: updateFormData
+      responses: 
+        200: 
+          description: "Successful\x20operation"
+          content: 
+            "application/json": 
+              schema: 
+                "\x24ref": "\x23/components/schemas/FormDataResponse"
+        404: 
+          description: "Data\x20not\x20found"
+          content: 
+            "application/json": 
+        405: 
+          description: "Invalid\x20input"
+          content: 
+            "application/json": 
+      tags: 
+        - "form/jreFieldDefinition"
+  "/form/jreFieldDefinition/\x7BrecordId\x7D": 
+    delete: 
+      summary: "Delete\x20form\x20data"
+      security: 
+        - api_id: 
+          api_key: 
+        - api_id: 
+          api_key: 
+          token: 
+        - Authorization: 
+          api_id: 
+          api_key: 
+      description: "Delete\x20a\x20record\x20of\x20the\x20specified\x20form\x2C\x20via\x20record\x20ID."
+      operationId: deleteFormData
+      responses: 
+        200: 
+          description: "Successful\x20operation"
+          content: 
+            "application/json": 
+        404: 
+          description: "Data\x20not\x20found"
+          content: 
+            "application/json": 
+      parameters: 
+        - schema: 
+            type: string
+          in: path
+          name: recordId
+          description: "Form\x20record\x20ID."
+          required: true
+      tags: 
+        - "form/jreFieldDefinition"
+    get: 
+      summary: "Get\x20form\x20data\x20by\x20record\x20ID"
+      security: 
+        - api_id: 
+          api_key: 
+        - api_id: 
+          api_key: 
+          token: 
+        - Authorization: 
+          api_id: 
+          api_key: 
+      description: "Retrieve\x20data\x20of\x20a\x20record\x20from\x20the\x20specified\x20form\x2C\x20via\x20record\x20ID"
+      operationId: getFormData
+      responses: 
+        200: 
+          description: "Successful\x20operation"
+          content: 
+            "application/json": 
+        405: 
+          description: "Invalid\x20input"
+          content: 
+            "application/json": 
+      parameters: 
+        - schema: 
+            type: string
+          in: path
+          name: recordId
+          description: "Form\x20record\x20ID."
+          required: true
+        - schema: 
+            type: boolean
+          in: query
+          name: includeSubformData
+          description: "Include\x20all\x20subform\x28s\x29\x20data\x20present\x20in\x20the\x20specified\x20form\x20into\x20the\x20response."
+          required: false
+        - schema: 
+            type: boolean
+          in: query
+          name: includeReferenceElements
+          description: "Include\x20all\x20referenced\x20elements\x20present\x20in\x20the\x20specified\x20form\x20into\x20the\x20response\x2C\x20e.g.\x2C\x20select\x20box\x20element\x20referencing\x20a\x20datalist\x20record."
+          required: false
+        - schema: 
+            type: boolean
+          in: query
+          name: flattenData
+          description: "Option\x20to\x20flatten\x20all\x20JSON\x20objects\x20to\x20a\x20single-level\x20key-value\x20map."
+          required: false
+      tags: 
+        - "form/jreFieldDefinition"
+info: 
+  description: "Auto-generated\x20API\x20for\x20form\x3A\x20jreFieldDefinition"
+  title: "JRE\x20Field\x20Definition\x20API"
+  version: "9.0.3"
+tags: 
+  - name: "form/jreFieldDefinition"
+    description: ""

@@ -1,0 +1,9 @@
+code,name,description,displayOrder,isActive
+DEMOGRAPHIC,Demographic,Personal and demographic attributes,1,Y
+LOCATION,Location,Geographic and administrative location data,2,Y
+HOUSEHOLD,Household,Household composition and characteristics,3,Y
+AGRICULTURAL,Agricultural,Farm and agricultural data,4,Y
+ECONOMIC,Economic,Income and financial indicators,5,Y
+DERIVED,Derived,Calculated or computed fields,6,Y
+PROGRAM,Program,Program-specific enrollment data,7,Y
+OTHER,Other,Miscellaneous fields,8,Y
