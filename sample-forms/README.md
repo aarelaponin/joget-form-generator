@@ -19,7 +19,9 @@ sample-forms/
 ├── 02_master_details/        # Master-detail form relationships
 ├── 03_tabs/                  # Tab-based form layout
 ├── 04_farmer-application-form/  # Complex multi-tab wizard form
-└── 05_ajax-subform/          # AJAX Subform lookup pattern
+├── 05_ajax-subform/          # AJAX Subform lookup pattern
+├── 06_jre-editor/            # Joget Rules Engine editor form
+└── 07_GIS/                   # GIS polygon capture component
 ```
 
 ## Example Categories
@@ -93,6 +95,46 @@ Demonstrates the SelectBox + AjaxSubForm pattern for dynamic record lookup.
 - `SelectBox` with `idColumn: ""` (MUST be empty for AjaxSubForm pattern)
 
 **See also:** [AJAX Subform Pattern Documentation](../docs/AJAX_SUBFORM_PATTERN.md)
+
+### 06_jre-editor - Joget Rules Engine Editor
+
+Form for editing Joget Rules Engine configurations.
+
+### 07_GIS - GIS Polygon Capture
+
+Demonstrates the GIS Polygon Capture plugin for capturing land parcel boundaries with GPS support.
+
+**Key files:**
+- `ui-form.json` - Form with GisPolygonCaptureElement
+
+**Component:** `global.govstack.gisui.element.GisPolygonCaptureElement`
+
+**Key properties shown:**
+| Property | Description | Example Value |
+|----------|-------------|---------------|
+| `id` | Field storing geometry data (GeoJSON) | `geometry` |
+| `defaultLatitude/Longitude` | Map center coordinates | `-29.5`, `28.5` |
+| `defaultZoom` | Initial map zoom level | `14` |
+| `captureMode` | GPS, DRAW, or BOTH | `BOTH` |
+| `gpsHighAccuracy` | Use high-accuracy GPS | `true` |
+| `gpsMinAccuracy` | Minimum GPS accuracy (meters) | `10` |
+| `minVertices/maxVertices` | Polygon vertex constraints | `3`, `100` |
+| `minAreaHectares/maxAreaHectares` | Area constraints | `0.1`, `1000` |
+| `enableOverlapCheck` | Check for overlapping parcels | `true` |
+| `overlapFormId` | Form to check for overlaps | `gisData` |
+| `overlapGeometryField` | Geometry field in overlap form | `geometry` |
+| `perimeterFieldId` | Hidden field for perimeter | `perimeter` |
+| `centroidFieldId` | Hidden field for centroid | `centroid` |
+| `vertexCountFieldId` | Hidden field for vertex count | `vertex_count` |
+
+**Derived fields pattern:**
+The GIS component auto-populates hidden fields with calculated values:
+- `perimeter` - Polygon perimeter in meters
+- `centroid` - Center point coordinates
+- `vertex_count` - Number of polygon vertices
+
+**Usage in FRS parcel form:**
+This pattern is used for capturing land parcel boundaries in the Farmer Registration System (`specs/frs/parcel/`).
 
 ## Using These Examples
 
@@ -188,5 +230,5 @@ These examples demonstrate important Joget conventions:
 
 ---
 
-**Version:** 0.2.0
-**Last Updated:** 2025-12-22
+**Version:** 0.3.0
+**Last Updated:** 2026-01-06

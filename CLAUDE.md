@@ -208,7 +208,9 @@ sample-forms/
 ├── 02_master_details/        # Master-detail relationships
 ├── 03_tabs/                  # Tab-based layouts
 ├── 04_farmer-application-form/  # Complex 7-page wizard (excellent syntax reference)
-└── 05_ajax-subform/          # AJAX Subform lookup pattern
+├── 05_ajax-subform/          # AJAX Subform lookup pattern
+├── 06_jre-editor/            # Joget Rules Engine editor form
+└── 07_GIS/                   # GIS polygon capture for land parcels
 ```
 
 ### Key Reference Examples
@@ -222,6 +224,11 @@ sample-forms/
 - **01_nested_lovs**: Complete cascading dropdown implementation with `JOGET_NESTED_LOV_GUIDE.md`
 
 - **05_ajax-subform**: AJAX Subform pattern (see `docs/AJAX_SUBFORM_PATTERN.md` for critical undocumented behaviors)
+
+- **07_GIS**: GIS Polygon Capture plugin (`GisPolygonCaptureElement`) for land parcel boundaries:
+  - GPS-based polygon capture with accuracy settings
+  - Overlap detection with existing parcels
+  - Auto-calculated derived fields (perimeter, centroid, vertex count)
 
 ## Package Structure
 
