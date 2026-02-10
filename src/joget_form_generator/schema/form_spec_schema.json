@@ -43,6 +43,11 @@
         "description": {
           "type": "string",
           "description": "Optional form description"
+        },
+        "isSubform": {
+          "type": "boolean",
+          "default": false,
+          "description": "If true, auto-inject parent_id hidden field for linking to parent form"
         }
       }
     },
@@ -80,9 +85,12 @@
             "richTextEditor",
             "formGrid",
             "multiPagedForm",
-            "section"
+            "section",
+            "gisPolygonCapture",
+            "smartSearch",
+            "concatField"
           ],
-          "description": "Field type (Phase 1: 9 standard, Phase 2: 4 custom/advanced, Enterprise: 4 advanced, Structural: section)"
+          "description": "Field type (Standard: 9, Advanced: 4, Enterprise: 4, GovStack: 3, Structural: 1)"
         },
         "required": {
           "type": "boolean",
@@ -227,15 +235,49 @@
           "minItems": 1,
           "description": "Page definitions (multiPagedForm)"
         },
-        "showNavigation": {
-          "type": "boolean",
-          "default": true,
-          "description": "Show page navigation (multiPagedForm)"
+        "displayMode": {
+          "type": "string",
+          "enum": ["tab", "wizard"],
+          "default": "tab",
+          "description": "Display mode for multiPagedForm: 'tab' for tabbed interface, 'wizard' for step-by-step"
         },
-        "showProgressBar": {
+        "partiallyStore": {
+          "type": "boolean",
+          "default": false,
+          "description": "Allow partial saves before completing all pages (multiPagedForm)"
+        },
+        "storeMainFormOnPartiallyStore": {
           "type": "boolean",
           "default": true,
-          "description": "Show progress bar (multiPagedForm)"
+          "description": "Store main form data on partial save (multiPagedForm)"
+        },
+        "onlyAllowSubmitOnLastPage": {
+          "type": "boolean",
+          "default": false,
+          "description": "Only show submit button on last page (multiPagedForm)"
+        },
+        "prevButtonLabel": {
+          "type": "string",
+          "default": "Previous",
+          "description": "Previous button label (multiPagedForm)"
+        },
+        "nextButtonLabel": {
+          "type": "string",
+          "default": "Next",
+          "description": "Next button label (multiPagedForm)"
+        },
+        "ajaxMode": {
+          "type": "boolean",
+          "default": false,
+          "description": "Use AJAX mode for page navigation (multiPagedForm)"
+        },
+        "css": {
+          "type": "string",
+          "description": "Custom CSS for multiPagedForm element"
+        },
+        "conditionalVisibility": {
+          "$ref": "#/$defs/ConditionalVisibility",
+          "description": "Conditional visibility based on another field's value"
         },
         "validation": {
           "$ref": "#/$defs/Validation",
@@ -447,6 +489,33 @@
         }
       }
     },
+    "ConditionalVisibility": {
+      "type": "object",
+      "required": ["controlField", "controlValue"],
+      "properties": {
+        "controlField": {
+          "type": "string",
+          "description": "Field ID that controls visibility of this element"
+        },
+        "controlValue": {
+          "oneOf": [
+            {"type": "string"},
+            {"type": "array", "items": {"type": "string"}}
+          ],
+          "description": "Value(s) that trigger visibility (can be single value or array)"
+        },
+        "reverse": {
+          "type": "boolean",
+          "default": false,
+          "description": "If true, hide when controlValue matches (instead of show)"
+        },
+        "regex": {
+          "type": "boolean",
+          "default": false,
+          "description": "If true, treat controlValue as regex pattern"
+        }
+      }
+    },
     "GridColumn": {
       "type": "object",
       "required": ["value", "label"],
@@ -487,11 +556,34 @@
         },
         "label": {
           "type": "string",
-          "description": "Page label/title"
+          "description": "Page label/title displayed in tab or wizard step"
         },
         "description": {
           "type": "string",
-          "description": "Page description"
+          "description": "Page description (optional)"
+        },
+        "validate": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to validate this page before proceeding"
+        },
+        "parentSubFormId": {
+          "type": "string",
+          "description": "ID used in parent form to reference this subform (auto-generated if not provided)"
+        },
+        "subFormParentId": {
+          "type": "string",
+          "default": "parent_id",
+          "description": "Foreign key field in subform pointing to parent record"
+        },
+        "readonly": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether this page is read-only"
+        },
+        "readonlyLabel": {
+          "type": "string",
+          "description": "Label to show when page is readonly"
         }
       }
     }

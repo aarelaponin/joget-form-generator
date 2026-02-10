@@ -1,7 +1,7 @@
 # Joget Form Generator - User Guide
 
-**Version:** 0.2.0
-**Last Updated:** 2025-12-19
+**Version:** 0.3.0
+**Last Updated:** 2026-02-10
 
 ## Table of Contents
 
@@ -14,7 +14,9 @@
 7. [Validation](#validation)
 8. [CLI Usage](#cli-usage)
 9. [Examples](#examples)
-10. [Troubleshooting](#troubleshooting)
+10. [GovStack Plugin Fields](#govstack-plugin-fields)
+11. [MCP Server Tools](#mcp-server-tools)
+12. [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -60,7 +62,13 @@ The **Joget Form Generator** is a command-line tool that transforms human-readab
 16. Form Grid
 17. Multi Paged Form
 
+**Phase 4 (GovStack Plugin Fields):**
+18. GIS Polygon Capture (land parcel boundaries with GPS)
+19. Smart Search (fuzzy search for farmers)
+20. Concat Field (field concatenation)
+
 See [Enterprise Fields Guide](../ENTERPRISE_FIELDS.md) for detailed documentation on Enterprise field types.
+See [GovStack Plugin Fields](#govstack-plugin-fields) below for GIS and specialized fields.
 
 ---
 
@@ -1025,6 +1033,190 @@ fields:
 
 ---
 
+## GovStack Plugin Fields
+
+These fields require the GovStack plugins installed in Joget DX.
+
+### 18. GIS Polygon Capture
+
+GPS-based polygon capture for land parcel boundaries with overlap detection.
+
+```yaml
+- id: geometry
+  type: gisPolygonCapture
+  label: Parcel Boundary
+  required: true
+
+  # Map configuration
+  defaultLatitude: "-29.6"
+  defaultLongitude: "28.2"
+  defaultZoom: "14"
+  mapHeight: "500"
+  tileProvider: OSM           # OSM, ESRI, or Google
+
+  # GPS settings
+  gpsHighAccuracy: true
+  gpsMinAccuracy: "10"        # meters
+
+  # Polygon constraints
+  minVertices: "3"
+  maxVertices: "200"
+  minAreaHectares: "0.01"
+  maxAreaHectares: "1000"
+
+  # Overlap detection
+  enableOverlapCheck: true
+  overlapFormId: parcelLocation
+  overlapGeometryField: geometry
+  overlapDisplayFields: parcelCode
+
+  # Derived fields (auto-populated hidden fields)
+  areaFieldId: area_hectares
+  perimeterFieldId: perimeter_meters
+  centroidFieldId: centroid_lat
+  vertexCountFieldId: vertex_count
+```
+
+**Properties:**
+- `defaultLatitude/Longitude` - Map center coordinates
+- `gpsHighAccuracy` - Use high accuracy GPS mode
+- `enableOverlapCheck` - Check for overlap with existing parcels
+- `areaFieldId`, `perimeterFieldId`, etc. - Hidden fields auto-populated with calculated values
+
+---
+
+### 19. Smart Search
+
+Fuzzy search for finding records (e.g., farmers) by multiple criteria.
+
+```yaml
+- id: farmer_id
+  type: smartSearch
+  label: Select Farmer
+  required: true
+  displayMode: popup         # popup or inline
+  storeValue: nationalId     # field to store as value
+  displayColumns: "nationalId,firstName,lastName,district"
+  autoSelectSingleResult: true
+  autoSelectMinScore: "95"
+  showRecentFarmers: true
+  maxRecentFarmers: "5"
+```
+
+**Properties:**
+- `displayMode` - How to display search (popup dialog or inline)
+- `displayColumns` - Columns to show in search results
+- `autoSelectSingleResult` - Auto-select if only one match found
+- `showRecentFarmers` - Show recently selected records
+
+---
+
+### 20. Concat Field
+
+Concatenates values from multiple source fields.
+
+```yaml
+- id: personal_information
+  type: concatField
+  label: Personal Information
+  sourceFields:
+    - fieldId: national_id
+    - fieldId: first_name
+      transform: uppercase
+    - fieldId: last_name
+      transform: uppercase
+  separator: "_"
+  prefix: "ID-"
+  suffix: ""
+  skipEmpty: true
+  displayType: readonly      # readonly, hidden, or editable
+  updateOn: change           # change, blur, or submit
+```
+
+**Properties:**
+- `sourceFields` - Array of fields to concatenate (each with optional transform)
+- `separator` - Character(s) between field values
+- `prefix/suffix` - Strings to add before/after concatenated value
+- `skipEmpty` - Skip empty source values
+- `displayType` - How to display the field
+
+---
+
+## MCP Server Tools
+
+The MCP server provides tools for AI-assisted form development.
+
+### Starting the MCP Server
+
+```bash
+# Start the server
+joget-form-mcp serve
+
+# List available tools
+joget-form-mcp tools
+```
+
+### Available Tools
+
+| Tool | Description |
+|------|-------------|
+| `generate_form` | Generate single form from YAML |
+| `generate_multiple_forms` | Generate multiple independent forms |
+| `generate_form_package` | Generate wizard with interconnected subforms |
+| `validate_spec` | Validate YAML specification |
+| `validate_joget_json` | Validate generated JSON |
+| `list_field_types` | List all supported field types |
+| `get_field_type_info` | Get detailed info for a field type |
+| `get_example_spec` | Get example YAML specifications |
+| `create_form_spec` | Generate YAML from natural language |
+| `create_cascading_dropdown_spec` | Generate cascading dropdown pattern |
+| `add_field_to_spec` | Add field to existing YAML |
+
+### Form Package Generation
+
+For multi-tab wizards, use `generate_form_package`:
+
+```yaml
+package:
+  id: farmerRegistration
+  name: Farmer Registration Package
+
+mainForm:
+  id: farmerRegistrationForm
+  name: Farmer Registration
+  tableName: farms_registry
+  wizard:
+    id: farmerWizard
+    displayMode: tab           # tab or wizard
+    partiallyStore: true
+    pages:
+      - formId: farmerBasicInfo
+        label: General
+        validate: true
+        parentSubFormId: basic_data
+      - formId: farmerResidency
+        label: Residency
+        validate: true
+
+subForms:
+  - form:
+      id: farmerBasicInfo
+      name: Basic Info
+      tableName: farmerBasicInfo
+    fields:
+      - id: national_id
+        label: National ID
+        type: textField
+        required: true
+```
+
+The tool automatically:
+- Generates MultiPagedForm with correct `pageN_*` property structure
+- Injects `parent_id` hidden fields in subforms
+- Links pages with proper `parentSubFormId` and `subFormParentId`
+
+---
+
 ## Troubleshooting
 
 ### Common Errors
@@ -1152,17 +1344,19 @@ If you encounter issues not covered here:
 
 - **[API Reference](API_REFERENCE.md)** - For programmatic usage
 - **[Pattern Development Guide](PATTERN_DEVELOPMENT_GUIDE.md)** - For extending with custom field types
+- **[Joget Sub-Agent Prompt](JOGET_SUBAGENT_PROMPT.md)** - Comprehensive guide for AI-assisted form generation
 - **[Examples](../examples/)** - YAML specification examples
 - **[Sample Forms](../sample-forms/)** - Production-quality Joget JSON examples
   - `01_nested_lovs/` - Cascading dropdown pattern with comprehensive guide
   - `04_farmer-application-form/` - Complex 7-page wizard (excellent syntax reference)
   - `05_ajax-subform/` - AJAX Subform lookup pattern
+  - `07_GIS/` - GIS polygon capture for land parcels
 - **[Nested LOV Refactoring Pattern](NESTED_LOV_REFACTORING_PATTERN.md)** - Convert flat dropdown lists to hierarchical category-based selections
 - **[AJAX Subform Pattern](AJAX_SUBFORM_PATTERN.md)** - Critical undocumented behaviors for dynamic form loading
 - **[Enterprise Fields](../ENTERPRISE_FIELDS.md)** - Enterprise Edition field types and composite patterns
 
 ---
 
-**Document Version:** 0.2.0
-**Generator Version:** 0.2.0
-**Last Updated:** 2025-12-22
+**Document Version:** 0.3.0
+**Generator Version:** 0.3.0
+**Last Updated:** 2026-02-10

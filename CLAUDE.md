@@ -101,10 +101,11 @@ The pattern library (`src/joget_form_generator/patterns/`) uses a registry-based
 
 - **PatternRegistry** (`registry.py`): Central registry mapping field types to pattern classes
   - Registration happens in `patterns/__init__.py`
-  - Supports 17 data field types + 1 structural element:
+  - Supports 20 data field types + 1 structural element:
     - **Standard (9)**: hiddenField, textField, passwordField, textArea, selectBox, checkBox, radio, datePicker, fileUpload
     - **Advanced (4)**: customHTML, idGenerator, subform, grid
     - **Enterprise (4)**: calculationField, richTextEditor, formGrid, multiPagedForm
+    - **GovStack (3)**: gisPolygonCapture, smartSearch, concatField
     - **Structural (1)**: section (for grouping fields into sections)
 
 - **Pattern Classes**: Each field type has:
@@ -115,12 +116,29 @@ The pattern library (`src/joget_form_generator/patterns/`) uses a registry-based
 
 The MCP server (`src/joget_form_mcp/`) enables AI assistants to interact with the form generator:
 
-- **server.py**: Main MCP server with 12 tools
+- **server.py**: Main MCP server with 13 tools
 - **tools/**: Tool implementations
-  - `generation.py`: Form generation tools
+  - `generation.py`: Form generation tools including `generate_form_package` for wizard packages
   - `validation.py`: Spec validation tools
   - `discovery.py`: Field type discovery and documentation
   - `specification.py`: YAML spec creation from natural language
+
+Key MCP tools:
+- `generate_form`: YAML → single Joget JSON form
+- `generate_multiple_forms`: YAML → multiple independent forms
+- `generate_form_package`: YAML → complete wizard with subforms (auto-injects parent_id)
+- `validate_spec`: Validate YAML before generation
+- `list_field_types`: Get all available field types
+- `get_field_type_info`: Get detailed info for specific field type
+
+### Sub-Agent Prompt
+
+For AI assistants generating Joget forms, see `docs/JOGET_SUBAGENT_PROMPT.md` which covers:
+- Joget boolean conventions (`"true"` vs `""` for false)
+- MDM form naming rules and required fields
+- Relationship patterns (1:1 subforms, 1:N FormGrid, cascading dropdowns)
+- MultiPagedForm wizard structure with flat `pageN_*` properties
+- Common mistakes to avoid
 
 ### Adding New Field Types
 

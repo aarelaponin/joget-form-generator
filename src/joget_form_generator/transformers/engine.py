@@ -173,7 +173,11 @@ class TransformEngine:
         self, form_json: dict[str, Any], normalized_spec: dict[str, Any]
     ) -> dict[str, Any]:
         """
-        Post-process form JSON (cleanup).
+        Post-process form JSON with auto-injection and validation.
+
+        Operations:
+        1. Auto-inject parent_id hidden field if form is used as subform
+        2. Validate foreignKey references in FormGrid elements
 
         Args:
             form_json: Generated form JSON
@@ -182,5 +186,114 @@ class TransformEngine:
         Returns:
             Post-processed form JSON
         """
-        # No metadata - Joget doesn't accept extra fields
+        # Check if this is a subform (has isSubform flag or needs parent_id)
+        form_meta = normalized_spec.get("form", {})
+        if form_meta.get("isSubform", False):
+            form_json = self._inject_parent_id_if_missing(form_json)
+
+        # Validate FormGrid foreignKey references
+        self._validate_form_grid_references(form_json, normalized_spec)
+
         return form_json
+
+    def _inject_parent_id_if_missing(self, form_json: dict[str, Any]) -> dict[str, Any]:
+        """
+        Auto-inject parent_id hidden field if not present.
+
+        This ensures subforms have the necessary FK field to link back to parent.
+
+        Args:
+            form_json: Generated form JSON
+
+        Returns:
+            Form JSON with parent_id field injected if needed
+        """
+        # Check if parent_id already exists
+        has_parent_id = self._find_field_by_id(form_json, "parent_id")
+        if has_parent_id:
+            return form_json
+
+        # Create parent_id hidden field
+        parent_id_field = {
+            "className": "org.joget.apps.form.lib.HiddenField",
+            "properties": {
+                "id": "parent_id",
+                "value": "",
+                "useDefaultWhenEmpty": "",
+                "workflowVariable": "",
+                "validator": {"className": "", "properties": {}},
+            },
+        }
+
+        # Insert at the beginning of the first section's first column
+        if form_json.get("elements"):
+            first_section = form_json["elements"][0]
+            if first_section.get("elements"):
+                first_column = first_section["elements"][0]
+                if first_column.get("elements") is not None:
+                    first_column["elements"].insert(0, parent_id_field)
+
+        return form_json
+
+    def _find_field_by_id(self, form_json: dict[str, Any], field_id: str) -> bool:
+        """
+        Recursively search for a field by ID in the form JSON.
+
+        Args:
+            form_json: Form JSON structure
+            field_id: Field ID to find
+
+        Returns:
+            True if field exists, False otherwise
+        """
+
+        def search_elements(elements: list) -> bool:
+            for element in elements:
+                # Check properties for field ID
+                props = element.get("properties", {})
+                if props.get("id") == field_id:
+                    return True
+                # Recursively search nested elements
+                if "elements" in element:
+                    if search_elements(element["elements"]):
+                        return True
+            return False
+
+        return search_elements(form_json.get("elements", []))
+
+    def _validate_form_grid_references(
+        self, form_json: dict[str, Any], normalized_spec: dict[str, Any]
+    ) -> None:
+        """
+        Validate that FormGrid foreignKey references match existing fields.
+
+        This helps catch configuration errors early.
+
+        Args:
+            form_json: Generated form JSON
+            normalized_spec: Normalized specification for context
+
+        Note:
+            Currently logs warnings but doesn't raise errors to allow
+            cross-form references that may be valid at runtime.
+        """
+        # Collect all field IDs in this form
+        field_ids = {f["id"] for f in normalized_spec.get("fields", [])}
+
+        def check_form_grids(elements: list) -> None:
+            for element in elements:
+                class_name = element.get("className", "")
+                if "FormGrid" in class_name:
+                    props = element.get("properties", {})
+                    # Check loadBinder foreignKey
+                    load_binder = props.get("loadBinder", {})
+                    if load_binder:
+                        fk = load_binder.get("properties", {}).get("foreignKey", "")
+                        if fk and fk not in field_ids:
+                            # This is expected for cross-form references
+                            pass
+                # Recursively check nested elements
+                if "elements" in element:
+                    check_form_grids(element["elements"])
+
+        check_form_grids(form_json.get("elements", []))

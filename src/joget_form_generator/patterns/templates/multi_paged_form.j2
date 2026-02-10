@@ -1,11 +1,19 @@
 {
-  "className": "org.joget.plugin.enterprise.PageFormElement",
+  "className": "org.joget.plugin.enterprise.MultiPagedForm",
   "properties": {
     "id": "{{ id }}",
     "label": "{{ label }}",
-    "pages": {{ pages | tojson_pretty }},
-    "showNavigation": "{{ showNavigation }}",
-    "showProgressBar": "{{ showProgressBar }}",
-    "readonly": "{{ readonly }}"
+    "prevButtonlabel": "{{ prevButtonLabel }}",
+    "nextButtonlabel": "{{ nextButtonLabel }}",
+    "css": "{{ css }}",
+    "displayMode": "{{ displayMode }}",
+    "ajaxMode": "{{ ajaxMode }}",
+    "partiallyStore": "{{ partiallyStore }}",
+    "storeMainFormOnPartiallyStore": "{{ storeMainFormOnPartiallyStore }}",
+    "onlyAllowSubmitOnLastPage": "{{ onlyAllowSubmitOnLastPage }}",
+    "numberOfPage": {
+      "className": "{{ num_pages }}",
+      "properties": {{ page_properties | tojson_pretty }}
+    }
   }
 }

@@ -93,6 +93,26 @@ def create_server() -> Server:
                     "required": ["yaml_spec"],
                 },
             ),
+            Tool(
+                name="generate_form_package",
+                description=(
+                    "Generate a complete form package including a wizard main form and its "
+                    "subforms. Automatically handles parent_id injection and MultiPagedForm "
+                    "configuration. Use this for multi-tab/wizard form hierarchies."
+                ),
+                inputSchema={
+                    "type": "object",
+                    "properties": {
+                        "yaml_spec": {
+                            "type": "string",
+                            "description": (
+                                "YAML specification with package, mainForm (wizard), and subForms"
+                            ),
+                        }
+                    },
+                    "required": ["yaml_spec"],
+                },
+            ),
             # Validation tools
             Tool(
                 name="validate_spec",
@@ -268,6 +288,8 @@ def create_server() -> Server:
                 result = generation_tools.generate_form(arguments["yaml_spec"])
             elif name == "generate_multiple_forms":
                 result = generation_tools.generate_multiple_forms(arguments["yaml_spec"])
+            elif name == "generate_form_package":
+                result = generation_tools.generate_form_package(arguments["yaml_spec"])
 
             # Validation tools
             elif name == "validate_spec":

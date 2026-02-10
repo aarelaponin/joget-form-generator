@@ -19,6 +19,9 @@ from .rich_text_editor import RichTextEditorPattern
 from .form_grid import FormGridPattern
 from .multi_paged_form import MultiPagedFormPattern
 from .section import SectionPattern
+from .gis_polygon import GisPolygonCapturePattern
+from .smart_search import SmartSearchPattern
+from .concat_field import ConcatFieldPattern
 
 # Register all Phase 1 patterns
 PatternRegistry.register("hiddenField", HiddenFieldPattern)
@@ -46,6 +49,11 @@ PatternRegistry.register("multiPagedForm", MultiPagedFormPattern)
 # Register structural patterns
 PatternRegistry.register("section", SectionPattern)
 
+# Register GovStack plugin patterns
+PatternRegistry.register("gisPolygonCapture", GisPolygonCapturePattern)
+PatternRegistry.register("smartSearch", SmartSearchPattern)
+PatternRegistry.register("concatField", ConcatFieldPattern)
+
 __all__ = [
     "PatternRegistry",
     "HiddenFieldPattern",
@@ -66,4 +74,7 @@ __all__ = [
     "FormGridPattern",
     "MultiPagedFormPattern",
     "SectionPattern",
+    "GisPolygonCapturePattern",
+    "SmartSearchPattern",
+    "ConcatFieldPattern",
 ]
